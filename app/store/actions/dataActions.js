@@ -70,6 +70,7 @@ export const getUser =
           {
             headers: {
               Authorization: `Bearer ${authToken}`,
+              'content-type': 'multipart/form-data'
             },
           }
         );

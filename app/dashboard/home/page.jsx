@@ -1,6 +1,6 @@
 "use client"
 import { getUser } from "@/app/store/actions/dataActions";
-import DiscoverNGO from "@/components/NGO’sforfunds/DiscoverNGO";
+import DiscoverNGO from "@/components/NGOsforfunds/DiscoverNGO";
 import DashboardLayout from "@/components/common/DashboardLayout";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
