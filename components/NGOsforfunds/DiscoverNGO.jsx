@@ -1,12 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { DiscoverNGOcard } from "../common/Helper";
 import { RightarrowIcons } from "../common/Icon";
+import { getAllSampleProposals, getProposalQuestions, resetStore } from "@/app/store/actions/dataActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import Loader from "../common/Loader";
 
 const DiscoverNGO = () => {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const proposalData = useSelector((state) => state?.data?.proposalData)
+
+  console.log("proposalData?", proposalData)
+
+  useEffect(() => {
+
+    dispatch(getAllSampleProposals())
+    // dispatch(resetStore())
+
+  }, [])
+
+  const handleClick = (id) =>{
+
+    const data = {
+      "sample_proposal_id":id
+    }
+
+    setLoading(true);
+    dispatch(getProposalQuestions(data)).then(()=>{
+      setLoading(false);
+      router.push('/ai-chat')
+    })
+    
+  }
   return (
     <div className="bg-[#FAFAFA] h-screen">
+        {loading && <Loader />}
       <div className=" max-w-[1180px] w-full px-4 xl:px-8">
         <div className=" flex max-sm:flex-col gap-[10px] justify-between mt-[32px] items-center ">
           <div>
@@ -46,21 +79,22 @@ const DiscoverNGO = () => {
             </div>
           </div>
           <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-[24px] mt-[24px]">
-            {DiscoverNGOcard.map((item, index) => (
+            {proposalData?.result?.map((item, index) => (
               <div
                 key={index}
                 className=" max-w-[240px] w-full mx-auto border-[1px] border-[#E0E0E0] bg-white rounded-[4px] "
               >
                 <div className=" group relative ">
                   <Image
-                    src={item.img1}
+                    src={item.image}
                     width={324}
                     height={240}
                     alt="CraftYour-img4.png"
-                    
+
                   />
                   <div className=" flex-col flex gap-[10px] custom-bg group-hover:duration-300 absolute w-full top-0 h-full justify-center ">
                     <button
+                    onClick={()=>handleClick(item.id)}
                       className=" bg-[#F2F2F2] rounded-[4px] py-[8px] px-[35px] max-w-[100px]
                      w-full border-[1px] border-white hover:bg-transparent duration-300 text-[#333] font-interTight text-[14px] font-semibold hover:text-white mx-auto hidden group-hover:block"
                     >
@@ -68,11 +102,12 @@ const DiscoverNGO = () => {
                     </button>
                   </div>
                 </div>
-                <div className=" pb-4 lg:pb-6 px-2 sm:px-3 lg:px-[17px] ">
-                  <p className=" font-interTight leading-[130%] text-[#333333] text-[12px] sm:text-[14px] md:text-[16px] pt-2 md:pt-[12px] line-clamp-2 ">
-                    {item.text1}
+                <div className="pb-4 lg:pb-6 px-2 sm:px-3 lg:px-[17px] text-center">
+                  <p className="font-interTight leading-[130%] text-[#333333] text-[12px] sm:text-[14px] md:text-[16px] pt-2 md:pt-[12px] line-clamp-2">
+                    {item.name}
                   </p>
                 </div>
+
               </div>
             ))}
           </div>

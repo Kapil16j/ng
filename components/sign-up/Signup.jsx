@@ -76,7 +76,7 @@ const Signup = () => {
     dispatch(register({ data })).then((data) => {
       setLoading(false)
       if (data?.status == 201) {
-        alert("Registered Successfully");
+        // alert("Registered Successfully");
       
         router.push('/signin')
       } else if (data?.response?.status == 400) {
@@ -197,6 +197,14 @@ const Signup = () => {
               Sign Up <FormarrowIcon />
             </button>
           </form>
+          <div className="mt-4 text-center">
+            <span className="text-[#828282] font-interTight text-[16px]">
+              Already a User?{" "}
+              <button onClick={()=>router.push("/signin")} className="text-blue-500 hover:underline">
+                Sign in
+              </button>
+            </span>
+          </div>
           <div className="w-full my-4 sm:my-[29px]  flex gap-[30px] items-center ">
             <div className="w-full  h-[1px] bg-[#E0E0E0]"></div>
             <p className="text-[#BDBDBD] font-interTight text-[18px] font-normal leading-[140%]">

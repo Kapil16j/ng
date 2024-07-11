@@ -38,7 +38,7 @@ const Navbar = () => {
 
   const handleLogout = () =>{
 
-    dispatch(logout())
+    router.push("/dashboard/home")
   }
 
   const handleLogin = () =>{
@@ -84,10 +84,10 @@ const Navbar = () => {
               </Link>
               {
                 loginData ?
-                  <button className="w-[78px] font-interTight text-base font-normal rounded-[4px] leading-[150%] h-[40px] bg-coarseWool border-[1px] border-black text-white hover:bg-transparent hover:text-black transition duration-300 ease-in-out"
+                  <button className="w-[100px] font-interTight text-base font-normal rounded-[4px] leading-[150%] h-[40px] bg-coarseWool border-[1px] border-black text-white hover:bg-transparent hover:text-black transition duration-300 ease-in-out"
                   onClick={()=>handleLogout()}
                   >
-                    Logout
+                    Dashboard
                   </button>
                   :
                   <button className="w-[78px] font-interTight text-base font-normal rounded-[4px] leading-[150%] h-[40px] bg-coarseWool border-[1px] border-black text-white hover:bg-transparent hover:text-black transition duration-300 ease-in-out"

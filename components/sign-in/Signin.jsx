@@ -22,7 +22,7 @@ const Signin = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   const validateEmail = (email) => {
     const re =
@@ -70,8 +70,8 @@ const Signin = () => {
       console.log("loginData??", data);
       setLoading(false);
       if (data?.status == 201 || data?.status == 200) {
-        alert("Login Successfully");
-        router.push('/dashboard/home')
+        // alert("Login Successfully");
+        router.push("/dashboard/home");
       } else if (data?.response?.status) {
         alert(data?.response?.data?.detail);
       }
@@ -80,9 +80,7 @@ const Signin = () => {
 
   return (
     <div className="w-full flex sm:h-screen">
-      {loading && (
-        <Loader/>
-      )}
+      {loading && <Loader />}
       <div className="w-full lg:w-[51.5%] overflow-auto sm:max-lg:bg-[url(/assets/img/login-bg.png)] bg-cover bg-no-repeat bg-center sm:bg-white flex max-lg:py-20 max-sm:py-10 items-center justify-center p-4">
         <div className="lg:max-w-[436px] max-w-[636px] h-fit max-lg:overflow-auto sm:max-lg:shadow-[0px_0px_112px_0px_rgba(0,0,0,0.09),0px_0px_18px_0px_rgba(0,0,0,0.12)_inset] rounded-md max-lg:p-8 max-sm:px-3 max-sm:py-6 bg-white w-full">
           <h2 className="text-zinc-800 text-2xl lg:text-4xl xl:text-5xl font-bold font-interTight leading-[120%]">
@@ -103,8 +101,7 @@ const Signin = () => {
                 type="email"
                 id="email"
                 placeholder="Enter email address"
-                className={`xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${emailError ? "border-red-500" : ""
-                  }`}
+                className={`xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${emailError ? "border-red-500" : ""}`}
                 value={email}
                 onChange={handleEmailChange}
               />
@@ -114,8 +111,7 @@ const Signin = () => {
             </div>
             <div className="flex flex-col gap-1 sm:gap-[10px] relative">
               <span
-                className={`absolute cursor-pointer right-5 ${passwordError ? "bottom-[62px] xl:bottom-14" : "xl:bottom-6 bottom-3"
-                  }`}
+                className={`absolute cursor-pointer right-5 ${passwordError ? "bottom-[62px] xl:bottom-14" : "xl:bottom-6 bottom-3"}`}
                 onClick={() => setPasswordeye(!passwordeye)}
               >
                 {passwordeye ? <EyeoffIcon /> : <EyeonIcon />}
@@ -130,8 +126,7 @@ const Signin = () => {
                 type={passwordeye ? "password" : "text"}
                 id="password"
                 placeholder="Enter password"
-                className={`xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${passwordError ? "border-red-500" : ""
-                  }`}
+                className={`xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${passwordError ? "border-red-500" : ""}`}
                 value={password}
                 onChange={handlePasswordChange}
               />
@@ -163,7 +158,17 @@ const Signin = () => {
             >
               Sign In <FormarrowIcon />
             </button>
+
           </form>
+
+          <div className="mt-4 text-center">
+            <span className="text-[#828282] font-interTight text-[16px]">
+              Don't have an account?{" "}
+              <button onClick={()=>router.push("/signup")} className="text-blue-500 hover:underline">
+                Sign up
+              </button>
+            </span>
+          </div>
           <div className="w-full my-4 xl:my-[29px] flex gap-[30px] items-center">
             <div className="w-full h-[1px] bg-[#E0E0E0]"></div>
             <p className="text-[#BDBDBD] font-interTight text-[18px] font-normal leading-[140%]">
@@ -177,6 +182,7 @@ const Signin = () => {
           >
             <GoogleIcon /> Register with Google
           </button>
+          
         </div>
       </div>
       <div className="w-[48.5%] max-lg:hidden bg-[url(/assets/img/login-bg.png)] bg-cover bg-no-repeat bg-center flex items-center justify-center p-4"></div>

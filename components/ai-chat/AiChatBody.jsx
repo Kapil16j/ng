@@ -1,155 +1,228 @@
-import { Allchat2card, Allchatcard } from "../common/Helper";
-import {
-  AiChatAiIcon,
-  AiChatExpandIcon,
-  AiChatShrinkIcon,
-  AiChatSparkleIcon,
-  AiChatTranslateIcon,
-  EnterIcons,
-  PlusIcons,
-} from "../common/Icon";
+import { useEffect, useState, useRef } from "react";
+import { AiChatAiIcon, AiChatExpandIcon, AiChatShrinkIcon, AiChatSparkleIcon, AiChatTranslateIcon, EnterIcons, PauseIcon, PlusIcons } from "../common/Icon";
 import AiChatGenerateProposal from "./AiChatGenerateProposal";
 import AiChatGrayBtnWithIconLabel from "./AiChatGrayBtnWithIconLabel";
 import ProposalCreatorComponent from "./ProposalCreatorComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { genreatePorposalMessage, getAllMessagesForChat } from "@/app/store/actions/dataActions";
+import moment from 'moment';
+import ChatMessage from "../common/ChatMessage";
+import Typewriter from 'typewriter-effect';
 
-const AiChatBody = ({ createProposal }) => {
+const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, selectedChatId, loading, setLoading }) => {
+  const [answer, setAnswer] = useState('');
+  const [inputLoading, setInputLoading] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
+  const [typoWriteText, setTypeWriterText] = useState(false);
+
+  const dispatch = useDispatch();
+  const chatContainerRef = useRef(null);
+
+  const allMessages = useSelector((state) => state.data.allChatMessages);
+
+  console.log("selectedChatId??", selectedChatId);
+
+  const userMessages = allMessages?.filter(msg => msg.sentBy === 'USER');
+  const systemMessages = allMessages?.filter(msg => msg.sentBy === 'SYSTEM');
+
+  const sendAnswer = async () => {
+    if (answer === "") return null;
+
+    setInputLoading(true);
+    const data = {
+      "chat_id": selectedChatId,
+      "fine_tuned_answers": answer
+    };
+
+    try {
+      await dispatch(genreatePorposalMessage(data));
+      await fetchAllMessagesChat();
+      setInputLoading(false);
+      // setTypeWriterText(true)
+      setAnswer(''); 
+ 
+    } catch (error) {
+      console.error('Error sending answer:', error);
+      setInputLoading(false);
+    }
+  };
+
+
+
+  const fetchAllMessagesChat = async () => {
+    if (!selectedChatId) return; 
+        setLoading(true);
+    await dispatch(getAllMessagesForChat(selectedChatId)).then(() => {
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    if (selectedChatId) {
+      fetchAllMessagesChat().then(() => setDataFetched(true));
+    }
+  }, [selectedChatId]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [allMessages]);
+
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      console.log("Scrolling to bottom", chatContainerRef.current);
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [allMessages, inputLoading]);
+
   return (
     <div className="w-full h-full overflow-auto bg-[#FAFAFA] pt-8 px-4 md:pl-8 md:pr-5 scroll-ml-2">
-      <div
-        className={`w-full ${
-          createProposal
-            ? "h-[calc(100%-74px)]"
-            : "h-[calc(100%-74px)] sm:h-[calc(100%-120px)]"
-        } flex-grow overflow-auto`}
-      >
-        {!createProposal ? (
-          <>
-            <div className="max-w-[992px] w-full">
-              <div className="flex flex-col gap-[34px]">
-                {Allchatcard.map((item, index) => (
-                  <div
-                    key={index}
-                    className="pl-3 sm:pl-[15px] md:pl-[22px] relative"
-                  >
-                    <div className="absolute z-50 top-0 left-0">
-                      <AiChatAiIcon />
-                    </div>
-                    <div className=" flex gap-3 pl-[25px] md:pl-10 items-center ">
-                      <span className=" font-interTight tracking-[2px] font-bold text-[#333] ">
-                        {item.user}
-                      </span>
-                      <p className=" text-[11px] flex items-center gap-[3px] text-[#333] font-interTight leading-[130%] ">
-                        {item.text2}
-                        <span className=" h-[2px] w-[2px] bg-[#333] flex "></span>
-                        <span>{item.time}</span>
-                      </p>
-                    </div>
-                    <div
-                      className={` rounded max-w-[970px] py-4 md:py-6 text-base mt-1 px-6 md:pl-[29px] md:pr-[33px] w-full ${
-                        item.user === "You"
-                          ? " bg-white leading-[160%]"
-                          : "bg-[#E3E8F2]"
-                      }`}
-                    >
-                      <p className="max-w-[908px] w-full text-[#333] font-interTight text-sm md:text-[16px] leading-[130%] ">
-                        {item.chat}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Today seperator line */}
-              <div className="w-full my-6 flex gap-2 items-center">
-                <div className="w-full bg-[#E0E0E0] h-[1.5px] "></div>
-                <p className="text-sm font-interTight font-bold text-[#BDBDBD] ">
-                  Today
-                </p>
-                <div className="w-full bg-[#E0E0E0] h-[1.5px] "></div>
-              </div>
-
-              {/* Today chats */}
-              <div className="flex flex-col gap-[34px]">
-                {Allchat2card.map((item, index) => (
-                  <div
-                    key={index}
-                    className="pl-3 sm:pl-5 md:pl-[22px] relative"
-                  >
-                    <div className="absolute z-50 top-0 left-0">
-                      <AiChatAiIcon />
-                    </div>
-                    <div className=" flex gap-3 md:pl-[29px] pl-10 items-center ">
-                      <span className=" font-interTight tracking-[2px] font-bold text-[#333] ">
-                        {item.user}
-                      </span>
-                      <p className=" text-[11px] flex items-center gap-[3px] text-[#333] font-interTight leading-[130%] ">
-                        {item.text2}
-                        <span className="h-[2px] w-[2px] bg-[#333] flex"></span>
-                        <span>{item.time}</span>
-                      </p>
-                    </div>
-                    <div
-                      className={` rounded max-w-[970px] py-6 text-[16px] pl-[29px] mt-1 pr-[33px] w-full ${
-                        item.user === "You"
-                          ? " bg-white leading-[160%]"
-                          : "bg-[#E3E8F2]"
-                      }`}
-                    >
-                      <p className=" max-w-[908px] w-full text-[#333] font-interTight text-sm md:text-[16px] leading-[130%] ">
-                        {item.chat}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      <div className={`w-full ${createProposal ? "h-[calc(100%-74px)]" : "h-[calc(100%-74px)] sm:h-[calc(100%-120px)]"} flex-grow overflow-auto`} ref={chatContainerRef}>
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div role="status">
+              <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+              </svg>
+              <span className="sr-only">Loading...</span>
             </div>
+          </div>
+        ) : !createProposal ? (
+          <>
+            {dataFetched && allMessages?.length === 0 ? (
+              <div className="flex items-center justify-center h-full">
+                <p></p>
+              </div>
+            ) : (
+              <div className="max-w-[992px] w-full">
+                <div className="flex flex-col gap-[34px]">
+                  {allMessages?.map((item, i) => (
+                    <div key={i} className={`pl-3 sm:pl-[15px] md:pl-[22px] relative ${item.sentBy === "USER" ? "text-right" : ""}`}>
+                      {item.sentBy === "SYSTEM" && (
+                        <div className="absolute z-50 top-0 left-0">
+                          <AiChatAiIcon />
+                        </div>
+                      )}
+                      <div className={`flex gap-3 ${item.sentBy === "USER" ? "justify-end" : ""} pl-[25px] md:pl-10 items-center`}>
+                        <span className="font-interTight tracking-[2px] font-bold text-[#333]">
+                          {item.sentBy === "USER" ? "You" : "AI"}
+                        </span>
+                        <p className="text-[11px] flex items-center gap-[3px] text-[#333] font-interTight leading-[130%]">
+                          {item.text2}
+                          <span className="h-[2px] w-[2px] bg-[#333] flex"></span>
+                          <span>{moment(item.created_at).format('MMMM Do YYYY, h:mm:ss a')}</span>
+                        </p>
+                      </div>
+                      <div className={`rounded max-w-[970px] py-4 md:py-6 text-base mt-1 px-6 md:pl-[29px] md:pr-[33px] w-full ${item.sentBy === "USER" ? "bg-white leading-[160%] text-right" : "bg-[#E3E8F2]"}`}>
+                        {item.message.split('\n').map((line, index) => {
+                          // Use a regular expression to find text enclosed in **
+                          let formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-            {/* Generate proposal btn */}
-            <AiChatGenerateProposal />
+                          // Check if the line starts with a '-'
+                          if (line.trim().startsWith('-')) {
+                            formattedLine = '<span style="padding-left: 2em; display: inline-block;">•' + line.substring(1).trim() + '</span>';
+                          }
+
+                          return (
+                            <>
+                              {/* {(item.sentBy === "SYSTEM" && i === allMessages.length - 1 &&  typoWriteText == true) ?
+                              <Typewriter
+                              onInit={(typewriter) => {
+                                typewriter
+                                  .typeString(formattedLine)
+                                  .callFunction(() => {
+                                    console.log('Text typing complete!');
+                                    // setTypeWriterText(false)
+                                    // Any other logic you want to execute after typing is complete
+                                  })
+                                  .start();
+                              }}
+                              options={{
+                                autoStart: true,
+                                loop: false,
+                                html: true, // Enable HTML tags in strings
+                                cursor: ''
+                              }}
+                            />
+                                : */}
+
+                                <p
+                                  key={index}
+                                  className="leading-[160%]"
+                                  dangerouslySetInnerHTML={{ __html: formattedLine }}
+                                ></p>
+                              {/* } */}
+                            </>
+
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+
+                </div>
+              </div>
+            )}
           </>
         ) : (
-          <ProposalCreatorComponent />
+          <ProposalCreatorComponent setActive={setActive} setCreateProposal={setCreateProposal}/>
         )}
       </div>
 
-      {/* Chat input and btns */}
+      {/* Input loader */}
+      {inputLoading && (
+        <div className="flex items-center justify-center mt-2">
+          <div role="status">
+            <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
+              <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
+            </svg>
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      )}
+
+      {/* Chat input and buttons */}
       <div className="py-2 max-w-[992px] w-full flex flex-col gap-[13px]">
-        {/* Translate, improve, make longer, make shorter btns*/}
         {!createProposal && (
           <div className="max-sm:hidden flex items-center justify-start gap-3">
-            <AiChatGrayBtnWithIconLabel
-              icon={<AiChatTranslateIcon />}
-              label="Translate"
-            />
-            <AiChatGrayBtnWithIconLabel
-              icon={<AiChatSparkleIcon />}
-              label="Improve"
-            />
-            <AiChatGrayBtnWithIconLabel
-              icon={<AiChatExpandIcon />}
-              label="Make longer"
-            />
-            <AiChatGrayBtnWithIconLabel
-              icon={<AiChatShrinkIcon />}
-              label="Make shorter"
-            />
+            <AiChatGrayBtnWithIconLabel icon={<AiChatTranslateIcon />} label="Translate" />
+            <AiChatGrayBtnWithIconLabel icon={<AiChatSparkleIcon />} label="Improve" />
+            <AiChatGrayBtnWithIconLabel icon={<AiChatExpandIcon />} label="Make longer" />
+            <AiChatGrayBtnWithIconLabel icon={<AiChatShrinkIcon />} label="Make shorter" />
           </div>
         )}
 
-        {/* Chat input */}
-        <div className=" bg-white py-[10px] px-3 md:px-6 rounded shadow-[0px_2px_4.4px_0px_rgba(30,31,34,0.05)]">
+        <div className="bg-white py-[10px] px-3 md:px-6 rounded shadow-[0px_2px_4.4px_0px_rgba(30,31,34,0.05)]">
           <div className="flex items-center gap-2 sm:gap-[23px]">
-            <div className="p-[6px] bg-[#E3E8F2] h-9 w-9 rounded cursor-pointer ">
+            <div className="p-[6px] bg-[#E3E8F2] h-9 w-9 rounded cursor-pointer">
               <PlusIcons />
             </div>
             <input
               type="text"
               placeholder="Ask questions, or type ‘/’ for commands"
-              className=" text-[#BDBDBD] pl-1 text-[18px] w-full outline-none leading-[140%] font-interTight "
+              className="text-black pl-1 text-[18px] w-full outline-none leading-[140%] font-interTight"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+
             />
-            <div className=" cursor-pointer ">
-              <EnterIcons />
-            </div>
+
+            {!inputLoading ?
+              <div className="cursor-pointer" onClick={() => sendAnswer()}>
+                <EnterIcons />
+
+              </div>
+              :
+
+              <>
+
+              </>
+
+
+            }
           </div>
         </div>
       </div>
