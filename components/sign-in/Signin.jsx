@@ -163,7 +163,7 @@ const Signin = () => {
 
           <div className="mt-4 text-center">
             <span className="text-[#828282] font-interTight text-[16px]">
-              Don't have an account?{" "}
+              Don&apos;t have an account?
               <button onClick={()=>router.push("/signup")} className="text-blue-500 hover:underline">
                 Sign up
               </button>
