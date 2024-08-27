@@ -6,7 +6,7 @@ import {
   FormarrowIcon,
   GoogleIcon,
 } from "../common/Icon";
-import { logIn } from "@/app/store/actions/dataActions";
+import { logIn, verifyOtp } from "@/app/store/actions/dataActions"; // Assuming you have a verifyOtp action
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
@@ -20,6 +20,8 @@ const Signin = () => {
   const [termsChecked, setTermsChecked] = useState(false);
   const [termsError, setTermsError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState(""); // State to store the OTP
+  const [otpVisible, setOtpVisible] = useState(false); // State to control OTP screen visibility
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -49,13 +51,11 @@ const Signin = () => {
     e.preventDefault();
 
     const isValidEmail = validateEmail(email);
-    const isValidPassword = password.length >= 8;
 
     setEmailError(!isValidEmail);
-    setPasswordError(!isValidPassword);
     setTermsError(!termsChecked);
 
-    if (!isValidEmail || !isValidPassword || !termsChecked) {
+    if (!isValidEmail || !termsChecked) {
       return;
     }
 
@@ -63,17 +63,37 @@ const Signin = () => {
 
     const data = {
       email: email,
-      password: password,
     };
 
-    dispatch(logIn({ data })).then((data) => {
-      console.log("loginData??", data);
+    dispatch(logIn({ data })).then((response) => {
+      console.log("loginData??", response);
       setLoading(false);
-      if (data?.status == 201 || data?.status == 200) {
-        // alert("Login Successfully");
-        router.push("/dashboard/home");
-      } else if (data?.response?.status) {
-        alert(data?.response?.data?.detail);
+      if (response?.status === 201 || response?.status === 200) {
+        setOtpVisible(true); // Show OTP screen on successful login
+      } else if (response?.response?.status) {
+        alert(response?.response?.data?.detail);
+      }
+    });
+  };
+
+  const handleOtpSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const data = {
+      email: email,
+      otp:otp
+    };
+
+    dispatch(verifyOtp({data })).then((response) => {
+      setLoading(false);
+      if (response?.status === 200) {
+
+        console.log("response?????",response)
+        alert("OTP Verified Successfully");
+        router.push("/dashboard/home"); // Redirect to the dashboard after successful OTP verification
+      } else {
+        alert("Invalid OTP. Please try again.");
       }
     });
   };
@@ -89,77 +109,80 @@ const Signin = () => {
           <p className="text-[#828282] mt-2 font-interTight text-[16px] sm:text-[22px] font-light">
             We are happy to have you back
           </p>
-          <form className="w-full flex gap-5 flex-col mt-3 xl:mt-[49px]" onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-1 sm:gap-[10px]">
-              <label
-                htmlFor="email"
-                className="text-[#333] font-interTight text-[16px] sm:text-[18px] font-normal leading-[140%]"
+          
+          {otpVisible ? (
+            <form className="w-full flex gap-5 flex-col mt-3 xl:mt-[49px]" onSubmit={handleOtpSubmit}>
+              <div className="flex flex-col gap-1 sm:gap-[10px]">
+                <label
+                  htmlFor="otp"
+                  className="text-[#333] font-interTight text-[16px] sm:text-[18px] font-normal leading-[140%]"
+                >
+                  Enter OTP
+                </label>
+                <input
+                  type="text"
+                  id="otp"
+                  placeholder="Enter OTP"
+                  className="xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0]"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full text-white font-interTight text-[16px] font-medium h-[48px] xl:h-[64px] rounded flex items-center justify-center gap-3 border border-[#1D2130] duration-300 group hover:text-[#1D2130] hover:bg-transparent bg-[#1D2130]"
               >
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                placeholder="Enter email address"
-                className={`xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${emailError ? "border-red-500" : ""}`}
-                value={email}
-                onChange={handleEmailChange}
-              />
-              {emailError && (
-                <p className="text-red-500">Please enter a valid email address.</p>
+                Verify OTP <FormarrowIcon />
+              </button>
+            </form>
+          ) : (
+            <form className="w-full flex gap-5 flex-col mt-3 xl:mt-[49px]" onSubmit={handleSubmit}>
+              <div className="flex flex-col gap-1 sm:gap-[10px]">
+                <label
+                  htmlFor="email"
+                  className="text-[#333] font-interTight text-[16px] sm:text-[18px] font-normal leading-[140%]"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Enter email address"
+                  className={`xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${emailError ? "border-red-500" : ""}`}
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+                {emailError && (
+                  <p className="text-red-500">Please enter a valid email address.</p>
+                )}
+              </div>
+             
+              <div className="flex gap-2 sm:gap-4 items-center">
+                <input
+                  type="checkbox"
+                  name="agree"
+                  id="agree"
+                  checked={termsChecked}
+                  onChange={handleTermsChange}
+                />
+                <label
+                  htmlFor="agree"
+                  className="text-[#4F4F4F] font-interTight text-[18px] font-normal leading-[140%]"
+                >
+                  I agree to terms & conditions
+                </label>
+              </div>
+              {termsError && (
+                <p className="text-red-500">Please agree to the terms and conditions.</p>
               )}
-            </div>
-            <div className="flex flex-col gap-1 sm:gap-[10px] relative">
-              <span
-                className={`absolute cursor-pointer right-5 ${passwordError ? "bottom-[62px] xl:bottom-14" : "xl:bottom-6 bottom-3"}`}
-                onClick={() => setPasswordeye(!passwordeye)}
+              <button
+                type="submit"
+                className="w-full text-white font-interTight text-[16px] font-medium h-[48px] xl:h-[64px] rounded flex items-center justify-center gap-3 border border-[#1D2130] duration-300 group hover:text-[#1D2130] hover:bg-transparent bg-[#1D2130]"
               >
-                {passwordeye ? <EyeoffIcon /> : <EyeonIcon />}
-              </span>
-              <label
-                htmlFor="password"
-                className="text-[#333] font-interTight text-[16px] sm:text-[18px] font-normal leading-[140%]"
-              >
-                Password
-              </label>
-              <input
-                type={passwordeye ? "password" : "text"}
-                id="password"
-                placeholder="Enter password"
-                className={`xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${passwordError ? "border-red-500" : ""}`}
-                value={password}
-                onChange={handlePasswordChange}
-              />
-              {passwordError && (
-                <p className="text-red-500">Password must be at least 8 characters long.</p>
-              )}
-            </div>
-            <div className="flex gap-2 sm:gap-4 items-center">
-              <input
-                type="checkbox"
-                name="agree"
-                id="agree"
-                checked={termsChecked}
-                onChange={handleTermsChange}
-              />
-              <label
-                htmlFor="agree"
-                className="text-[#4F4F4F] font-interTight text-[18px] font-normal leading-[140%]"
-              >
-                I agree to terms & conditions
-              </label>
-            </div>
-            {termsError && (
-              <p className="text-red-500">Please agree to the terms and conditions.</p>
-            )}
-            <button
-              type="submit"
-              className="w-full text-white font-interTight text-[16px] font-medium h-[48px] xl:h-[64px] rounded flex items-center justify-center gap-3 border border-[#1D2130] duration-300 group hover:text-[#1D2130] hover:bg-transparent bg-[#1D2130]"
-            >
-              Sign In <FormarrowIcon />
-            </button>
-
-          </form>
+                Sign In <FormarrowIcon />
+              </button>
+            </form>
+          )}
 
           <div className="mt-4 text-center">
             <span className="text-[#828282] font-interTight text-[16px]">

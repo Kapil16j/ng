@@ -27,7 +27,7 @@ const Dashboard = () => {
       <div className="max-w-[1334px] w-full mx-auto pt-4 sm:pt-6 px-4 md:px-8 pb-4 sm:pb-8 flex flex-col gap-4">
         <div className="flex max-sm:flex-col max-sm:gap-4 justify-between w-full items-center">
           <p className=" font-inter font-semibold text-[30px] leading-[120%] tracking-[-0.75px] text-ruinedSmores">
-            Dashboard
+            Home
           </p>
           <div className="flex max-sm:flex-col gap-4 sm:gap-2 items-center max-w-[407px] w-full">
             <div className="max-w-[300px] w-full py-2 px-4 border border-[#E4E4E7] rounded-[6px] bg-white">

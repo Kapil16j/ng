@@ -290,20 +290,60 @@ export const CraftYourcard = [
 ];
 export const DiscoverNGOcard = [
   {
-    img1: "/assets/img/CraftYour-img2.png",
+    img1: "/assets/img/image1.png",
     text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
   },
   {
-    img1: "/assets/img/CraftYour-img2.png",
+    img1: "/assets/img/image2.png",
     text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
   },
   {
-    img1: "/assets/img/CraftYour-img2.png",
+    img1: "/assets/img/image3.png",
     text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
   },
   {
-    img1: "/assets/img/CraftYour-img2.png",
+    img1: "/assets/img/image4.png",
     text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
+  },
+  {
+    img1: "/assets/img/image5.png",
+    text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
+  },
+  {
+    img1: "/assets/img/image6.png",
+    text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
+  },
+  {
+    img1: "/assets/img/image7.png",
+    text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
+  },
+  {
+    img1: "/assets/img/image8.png",
+    text1: "Upcoming Grant Opportunities for  Africa in 2024",
+    location:"Indore",
+    deadline:"12 May 2024",
+    amount:"$432687"
   },
 ];
 export const PriceCardData = [

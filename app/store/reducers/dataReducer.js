@@ -23,6 +23,10 @@ import {
   REFERSH_TOKEN_FAILURE,
   GENERATE_PROPOSAL,
   GENERATE_PROPOSAL_FAILURE,
+  ALL_GRANTS,
+  ALL_GRANTS_ERROR,
+  SEARCH_GRANTS,
+  SEARCH_GRANTS_ERROR,
 
 } from "../reducerTypes";
 
@@ -58,6 +62,13 @@ const initialState = {
 
   generatePropsalData: [],
   generatePropsalDataError: null,
+
+  allGrants:[],
+  allGrantsError:null,
+
+  searchGrants:[],
+  searchGrantsError:null
+
 
 
 };
@@ -211,6 +222,36 @@ const dataReducer = (state = initialState, action) => {
         generatePropsalDataError: action.payload,
         isAuthenticated: false,
       };
+
+      case ALL_GRANTS:
+        return {
+          ...state,
+          allGrants: action.payload,
+          error: null,
+          isAuthenticated: false,
+        };
+      case ALL_GRANTS_ERROR:
+        return {
+          ...state,
+          allGrantsError: action.payload,
+          isAuthenticated: false,
+        };
+
+        case SEARCH_GRANTS:
+        return {
+          ...state,
+          searchGrants: action.payload,
+          error: null,
+          isAuthenticated: false,
+        };
+      case SEARCH_GRANTS_ERROR:
+        return {
+          ...state,
+          searchGrantsError: action.payload,
+          isAuthenticated: false,
+        };
+
+      
 
 
 

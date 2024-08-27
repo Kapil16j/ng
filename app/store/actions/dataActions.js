@@ -23,7 +23,11 @@ import {
   REFERSH_TOKEN,
   REFERSH_TOKEN_FAILURE,
   GENERATE_PROPOSAL,
-  GENERATE_PROPOSAL_FAILURE
+  GENERATE_PROPOSAL_FAILURE,
+  ALL_GRANTS,
+  ALL_GRANTS_ERROR,
+  SEARCH_GRANTS,
+  SEARCH_GRANTS_ERROR
 } from "../reducerTypes";
 import { AUTH_TOKEN } from "../utils";
 
@@ -72,13 +76,33 @@ export const logIn =
       }
     };
 
+
+    export const verifyOtp =
+  ({ data }) =>
+    async (dispatch) => {
+      try {
+        const response = await axios.post(`${API_BASE_URL}/auth/verify-otp`, data);
+        dispatch({ type: LOGIN_SUCCESS, payload: response.data });
+        return response;
+
+      } catch (error) {
+        dispatch({ type: LOGIN_FAILURE, payload: error.response });
+        return error;
+      }
+    };
+
+
+    
+
 export const getUser =
   () =>
     async (dispatch, getState) => {
       try {
 
         const state = getState();
-        const authToken = state?.data?.loginData?.data?.access_token
+
+        console.log("state?????",state)
+        const authToken = state?.data?.loginData?.access_token
         console.log("authToken?", authToken)
         const response = await axios.get(`${API_BASE_URL}/auth/me`,
           {
@@ -104,7 +128,7 @@ export const getAllSampleProposals =
       try {
 
         const state = getState();
-        const authToken = state?.data?.loginData?.data?.access_token
+        const authToken = state?.data?.loginData?.access_token
         console.log("authToken?", authToken)
         const response = await axios.get(`${API_BASE_URL}/users/all_sample_proposals`,
           {
@@ -119,6 +143,7 @@ export const getAllSampleProposals =
 
       } catch (error) {
         dispatch({ type: ALL_SAMPLE_PROPOSALS_FAILURE, payload: error.response });
+        dispatch({ type: ALL_SAMPLE_PROPOSALS, payload: [] });
         return error;
       }
     };
@@ -131,7 +156,7 @@ export const getProposalQuestions =
       try {
 
         const state = getState();
-        const authToken = state?.data?.loginData?.data?.access_token
+        const authToken = state?.data?.loginData?.access_token
         console.log("authToken?", authToken)
         console.log("data??", data)
         const response = await axios.post(`${API_BASE_URL}/users/proposal_questions`, data,
@@ -159,7 +184,7 @@ export const getAllChats =
       try {
 
         const state = getState();
-        const authToken = state?.data?.loginData?.data?.access_token
+        const authToken = state?.data?.loginData?.access_token
         console.log("authToken?", authToken)
         const response = await axios.get(`${API_BASE_URL}/users/all_chats`,
           {
@@ -187,7 +212,7 @@ export const getAllMessagesForChat =
 
         console.log("chatId??...", chatId)
         const state = getState();
-        const authToken = state?.data?.loginData?.data?.access_token
+        const authToken = state?.data?.loginData?.access_token
         console.log("authToken?", authToken)
         const response = await axios.get(`${API_BASE_URL}/users/all_messages_for_chat/${chatId}`,
           {
@@ -215,7 +240,7 @@ export const refershTokenValue =
       try {
 
         const state = getState();
-        const authToken = state?.data?.loginData?.data?.access_token
+        const authToken = state?.data?.loginData?.access_token
         const data = {
           "refresh_token": authToken
         }
@@ -244,7 +269,7 @@ export const genreatePorposalMessage =
       try {
 
         const state = getState();
-        const authToken = state?.data?.loginData?.data?.access_token
+        const authToken = state?.data?.loginData?.access_token
 
         const response = await axios.post(`${API_BASE_URL}/users/generate_proposal`, data,
           {
@@ -263,6 +288,94 @@ export const genreatePorposalMessage =
         return error;
       }
     };
+
+export const getAllGrants =
+  () =>
+    async (dispatch, getState) => {
+      try {
+
+        const state = getState();
+        const authToken = state?.data?.loginData?.access_token
+
+        const response = await axios.get(`${API_BASE_URL}/users/grants?skip=0&limit=10`,
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+              'content-type': 'multipart/form-data'
+            },
+          }
+        );
+
+        console.log("response??", response)
+        dispatch({ type: ALL_GRANTS, payload: response.data });
+        return response;
+
+      } catch (error) {
+        console.log("error??", error)
+        dispatch({ type: ALL_GRANTS_ERROR, payload: error.response });
+        dispatch({ type: ALL_GRANTS, payload: [] });
+        return error;
+      }
+    };
+
+export const searchAllGrants =
+  (search) =>
+    async (dispatch, getState) => {
+      try {
+
+        const state = getState();
+        const authToken = state?.data?.loginData?.access_token
+
+
+        const data = {
+          query: search
+        }
+        const response = await axios.post(`${API_BASE_URL}/users/search-grants`, data,
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        console.log("response??", response)
+        dispatch({ type: SEARCH_GRANTS, payload: response.data });
+        return response;
+
+      } catch (error) {
+        console.log("error??", error)
+        dispatch({ type: SEARCH_GRANTS_ERROR, payload: error.response });
+        dispatch({ type: SEARCH_GRANTS, payload: [] });
+        return error;
+      }
+    };
+
+
+    export const premiumSupport =
+  (data) =>
+    async (dispatch, getState) => {
+      try {
+
+        const state = getState();
+        const authToken = state?.data?.loginData?.access_token
+    
+        const response = await axios.post(`${API_BASE_URL}/users/premium-support`, data,
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        console.log("premium-support", response)
+
+        return response;
+
+      } catch (error) {
+        return error;
+      }
+    };
+
+    
 
 
 
