@@ -47,6 +47,15 @@ const Navbar = () => {
     router.push('/signin')
   }
 
+  const handleAdminLogin = () =>{
+
+ 
+    router.push('/admin/app')
+  }
+
+
+
+  
   return (
     <>
       <nav>
@@ -97,6 +106,12 @@ const Navbar = () => {
                   </button>
 
               }
+
+<button className="w-[78px] font-interTight text-base font-normal rounded-[4px] leading-[150%] h-[40px] bg-coarseWool border-[1px] border-black text-white hover:bg-transparent hover:text-black transition duration-300 ease-in-out"
+                  onClick={()=>handleAdminLogin()} 
+                  >
+                    Admin
+                  </button>
             </div>
           </div>
         </div>

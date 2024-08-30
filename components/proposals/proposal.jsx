@@ -59,7 +59,7 @@ const Proposal = ({setSelectedComponent}) => {
         onSubmit={handleSubmit}
         className="bg-gray-100 p-8 rounded shadow-lg w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Submit Proposal</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Support</h2>
 
         <div className="mb-4">
           <label className="block text-gray-700 font-semibold mb-2">Name</label>

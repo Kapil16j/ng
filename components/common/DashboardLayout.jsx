@@ -19,11 +19,11 @@ const DashboardLayout = ({ children }) => {
       case "AISearch":
         return <Aisearch />;
       case "Proposals":
-        return <Proposal setSelectedComponent={setSelectedComponent}/>;
+        return null;
       case "Grants":
         return null;
       case "Help":
-        return null;
+        return <Proposal setSelectedComponent={setSelectedComponent}/>;
       default:
         return <DiscoverNGO />;
     }
