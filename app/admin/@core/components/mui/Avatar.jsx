@@ -29,6 +29,7 @@ const Avatar = styled(MuiAvatar)(({ skin, color, size, theme }) => {
       width: size
     })
   }
+  
 })
 
 const CustomAvatar = forwardRef((props, ref) => {
