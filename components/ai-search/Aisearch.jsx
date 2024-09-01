@@ -52,7 +52,7 @@ const Aisearch = () => {
             <div className="max-sm:flex-col flex justify-between sm:mt-[34px] items-center gap-[10px]">
               <div>
                 <p className="text-[#333333] font-interTight font-medium md:text-[24px] sm:text-[20px] text-[15px]">
-                  Results for "Africa opportunities"
+                  Results for Africa opportunities
                 </p>
               </div>
             </div>
