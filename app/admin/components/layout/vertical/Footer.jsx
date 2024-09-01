@@ -9,5 +9,5 @@ const Footer = () => {
     </LayoutFooter>
   )
 }
-
+  
 export default Footer

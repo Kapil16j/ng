@@ -11,5 +11,5 @@ const StyledVerticalNavBgColorContainer = styled.div`
   overflow-x: hidden;
   background-color: white;
 `
-
+    
 export default StyledVerticalNavBgColorContainer

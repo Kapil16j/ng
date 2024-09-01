@@ -11,6 +11,6 @@ const StyledVerticalNavContainer = styled.div`
   transition-property: inline-size, inset-inline-start;
   transition-duration: ${({ transitionDuration }) => `${transitionDuration}ms`};
   transition-timing-function: ease-in-out;
-`
+`  
 
 export default StyledVerticalNavContainer

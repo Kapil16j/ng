@@ -20,7 +20,7 @@ import { verticalLayoutClasses } from '@/app/admin/@layouts/utils/layoutClasses'
 
 const NavbarContent = ({user}) => {
   return (
-    <div className={classnames(verticalLayoutClasses.navbarContent, 'flex items-center justify-between gap-4 is-full')}>
+    <div className={classnames(verticalLayoutClasses.navbarContent, 'flex items-center justify-between gap-4 is-full w-[100%]')}>
       <div className='flex items-center gap-2 sm:gap-4'>
         <NavToggle />
         <NavSearch />

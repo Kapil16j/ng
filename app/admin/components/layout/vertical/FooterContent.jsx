@@ -12,7 +12,7 @@ import useVerticalNav from '@/app/admin/@menu/hooks/useVerticalNav'
 // Util Imports
 
 import { verticalLayoutClasses } from '@/app/admin/@layouts/utils/layoutClasses'
-
+  
 const FooterContent = () => {
   // Hooks
   const { isBreakpointReached } = useVerticalNav()

@@ -12,5 +12,5 @@ const User = () => {
     </Grid>
   )
 }
-
+  
 export default User

@@ -88,6 +88,7 @@ const VerticalNav = props => {
       )}
       {...rest}
     >
+      
       <StyledVerticalNavContainer
         width={widthContext}
         className={verticalNavClasses.container}

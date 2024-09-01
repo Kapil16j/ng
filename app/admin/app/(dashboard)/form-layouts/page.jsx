@@ -19,7 +19,7 @@ const FormLayouts = () => {
         <FormLayoutsAlignment />
       </Grid>
     </Grid>
-  )
+  )  
 }
 
 export default FormLayouts

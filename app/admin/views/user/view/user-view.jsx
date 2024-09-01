@@ -43,7 +43,7 @@ export default function UserPage() {
   const [error, setError] = useState(null);
   const [checked, setChecked] = useState(true);
   const [open, setOpen] = useState(false)
-
+  
   const [newUser, setNewUser] = useState({
     name: '',
     phone: '',
@@ -54,7 +54,7 @@ export default function UserPage() {
 
   const getUsers = () => {
     getAllUser().then((item) => {
-      console.log("useritem???", item)
+
       setUsers(item?.data)
     })
   }

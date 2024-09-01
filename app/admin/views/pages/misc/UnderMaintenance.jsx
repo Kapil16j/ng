@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 
 // Component Imports
 import Illustrations from '@/app/admin/components/Illustrations'
-
+  
 // Hook Imports
 // import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useImageVariant } from '@/app/admin/@core/hooks/useImageVariant'

@@ -21,5 +21,5 @@ const StyledVerticalNavExpandIcon = styled.span`
     }
   }
 `
-
+  
 export default StyledVerticalNavExpandIcon

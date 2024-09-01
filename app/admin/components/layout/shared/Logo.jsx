@@ -9,7 +9,7 @@ import MaterioLogo from '../../../@core/svg/Logo'
 
 // Config Imports
 import themeConfig from '@/app/admin/configs/themeConfig'
-
+  
 const LogoText = styled.span`
   color: ${({ color }) => color ?? 'var(--mui-palette-text-primary)'};
   font-size: 1.25rem;

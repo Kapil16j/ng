@@ -18,5 +18,5 @@ const tabContentList = () => ({
 const AccountSettingsPage = () => {
   return <AccountSettings tabContentList={tabContentList()} />
 }
-
+  
 export default AccountSettingsPage

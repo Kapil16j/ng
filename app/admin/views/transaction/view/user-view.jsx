@@ -30,7 +30,6 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 import { getAllUser } from '@/app/admin/utils/api';
 
 // ----------------------------------------------------------------------
-
 export default function UserPage() {
   const [users, setUsers] = useState([]);
 

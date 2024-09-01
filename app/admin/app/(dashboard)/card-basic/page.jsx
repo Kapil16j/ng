@@ -21,7 +21,7 @@ import CardFacebook from '@/app/admin/views/card-basic/CardFacebook'
 import CardLinkedIn from '@/app/admin/views/card-basic/CardLinkedIn'
 
 const CardBasic = () => {
-  return (
+  return (  
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Typography variant='h3'>Basic Cards</Typography>

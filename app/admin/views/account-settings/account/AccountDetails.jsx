@@ -15,7 +15,7 @@ import InputLabel from '@mui/material/InputLabel'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import Chip from '@mui/material/Chip'
-
+  
 // Vars
 const initialData = {
   firstName: 'John',

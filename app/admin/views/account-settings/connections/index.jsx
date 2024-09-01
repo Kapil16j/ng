@@ -15,7 +15,7 @@ import CustomIconButton from '@/app/admin/@core/components/mui/IconButton'
 
 // Vars
 const connectedAccountsArr = [
-  {
+  {  
     checked: true,
     title: 'Google',
     logo: '/images/logos/google.png',

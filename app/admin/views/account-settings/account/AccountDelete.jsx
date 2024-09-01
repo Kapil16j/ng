@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 
 const AccountDelete = () => {
-  return (
+  return (  
     <Card>
       <CardHeader title='Delete Account' />
       <CardContent className='flex flex-col items-start gap-6'>

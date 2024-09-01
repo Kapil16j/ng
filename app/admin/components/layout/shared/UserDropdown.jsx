@@ -62,7 +62,7 @@ const UserDropdown = ({user}) => {
     Cookies.remove('accesstoken')
      handleDropdownClose(e, '/admin/app/home/login')
   }
-
+   
   return (
     <>
       <Badge

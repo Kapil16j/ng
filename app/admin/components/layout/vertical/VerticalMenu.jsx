@@ -215,7 +215,7 @@ const VerticalMenu = ({ scrollMenu }) => {
             icon={<i className='ri-git-commit-line' />}
             suffix={<Chip label='Pro' size='small' color='primary' variant='tonal' />}
             target='_blank'
-          >
+          >  
             Form Wizard
           </MenuItem>
           <MenuItem

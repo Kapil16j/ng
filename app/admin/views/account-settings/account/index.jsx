@@ -15,7 +15,7 @@ const Account = () => {
         <AccountDelete />
       </Grid>
     </Grid>
-  )
+  )  
 }
 
 export default Account

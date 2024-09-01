@@ -12,7 +12,7 @@ const StyledVerticalMenuItem = styled.li`
   margin-block-start: 4px;
   ${({ menuItemStyles }) => menuItemStyles};
   ${({ rootStyles }) => rootStyles};
-
+   
   > .${menuClasses.button} {
     ${({ level, disabled }) =>
       menuButtonStyles({

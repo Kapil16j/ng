@@ -18,7 +18,7 @@ const StyledVerticalNav = styled.aside`
   /* Width & Min Width & Margin */
   inline-size: ${({ width }) => `${width}px`};
   min-inline-size: ${({ width }) => `${width}px`};
-
+   
   /* Toggled */
   &.${verticalNavClasses.breakpointReached} {
     position: fixed;

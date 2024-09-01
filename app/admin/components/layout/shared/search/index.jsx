@@ -9,7 +9,7 @@ import useVerticalNav from '@/app/admin/@menu/hooks/useVerticalNav'
 const NavSearch = () => {
   // Hooks
   const { isBreakpointReached } = useVerticalNav()
-
+  
   return isBreakpointReached ? (
     <IconButton className='text-textPrimary'>
       <i className='ri-search-line' />

@@ -30,7 +30,7 @@ const Navbar = () => {
     getUserData()
    
   },[])
-  
+    
 return (
     <LayoutNavbar>
       <NavbarContent user={user}/>

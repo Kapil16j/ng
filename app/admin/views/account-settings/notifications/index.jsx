@@ -60,7 +60,7 @@ const Notifications = () => {
       <Form>
         <div className='overflow-x-auto'>
           <table >
-            <thead>
+            <thead>  
               <tr>
                 <th>Type</th>
                 <th>Email</th>
