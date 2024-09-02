@@ -30,6 +30,7 @@ import {
   SEARCH_GRANTS_ERROR
 } from "../reducerTypes";
 import { AUTH_TOKEN } from "../utils";
+import Cookies from 'js-cookie'
 
 export const fetchData = () => async (dispatch) => {
   dispatch({ type: "FETCH_DATA_REQUEST" });
@@ -99,11 +100,11 @@ export const getUser =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
+        // const state = getState();
 
-        console.log("state?????",state)
-        const authToken = state?.data?.loginData?.access_token
-        console.log("authToken?", authToken)
+        // console.log("state?????",state)
+        // const authToken = state?.data?.loginData?.access_token
+        const authToken = Cookies.get('accesstoken')
         const response = await axios.get(`${API_BASE_URL}/auth/me`,
           {
             headers: {
@@ -127,9 +128,7 @@ export const getAllSampleProposals =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
-        console.log("authToken?", authToken)
+        const authToken = Cookies.get('accesstoken')
         const response = await axios.get(`${API_BASE_URL}/users/all_sample_proposals`,
           {
             headers: {
@@ -155,10 +154,7 @@ export const getProposalQuestions =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
-        console.log("authToken?", authToken)
-        console.log("data??", data)
+        const authToken = Cookies.get('accesstoken')
         const response = await axios.post(`${API_BASE_URL}/users/proposal_questions`, data,
           {
             headers: {
@@ -183,9 +179,7 @@ export const getAllChats =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
-        console.log("authToken?", authToken)
+        const authToken = Cookies.get('accesstoken')
         const response = await axios.get(`${API_BASE_URL}/users/all_chats`,
           {
             headers: {
@@ -210,10 +204,7 @@ export const getAllMessagesForChat =
     async (dispatch, getState) => {
       try {
 
-        console.log("chatId??...", chatId)
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
-        console.log("authToken?", authToken)
+        const authToken = Cookies.get('accesstoken')
         const response = await axios.get(`${API_BASE_URL}/users/all_messages_for_chat/${chatId}`,
           {
             headers: {
@@ -239,8 +230,7 @@ export const refershTokenValue =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
+        const authToken = Cookies.get('accesstoken')
         const data = {
           "refresh_token": authToken
         }
@@ -268,8 +258,7 @@ export const genreatePorposalMessage =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
+        const authToken = Cookies.get('accesstoken')
 
         const response = await axios.post(`${API_BASE_URL}/users/generate_proposal`, data,
           {
@@ -294,9 +283,7 @@ export const getAllGrants =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
-
+        const authToken = Cookies.get('accesstoken')
         const response = await axios.get(`${API_BASE_URL}/users/grants?skip=0&limit=10`,
           {
             headers: {
@@ -323,8 +310,7 @@ export const searchAllGrants =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
+        const authToken = Cookies.get('accesstoken')
 
 
         const data = {
@@ -356,8 +342,7 @@ export const searchAllGrants =
     async (dispatch, getState) => {
       try {
 
-        const state = getState();
-        const authToken = state?.data?.loginData?.access_token
+        const authToken = Cookies.get('accesstoken')
     
         const response = await axios.post(`${API_BASE_URL}/users/premium-support`, data,
           {

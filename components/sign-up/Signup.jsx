@@ -18,6 +18,10 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [phone, setPhone] = useState("");
+  const [countryError, setCountryError] = useState(false);
+  const [phoneError, setPhoneError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [termsChecked, setTermsChecked] = useState(false);
   const [termsError, setTermsError] = useState(false);
@@ -42,6 +46,18 @@ const Signup = () => {
     setEmailError(!validateEmail(event.target.value));
   };
 
+  const handleCountryChange = (event) => {
+    setCountry(event.target.value);
+    // setCountryError(!validateEmail(event.target.value));
+  };
+
+  const handlePhoneChange = (event) => {
+    setPhone(event.target.value);
+    // setCountryError(!validateEmail(event.target.value));
+  };
+
+  
+
   const handleTermsChange = (event) => {
     setTermsChecked(event.target.checked);
     setTermsError(!event.target.checked);
@@ -61,7 +77,7 @@ const Signup = () => {
     setPasswordError(!isValidPassword);
     setTermsError(!isValidTerms);
 
-    if (!isValidEmail || !isValidPassword || !isValidName || !isValidTerms) {
+    if (!isValidEmail || !isValidName || !isValidTerms) {
       return;
     }
 
@@ -70,7 +86,8 @@ const Signup = () => {
     const data = {
       name: name,
       email: email,
-      password: password,
+      country: country,
+      phone:phone
     };
 
     dispatch(register({ data })).then((data) => {
@@ -141,7 +158,53 @@ const Signup = () => {
                 </p>
               )}
             </div>
-            <div className="flex flex-col gap-1 sm:gap-[10px] relative">
+            <div className="flex flex-col gap-1 sm:gap-[10px] ">
+              <label
+                htmlFor="email"
+                className={`text-[#333] font-interTight  text-[16px] sm:text-[18px] font-normal leading-[140%] `}
+              >
+                Country*
+              </label>
+              <input
+                type="text"
+                id="country"
+                placeholder="Enter email address"
+                className={`sm:py-[22px] py-2 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${emailError ? "border-red-500" : ""
+                  }`}
+                value={country}
+                onChange={handleCountryChange}
+                required
+              />
+              {countryError && (
+                <p className="text-red-500">
+                  Please enter a Valid Country.
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1 sm:gap-[10px] ">
+              <label
+                htmlFor="email"
+                className={`text-[#333] font-interTight  text-[16px] sm:text-[18px] font-normal leading-[140%] `}
+              >
+                Phone*
+              </label>
+              <input
+                type="text"
+                id="phone"
+                placeholder="Enter email address"
+                className={`sm:py-[22px] py-2 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0] ${emailError ? "border-red-500" : ""
+                  }`}
+                value={phone}
+                onChange={handlePhoneChange}
+                required
+              />
+              {phoneError && (
+                <p className="text-red-500">
+                  Please enter a Valid Phone.
+                </p>
+              )}
+            </div>
+            {/* <div className="flex flex-col gap-1 sm:gap-[10px] relative">
               <span
                 className={`absolute  cursor-pointer right-5 ${passwordError
                   ? " bottom-[62px] sm:bottom-14"
@@ -171,7 +234,7 @@ const Signup = () => {
                   Password must be at least 8 characters long.
                 </p>
               )}
-            </div>
+            </div> */}
             <div className="flex gap-2 sm:gap-4 items-center">
               <input
                 type="checkbox"

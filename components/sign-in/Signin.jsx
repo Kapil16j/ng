@@ -10,6 +10,7 @@ import { logIn, verifyOtp } from "@/app/store/actions/dataActions"; // Assuming 
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
+import Cookies from 'js-cookie'
 
 const Signin = () => {
   const [passwordeye, setPasswordeye] = useState(true);
@@ -87,13 +88,20 @@ const Signin = () => {
 
     dispatch(verifyOtp({data })).then((response) => {
       setLoading(false);
-      if (response?.status === 200) {
+    
 
-        console.log("response?????",response)
-        alert("OTP Verified Successfully");
-        router.push("/dashboard/home"); // Redirect to the dashboard after successful OTP verification
+      if (response?.status == 200) {
+        console.log("otpdata??", response)
+        const accesstoken = response?.data?.access_token
+        const refreshToken = response?.data?.refresh_token
+
+        Cookies.set('accesstoken', accesstoken, { expires: 7 })
+        // router.push('/admin/app')
+         router.push('/dashboard/home')
+      // "  /dashobard/home"
+
       } else {
-        alert("Invalid OTP. Please try again.");
+        alert(response?.response?.data?.detail)
       }
     });
   };
