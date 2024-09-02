@@ -116,7 +116,7 @@ const DiscoverNGO = ({setSelectedComponent}) => {
           </div>
         </div>
 
-        <div className=" max-w-[1100px] bg-white rounded-[16px] w-full pt-[32px] sm:mt-[34px] px-3 lg:pl-[32px] lg:pr-[36px] pb-6 md:pb-10 lg:pb-[50px]">
+        {/* <div className=" max-w-[1100px] bg-white rounded-[16px] w-full pt-[32px] sm:mt-[34px] px-3 lg:pl-[32px] lg:pr-[36px] pb-6 md:pb-10 lg:pb-[50px]">
           <div className=" max-sm:flex-col flex justify-between items-center gap-[10px] ">
             <div>
               <p className=" text-[#333333] font-interTight font-medium md:text-[24px] sm:text-[20px] text-[15px] ">
@@ -174,7 +174,7 @@ const DiscoverNGO = ({setSelectedComponent}) => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
 
