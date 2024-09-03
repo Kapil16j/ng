@@ -230,6 +230,8 @@ export default function UserPage() {
                   { id: 'isEmailVerified', label: 'Email Verified' },
 
                   { id: 'subscription', label: 'Subscription' },
+                  { id: 'createdAt', label: 'created Date' },
+                  { id: 'updatedAt', label: 'updated Date' },
                   { id: 'status', label: 'Status' },
 
 
@@ -247,6 +249,8 @@ export default function UserPage() {
                       isEmailVerified={row?.isEmailVerified}
                       subscription={row?.subscription}
                       status={row?.status}
+                      createdAt={row?.createdAt}
+                      updatedAt={row?.updatedAt}
 
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}

@@ -13,7 +13,7 @@ const LayoutContent = ({ children }) => {
   return (
     <StyledMain
       isContentCompact={true}
-      className={classnames(verticalLayoutClasses.content, verticalLayoutClasses.contentCompact, 'flex-auto is-full')}
+      className={classnames(verticalLayoutClasses.content, verticalLayoutClasses.contentCompact, 'flex-auto is-full w-[100%]')}
     >
       {children}
     </StyledMain>

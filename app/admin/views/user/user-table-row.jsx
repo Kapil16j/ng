@@ -37,7 +37,9 @@ export default function UserTableRow({
   subscription,
   status,
   onStatusChange,
-  checked
+  checked,
+  createdAt,
+  updatedAt
 }) {
   const [openMenu, setOpenMenu] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -79,8 +81,10 @@ export default function UserTableRow({
         <TableCell>{role}</TableCell>
         <TableCell>{accountLocked == true ? 'Yes' : 'No'}</TableCell>
         <TableCell>{isEmailVerified == true ? 'Yes' : 'No'}</TableCell>
-
         <TableCell>{subscription}</TableCell>
+        <TableCell>{new Date(createdAt).toLocaleDateString()}</TableCell>
+<TableCell>{new Date(updatedAt).toLocaleDateString()}</TableCell>
+
         {/* <TableCell>
           <Switch
             checked={checked}

@@ -224,6 +224,8 @@ return;
                   { id: 'description', label: 'Description' },
                   { id: 'subject', label: 'Subject' },
                   { id: 'resolved', label: 'Resolved' },
+                  { id: 'createdAt', label: 'created Date' },
+                  { id: 'updatedAt', label: 'updated Date' },
                   { id: 'setting', label: 'Setting' },
                 ]}
               />
@@ -237,7 +239,8 @@ return;
                       description={row?.description}
                       subject={row?.subject}
                       resolved={row?.resolved}
-
+                      createdAt={row?.createdAt}
+                      updatedAt={row?.updatedAt}
                       
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}

@@ -34,7 +34,9 @@ export default function UserTableRow({
   description,
   subject,
   resolved,
-  onStatusChange
+  onStatusChange,
+  createdAt,
+  updatedAt
 
 }) {
   const [openMenu, setOpenMenu] = useState(null);
@@ -84,7 +86,8 @@ export default function UserTableRow({
             inputProps={{ 'aria-label': 'controlled' }}
           />
         </TableCell>
-
+        <TableCell>{new Date(createdAt).toLocaleDateString()}</TableCell>
+        <TableCell>{new Date(updatedAt).toLocaleDateString()}</TableCell>
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
