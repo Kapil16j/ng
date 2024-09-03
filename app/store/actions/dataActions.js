@@ -78,7 +78,7 @@ export const logIn =
     };
 
 
-    export const verifyOtp =
+export const verifyOtp =
   ({ data }) =>
     async (dispatch) => {
       try {
@@ -93,7 +93,7 @@ export const logIn =
     };
 
 
-    
+
 
 export const getUser =
   () =>
@@ -337,13 +337,13 @@ export const searchAllGrants =
     };
 
 
-    export const premiumSupport =
+export const premiumSupport =
   (data) =>
     async (dispatch, getState) => {
       try {
 
         const authToken = Cookies.get('accesstoken')
-    
+
         const response = await axios.post(`${API_BASE_URL}/users/premium-support`, data,
           {
             headers: {
@@ -360,7 +360,55 @@ export const searchAllGrants =
       }
     };
 
-    
+
+export const getAllSubscription =
+  () =>
+    async (dispatch, getState) => {
+      try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.get(`${API_BASE_URL}/users/subscriptions`,
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        return response;
+
+      } catch (error) {
+        return error;
+      }
+    };
+
+
+export const createPaymentIntent =
+  (subdata) =>
+    async (dispatch, getState) => {
+      try {
+        const authToken = Cookies.get('accesstoken')
+
+
+        const response = axios.post(`${API_BASE_URL}/stripe/create-payment-intent`, subdata,
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        return response;
+
+      } catch (error) {
+        return error;
+      }
+    };
+
+
+
+
+
 
 
 

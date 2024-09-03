@@ -18,6 +18,8 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.16.6",
+    "@stripe/react-stripe-js": "^2.8.0",
+    "@stripe/stripe-js": "^4.4.0",
     "apexcharts": "^3.52.0",
     "axios": "^1.7.5",
     "classnames": "^2.5.1",
@@ -42,6 +44,7 @@
     "redux-thunk": "^3.1.0",
     "server-only": "^0.0.1",
     "simplebar-react": "^3.2.6",
+    "stripe": "^16.9.0",
     "tailwind-merge": "^2.4.0",
     "typewriter-effect": "^2.21.0"
   },

@@ -49,7 +49,7 @@ const DashboardSidebar = ({ sidebar, setSidebar, setSelectedComponent, selectedC
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center gap-2">
           <LogoIcon />
-          <h2 className="text-black font-Inter text-[25px] font-bold">Ddsgnr</h2>
+          <h2 className="text-black font-Inter text-[25px] font-bold">NGO</h2>
         </div>
         <div className="lg:hidden">
           <button type="submit" onClick={() => setSidebar(!sidebar)}>
@@ -93,14 +93,14 @@ const DashboardSidebar = ({ sidebar, setSidebar, setSelectedComponent, selectedC
             </p>
           </button>
           <button
-            onClick={() => handleSelection("Grants")}
+            onClick={() => handleSelection("Plans")}
             className={`py-[11px] px-3 rounded-[4px] max-w-[228px] w-full border border-[rgba(255,255,255,0.11)] ${
-              isSelected("Grants") ? "bg-retroBlue text-white" : "bg-transparent group hover:bg-retroBlue"
+              isSelected("Plans") ? "bg-retroBlue text-white" : "bg-transparent group hover:bg-retroBlue"
             } flex gap-3 items-center transition duration-300 ease-in-out`}
           >
-            <ProposalsSidebarIcon className={isSelected("Grants") ? "text-white" : ""} />
-            <p className={`font-interTight font-normal text-[18px] leading-[140%] ${isSelected("Grants") ? "text-white" : "group-hover:text-white text-coarseWool"}`}>
-              Grants
+            <ProposalsSidebarIcon className={isSelected("Plans") ? "text-white" : ""} />
+            <p className={`font-interTight font-normal text-[18px] leading-[140%] ${isSelected("Plans") ? "text-white" : "group-hover:text-white text-coarseWool"}`}>
+            Plans
             </p>
           </button>
           <button

@@ -38,6 +38,8 @@ const DiscoverNGO = ({setSelectedComponent}) => {
     })
     
   }
+
+  console.log("proposalData?.result",proposalData?.result)
   return (
     <div className="bg-[#FAFAFA] h-screen">
         {loading && <Loader />}
@@ -52,7 +54,7 @@ const DiscoverNGO = ({setSelectedComponent}) => {
               create proposals.
             </p>
           </div>
-          <div className=" group ">
+          {/* <div className=" group ">
             <button
               type="submit"
               className=" flex gap-[12px] bg-[#1D2130] text-white lg:text-[16px] text-[14px] 
@@ -63,7 +65,7 @@ const DiscoverNGO = ({setSelectedComponent}) => {
               Create Proposal
               <RightarrowIcons />
             </button>
-          </div>
+          </div> */}
         </div>
         <div className=" max-w-[1100px] bg-white rounded-[16px] w-full pt-[32px] sm:mt-[34px] px-3 lg:pl-[32px] lg:pr-[36px] pb-6 md:pb-10 lg:pb-[50px]">
           <div className=" max-sm:flex-col flex justify-between items-center gap-[10px] ">
@@ -103,7 +105,15 @@ const DiscoverNGO = ({setSelectedComponent}) => {
                     >
                       Use
                     </button>
+                    <button
+                    onClick={()=>window.open(item?.pdf, '_blank')}
+                      className=" bg-[#F2F2F2] rounded-[4px] py-[8px] px-[35px] max-w-[100px]
+                     w-full border-[1px] border-white hover:bg-transparent duration-300 text-[#333] font-interTight text-[14px] font-semibold hover:text-white mx-auto hidden group-hover:block"
+                    >
+                      View
+                    </button>
                   </div>
+                  
                 </div>
                 <div className="pb-4 lg:pb-6 px-2 sm:px-3 lg:px-[17px] text-center">
                   <p className="font-interTight leading-[130%] text-[#333333] text-[12px] sm:text-[14px] md:text-[16px] pt-2 md:pt-[12px] line-clamp-2">

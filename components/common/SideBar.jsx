@@ -15,7 +15,7 @@ const SideBar = ({ sidebar, setSidebar }) => {
           <div className="flex items-center gap-2">
             <LogoIcon />
             <h2 className="text-black font-Inter text-[25px] font-bold">
-              Ddsgnr
+              NGO
             </h2>
           </div>
           <button

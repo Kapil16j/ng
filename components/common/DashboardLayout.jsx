@@ -6,6 +6,7 @@ import DashboardHeader from "./DashboardHeader";
 import DiscoverNGO from "../NGOsforfunds/DiscoverNGO";
 import Aisearch from "../ai-search/Aisearch";
 import Proposal from "../proposals/proposal";
+import Plans from "../plans/plans";
 
 
 const DashboardLayout = ({ children }) => {
@@ -20,8 +21,8 @@ const DashboardLayout = ({ children }) => {
         return <Aisearch />;
       case "Proposals":
         return null;
-      case "Grants":
-        return null;
+      case "Plans":
+        return <Plans/>;
       case "Help":
         return <Proposal setSelectedComponent={setSelectedComponent}/>;
       default:
