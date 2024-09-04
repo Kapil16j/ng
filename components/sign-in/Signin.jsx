@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
 import Cookies from 'js-cookie'
+import OTPInput, { ResendOTP } from "otp-input-react";
 
 const Signin = () => {
   const [passwordeye, setPasswordeye] = useState(true);
@@ -23,6 +24,7 @@ const Signin = () => {
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState(""); // State to store the OTP
   const [otpVisible, setOtpVisible] = useState(false); // State to control OTP screen visibility
+  const [OTP, setOTP] = useState("");
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -83,7 +85,7 @@ const Signin = () => {
 
     const data = {
       email: email,
-      otp:otp
+      otp:OTP
     };
 
     dispatch(verifyOtp({data })).then((response) => {
@@ -114,6 +116,16 @@ const Signin = () => {
     });
   };
 
+  const inputStyle = {
+    width: "3rem",
+    height: "3rem",
+    margin: "0 0.5rem",
+    fontSize: "1.5rem",
+    borderRadius: "0.5rem",
+    border: "1px solid #ccc",
+    textAlign: "center",
+  };
+
   return (
     <div className="w-full flex sm:h-screen">
       {loading && <Loader />}
@@ -135,14 +147,16 @@ const Signin = () => {
                 >
                   Enter OTP
                 </label>
-                <input
+
+                <OTPInput value={OTP} onChange={setOTP} autoFocus OTPLength={6} otpType="number" disabled={false} inputStyles={inputStyle} secure />
+                {/* <input
                   type="text"
                   id="otp"
                   placeholder="Enter OTP"
                   className="xl:py-[22px] py-3 text-[#828282] text-[16px] sm:text-[18px] px-2 sm:px-[24px] bg-[#F2F2F2] outline-none border rounded border-[#E0E0E0]"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                />
+                /> */}
               </div>
               <button
                 type="submit"
@@ -160,6 +174,9 @@ const Signin = () => {
                 >
                   Email Address
                 </label>
+
+               
+      
                 <input
                   type="email"
                   id="email"

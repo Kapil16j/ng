@@ -67,7 +67,7 @@ const getUserData = async () => {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-xl">
+            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[85%]">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold">{isEditing ? "Edit profile" : "My Profile"}</h2>
                     <img
