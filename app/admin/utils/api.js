@@ -210,6 +210,26 @@ export const updateSubscription = (data) => {
 };
 
 
+export const updateUser = (data) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.put(`${API_BASE_URL}/users`, data,
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        return response;
+
+    } catch (error) {
+        return error;
+    }
+};
+
+
 export const activateDeactivateUser = (data) => {
     try {
         const authToken = Cookies.get('accesstoken')

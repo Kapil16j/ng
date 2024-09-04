@@ -15,7 +15,7 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import { Box, Modal, TextField, FormControl } from '@mui/material';
+import { Box, Modal, TextField, FormControl, CardHeader, CardContent, Grid } from '@mui/material';
 
 import Iconify from '@/app/admin/components/iconify';
 import Scrollbar from '@/app/admin/components/scrollbar';
@@ -26,7 +26,8 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-import { activateDeactivateUser,getAllUser } from '@/app/admin/utils/api';
+import { activateDeactivateUser, getAllUser, updateUser } from '@/app/admin/utils/api';
+import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
@@ -43,12 +44,12 @@ export default function UserPage() {
   const [error, setError] = useState(null);
   const [checked, setChecked] = useState(true);
   const [open, setOpen] = useState(false)
-  
+  const [isEditMode, setIsEditMode] = useState(false);
   const [newUser, setNewUser] = useState({
-    name: '',
+    firstName: '',
+    lastName:"",
     phone: '',
-    email: '',
-    subscription: '',
+    country: '',
   });
 
 
@@ -86,6 +87,28 @@ export default function UserPage() {
   // Other handlers like handleSort, handleSelectAllClick, etc.
 
 
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+
+    console.log("newUser??",newUser)
+    const data = {
+      firstName: newUser.firstName,
+      lastName:newUser.lastName,
+      phoneNo: newUser.phone,
+      country: newUser.country,
+    }
+    updateUser(data).then((item) => {
+      handleClose();
+      toast.success("User updated successfully!");
+      getUsers();
+      setLoading(false);
+    });
+  };
+
+
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
 
@@ -117,32 +140,32 @@ export default function UserPage() {
     try {
       // Toggle the boolean status
       const newStatus = !currentStatus;
-  
+
       // Update the status locally
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user.id === id ? { ...user, isAccountLocked: newStatus } : user
         )
       );
-  
+
       console.log("newStatus??", newStatus);
-  
+
       const data = {
         id: id,
         value: newStatus ? 'activate' : 'deactivate',  // API expects 'activate' or 'deactivate'
       };
-  
+
       // Call the API to update the status
       await activateDeactivateUser(data).then((item) => {
         console.log("activeitem???", item);
         getUsers();
       });
-  
+
     } catch (error) {
       console.error("Error updating user status:", error);
     }
   };
-  
+
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -184,7 +207,15 @@ export default function UserPage() {
     filterName,
   });
 
+  const handleEdit = (row) => {
+    setNewUser(row); // Set form fields with the values from the row
+    setIsEditMode(true); // Enable edit mode
+    setOpen(true); // Open the modal
+  };
+
   const notFound = !dataFiltered?.length && !!filterName;
+
+  
 
 
 
@@ -195,6 +226,8 @@ export default function UserPage() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+
 
   return (
     <Container>
@@ -233,6 +266,7 @@ export default function UserPage() {
                   { id: 'createdAt', label: 'created Date' },
                   { id: 'updatedAt', label: 'updated Date' },
                   { id: 'status', label: 'Status' },
+                  { id: 'setting', label: 'Setting' },
 
 
                 ]}
@@ -251,10 +285,10 @@ export default function UserPage() {
                       status={row?.status}
                       createdAt={row?.createdAt}
                       updatedAt={row?.updatedAt}
-
+                      
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
-
+                      handleEdit={() => handleEdit(row)}
                       onStatusChange={() => handleStatusChange(row.id, row.isAccountLocked)}
                       id={row.id}
                       checked={checked}
@@ -283,6 +317,7 @@ export default function UserPage() {
         />
       </Card>
 
+      
       <Modal open={open} onClose={handleClose}>
         <Box sx={{
           position: 'absolute',
@@ -292,52 +327,74 @@ export default function UserPage() {
           width: 400,
           bgcolor: 'background.paper',
           boxShadow: 24,
-          p: 4,
+          borderRadius: "15px"
         }}>
-          <Typography variant="h6" mb={2}>Create New User</Typography>
-          <form onSubmit={handleSubmit}>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                label="Name"
-                name="name"
-                value={newUser.name}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                label="Phone"
-                name="phone"
-                value={newUser.phone}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                label="Email"
-                name="email"
-                value={newUser.email}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <TextField
-                label="Subscription"
-                name="subscription"
-                value={newUser.subscription}
-                onChange={handleInputChange}
-                required
-              />
-            </FormControl>
-            <Stack direction="row" justifyContent="flex-end" mt={3}>
-              <Button variant="contained" color="primary" type="submit">
-                Create
-              </Button>
-            </Stack>
-          </form>
+          <Card>
+            <CardHeader title={isEditMode ? "Update User" : "Add User"} />
+            <CardContent>
+              <form onSubmit={isEditMode ? handleUpdate : handleSubmit}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <TextField
+                        required
+                        label="First Name"
+                        name="firstName"
+                        value={newUser.firstName}
+                        onChange={handleInputChange}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <TextField
+                        required
+                        label="Last Name"
+                        name="lastName"
+                        value={newUser.lastName}
+                        onChange={handleInputChange}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <TextField
+                        required
+                        label="Phone"
+                        name="phone"
+                        value={newUser.phone}
+                        onChange={handleInputChange}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <TextField
+                        required
+                        label="Country"
+                        name="country"
+                       
+                        value={newUser.country}
+                        onChange={handleInputChange}
+                       
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <LoadingButton
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                      loading={loading}
+                    >
+                      {isEditMode ? "Update" : "Submit"}
+                    </LoadingButton>
+                  </Grid>
+                </Grid>
+              </form>
+            </CardContent>
+          </Card>
         </Box>
       </Modal>
       <ToastContainer />

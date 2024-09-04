@@ -61,6 +61,9 @@ export default function UserTableRow({
     setOpenConfirm(false);
   };
 
+  const handleInvoice = () =>{
+
+  }
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
@@ -121,6 +124,12 @@ export default function UserTableRow({
         <MenuItem onClick={handleEdit}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
+        </MenuItem>
+        <MenuItem onClick={handleInvoice}>
+        <Iconify icon="mdi:receipt" sx={{ mr: 2 }} />
+
+
+          Invoice
         </MenuItem>
 
         <MenuItem onClick={handleOpenConfirm} sx={{ color: 'error.main' }}>

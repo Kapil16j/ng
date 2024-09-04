@@ -7,6 +7,7 @@ import DiscoverNGO from "../NGOsforfunds/DiscoverNGO";
 import Aisearch from "../ai-search/Aisearch";
 import Proposal from "../proposals/proposal";
 import Plans from "../plans/plans";
+import ProfilePage from "../profile/profile";
 
 
 const DashboardLayout = ({ children }) => {
@@ -23,6 +24,8 @@ const DashboardLayout = ({ children }) => {
         return null;
       case "Plans":
         return <Plans/>;
+        case "Profile":
+        return <ProfilePage/>;
       case "Help":
         return <Proposal setSelectedComponent={setSelectedComponent}/>;
       default:

@@ -103,6 +103,20 @@ const DashboardSidebar = ({ sidebar, setSidebar, setSelectedComponent, selectedC
             Plans
             </p>
           </button>
+
+          <button
+            onClick={() => handleSelection("Profile")}
+            className={`py-[11px] px-3 rounded-[4px] max-w-[228px] w-full border border-[rgba(255,255,255,0.11)] ${
+              isSelected("Profile") ? "bg-retroBlue text-white" : "bg-transparent group hover:bg-retroBlue"
+            } flex gap-3 items-center transition duration-300 ease-in-out`}
+          >
+            <ProposalsSidebarIcon className={isSelected("Profile") ? "text-white" : ""} />
+            <p className={`font-interTight font-normal text-[18px] leading-[140%] ${isSelected("Profile") ? "text-white" : "group-hover:text-white text-coarseWool"}`}>
+            My Profile
+            </p>
+          </button>
+
+          
           <button
             onClick={() => handleSelection("Help")}
             className={`py-[11px] px-3 rounded-[8px] max-w-[228px] w-full border border-[rgba(255,255,255,0.11)] ${
