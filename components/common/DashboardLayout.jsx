@@ -6,8 +6,8 @@ import DashboardHeader from "./DashboardHeader";
 import DiscoverNGO from "../NGOsforfunds/DiscoverNGO";
 import Aisearch from "../ai-search/Aisearch";
 import Proposal from "../proposals/proposal";
-import Plans from "../plans/plans";
 import ProfilePage from "../profile/profile";
+import Plans from "../plans/Plans";
 
 
 const DashboardLayout = ({ children }) => {
