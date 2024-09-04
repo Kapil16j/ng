@@ -96,8 +96,16 @@ const Signin = () => {
         const refreshToken = response?.data?.refresh_token
 
         Cookies.set('accesstoken', accesstoken, { expires: 7 })
+
+        if(response?.data?.user_type == "ADMIN"){
+          router.push('/admin/app')
+        }
+
+        if(response?.data?.user_type == "USER"){
+          router.push('/dashboard/home')
+        }
         // router.push('/admin/app')
-         router.push('/dashboard/home')
+        //  router.push('/dashboard/home')
       // "  /dashobard/home"
 
       } else {

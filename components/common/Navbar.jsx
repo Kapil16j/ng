@@ -36,9 +36,16 @@ const Navbar = () => {
     };
   }, [sidebar]);
 
-  const handleLogout = () =>{
+  const handleDashboard = () =>{
 
-    router.push("/dashboard/home")
+   
+
+    if(loginData?.user_type == "USER"){
+      router.push("/dashboard/home")
+    }
+    if(loginData?.user_type == "ADMIN"){
+      router.push("/admin/app")
+    }
   }
 
   const handleLogin = () =>{
@@ -94,7 +101,7 @@ const Navbar = () => {
               {
                 loginData ?
                   <button className="w-[100px] font-interTight text-base font-normal rounded-[4px] leading-[150%] h-[40px] bg-coarseWool border-[1px] border-black text-white hover:bg-transparent hover:text-black transition duration-300 ease-in-out"
-                  onClick={()=>handleLogout()}
+                  onClick={()=>handleDashboard()}
                   >
                     Dashboard
                   </button>
@@ -106,12 +113,6 @@ const Navbar = () => {
                   </button>
 
               }
-
-<button className="w-[78px] font-interTight text-base font-normal rounded-[4px] leading-[150%] h-[40px] bg-coarseWool border-[1px] border-black text-white hover:bg-transparent hover:text-black transition duration-300 ease-in-out"
-                  onClick={()=>handleAdminLogin()} 
-                  >
-                    Admin
-                  </button>
             </div>
           </div>
         </div>

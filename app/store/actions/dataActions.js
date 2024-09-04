@@ -68,11 +68,11 @@ export const logIn =
     async (dispatch) => {
       try {
         const response = await axios.post(`${API_BASE_URL}/auth/login`, data);
-        dispatch({ type: LOGIN_SUCCESS, payload: response.data });
+        // dispatch({ type: LOGIN_SUCCESS, payload: response.data });
         return response;
 
       } catch (error) {
-        dispatch({ type: LOGIN_FAILURE, payload: error.response });
+        // dispatch({ type: LOGIN_FAILURE, payload: error.response });
         return error;
       }
     };

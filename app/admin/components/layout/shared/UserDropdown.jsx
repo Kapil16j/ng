@@ -20,6 +20,8 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import Cookies from 'js-cookie'
+import { logout } from '@/app/store/actions/dataActions'
+import { useDispatch } from 'react-redux'
 
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
@@ -40,6 +42,7 @@ const UserDropdown = ({user}) => {
 
   // Hooks
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const handleDropdownOpen = () => {
     !open ? setOpen(true) : setOpen(false)
@@ -59,8 +62,10 @@ const UserDropdown = ({user}) => {
 
   const handleLogout = (e) =>{
 
-    Cookies.remove('accesstoken')
-     handleDropdownClose(e, '/admin/app/home/login')
+    // Cookies.remove('accesstoken')
+    //  handleDropdownClose(e, '/admin/app/home/login')
+
+    dispatch(logout())
   }
    
   return (
