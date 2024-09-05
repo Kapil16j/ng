@@ -10,6 +10,7 @@ const StripeComponent = ({ clientSecret }) => {
     const [plansData, setPlansData] = useState([])
     const [showStripe, setShowStripe] = useState(false)
     const [subScriptionId, setSubsciptionID] = useState('')
+    const [amount, setAmount] = useState('')
     const [error, setError] = useState(null);
 
     const dispatch = useDispatch()
@@ -40,6 +41,27 @@ const StripeComponent = ({ clientSecret }) => {
         }
     }
 
+
+
+    useEffect(() => {
+        const fetchPaymentIntentDetails = async () => {
+            if (stripe && clientSecret) {
+                try {
+                    // Use Stripe's JavaScript SDK to retrieve the Payment Intent
+                    const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+
+                    console.log("paymentIntentdata????",paymentIntent)
+                    if (paymentIntent) {
+                        setAmount(paymentIntent?.amount / 100); // Convert amount to dollars or your currency unit
+                    }
+                } catch (err) {
+                    setError('Failed to fetch payment details');
+                }
+            }
+        };
+
+        fetchPaymentIntentDetails();
+    }, [stripe, clientSecret]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -93,7 +115,7 @@ const StripeComponent = ({ clientSecret }) => {
                     disabled={!stripe}
                     className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                    Pay
+                    Pay (${amount})
                 </button>
                 {error && <div className="mt-2 text-red-500">{error}</div>}
             </form>
