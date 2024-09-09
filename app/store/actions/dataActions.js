@@ -121,6 +121,26 @@ export const getUser =
         return error;
       }
     };
+    export const updateUser =
+    (data) =>
+      async (dispatch, getState) => {
+      try {
+          const authToken = Cookies.get('accesstoken')
+  
+          const response = axios.put(`${API_BASE_URL}/users/update`, data,
+              {
+                  headers: {
+                      authorization: `Bearer ${authToken}`,
+                  },
+              }
+          );
+  
+          return response;
+  
+      } catch (error) {
+          return error;
+      }
+  };
 
 
 export const getAllSampleProposals =

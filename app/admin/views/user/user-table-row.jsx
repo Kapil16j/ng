@@ -17,7 +17,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-import { Switch } from '@mui/material';
+import { FormControl, InputLabel, Select, Switch } from '@mui/material';
 
 import Iconify from '../../components/iconify';
 
@@ -35,11 +35,13 @@ export default function UserTableRow({
   accountLocked,
   isEmailVerified,
   subscription,
+  tier,
   status,
   onStatusChange,
   checked,
   createdAt,
-  updatedAt
+  updatedAt,
+  handleTierChange
 }) {
   const [openMenu, setOpenMenu] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -61,7 +63,7 @@ export default function UserTableRow({
     setOpenConfirm(false);
   };
 
-  const handleInvoice = () =>{
+  const handleInvoice = () => {
 
   }
   return (
@@ -84,11 +86,29 @@ export default function UserTableRow({
         <TableCell>{role}</TableCell>
         <TableCell>{accountLocked == true ? 'Yes' : 'No'}</TableCell>
         <TableCell>{isEmailVerified == true ? 'Yes' : 'No'}</TableCell>
-        <TableCell>{subscription}</TableCell>
-        <TableCell>{new Date(createdAt).toLocaleDateString()}</TableCell>
-<TableCell>{new Date(updatedAt).toLocaleDateString()}</TableCell>
+        <TableCell>{subscription ? subscription : "No"}</TableCell>
+        <TableCell>
 
-        {/* <TableCell>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">--</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={tier}
+              label="--"
+              onChange={handleTierChange}
+            >
+              <MenuItem value='free'>Free</MenuItem>
+              <MenuItem value='premium'>Premium</MenuItem>
+              <MenuItem value='vip'>VIP</MenuItem>
+              <MenuItem value='platinum'>Platinum</MenuItem>
+            </Select>
+          </FormControl>
+      </TableCell>
+      <TableCell>{new Date(createdAt).toLocaleDateString()}</TableCell>
+      {/* <TableCell>{new Date(updatedAt).toLocaleDateString()}</TableCell> */}
+
+      {/* <TableCell>
           <Switch
             checked={checked}
             onChange={onStatusChange}
@@ -96,20 +116,20 @@ export default function UserTableRow({
           />
         </TableCell> */}
 
-        <TableCell>
-  <Switch
-    checked={accountLocked == true}  // Check if the status is 'ACTIVE'
-    onChange={onStatusChange}
-    inputProps={{ 'aria-label': 'controlled' }}
-  />
-</TableCell>
+      <TableCell>
+        <Switch
+          checked={accountLocked == true}  // Check if the status is 'ACTIVE'
+          onChange={onStatusChange}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      </TableCell>
 
-        <TableCell align="right">
-          <IconButton onClick={handleOpenMenu}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
+      <TableCell align="right">
+        <IconButton onClick={handleOpenMenu}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </TableCell>
+    </TableRow >
 
       <Popover
         open={!!openMenu}
@@ -126,7 +146,7 @@ export default function UserTableRow({
           Edit
         </MenuItem>
         <MenuItem onClick={handleInvoice}>
-        <Iconify icon="mdi:receipt" sx={{ mr: 2 }} />
+          <Iconify icon="mdi:receipt" sx={{ mr: 2 }} />
 
 
           Invoice

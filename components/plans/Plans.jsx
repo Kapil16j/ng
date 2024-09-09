@@ -82,7 +82,8 @@ const Plans = () => {
 
 
                 :
-                <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-4 px-4">
+                <div className="min-h-screen bg-gray-100">
+                <div className=" flex flex-col items-center justify-center py-4 px-4">
                     <h2 className="text-3xl font-bold mb-4">Choose Your Plan</h2>
                     <p className="text-lg text-gray-700 mb-8">Select a plan that fits your needs.</p>
                     <div className="flex flex-col md:flex-row justify-center gap-8">
@@ -92,6 +93,7 @@ const Plans = () => {
                             </div>
                         ))}
                     </div>
+                </div>
                 </div>
              } 
 

@@ -26,7 +26,7 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-import { activateDeactivateUser, getAllUser, updateUser } from '@/app/admin/utils/api';
+import { activateDeactivateUser, getAllUser, updateTier, updateUser } from '@/app/admin/utils/api';
 import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
@@ -45,11 +45,14 @@ export default function UserPage() {
   const [checked, setChecked] = useState(true);
   const [open, setOpen] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditId, setIsEditId] = useState('');
+  const [tierValue, setTierValue] = useState('');
   const [newUser, setNewUser] = useState({
-    firstName: '',
-    lastName:"",
-    phone: '',
+    name: '',
+    email:"",
+    phoneNo: '',
     country: '',
+
   });
 
 
@@ -94,14 +97,15 @@ export default function UserPage() {
 
     console.log("newUser??",newUser)
     const data = {
-      firstName: newUser.firstName,
-      lastName:newUser.lastName,
-      phoneNo: newUser.phone,
+      name: newUser.name,
+      email:newUser.email,
+      phoneNo: newUser.phoneNo,
       country: newUser.country,
     }
-    updateUser(data).then((item) => {
-      handleClose();
+    updateUser(data,isEditId).then((item) => {
+     
       toast.success("User updated successfully!");
+      handleClose();
       getUsers();
       setLoading(false);
     });
@@ -138,6 +142,8 @@ export default function UserPage() {
 
   const handleStatusChange = async (id, currentStatus) => {
     try {
+
+
       // Toggle the boolean status
       const newStatus = !currentStatus;
 
@@ -148,7 +154,7 @@ export default function UserPage() {
         )
       );
 
-      console.log("newStatus??", newStatus);
+      console.log("newStatus??", newStatus,id);
 
       const data = {
         id: id,
@@ -160,6 +166,37 @@ export default function UserPage() {
         console.log("activeitem???", item);
         getUsers();
       });
+
+    } catch (error) {
+      console.error("Error updating user status:", error);
+    }
+  };
+
+
+  const handleTierChange = async (id, currentStatus) => {
+    try {
+
+
+      // Toggle the boolean status
+      const newStatus = currentStatus;
+
+      // Update the status locally
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === id ? { ...user, tier: newStatus } : user
+        )
+      );
+
+      console.log("newStatustier??", newStatus,id);
+      const data = {
+        tier: newStatus,
+      };
+
+      // Call the API to update the status
+      await updateTier(data,id).then((item) => {
+        getUsers();
+      });
+      
 
     } catch (error) {
       console.error("Error updating user status:", error);
@@ -209,9 +246,13 @@ export default function UserPage() {
 
   const handleEdit = (row) => {
     setNewUser(row); // Set form fields with the values from the row
+    setIsEditId(row.id)
     setIsEditMode(true); // Enable edit mode
     setOpen(true); // Open the modal
   };
+
+
+
 
   const notFound = !dataFiltered?.length && !!filterName;
 
@@ -261,11 +302,9 @@ export default function UserPage() {
                   { id: 'role', label: 'Role' },
                   { id: 'isAccountLocked', label: 'Account Locked' },
                   { id: 'isEmailVerified', label: 'Email Verified' },
-
-                  { id: 'subscription', label: 'Subscription' },
+                  { id: 'tier', label: 'Tier' },
                   { id: 'createdAt', label: 'created Date' },
-                  { id: 'updatedAt', label: 'updated Date' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'status', label: 'A/D User' },
                   { id: 'setting', label: 'Setting' },
 
 
@@ -282,6 +321,7 @@ export default function UserPage() {
                       accountLocked={row?.isAccountLocked}
                       isEmailVerified={row?.isEmailVerified}
                       subscription={row?.subscription}
+                      tier={row?.tier}
                       status={row?.status}
                       createdAt={row?.createdAt}
                       updatedAt={row?.updatedAt}
@@ -292,6 +332,7 @@ export default function UserPage() {
                       onStatusChange={() => handleStatusChange(row.id, row.isAccountLocked)}
                       id={row.id}
                       checked={checked}
+                      handleTierChange={(event) => handleTierChange(row.id, event.target.value)}
                     />
                   ))}
 
@@ -339,8 +380,8 @@ export default function UserPage() {
                       <TextField
                         required
                         label="First Name"
-                        name="firstName"
-                        value={newUser.firstName}
+                        name="name"
+                        value={newUser.name}
                         onChange={handleInputChange}
                       />
                     </FormControl>
@@ -350,8 +391,8 @@ export default function UserPage() {
                       <TextField
                         required
                         label="Last Name"
-                        name="lastName"
-                        value={newUser.lastName}
+                        name="email"
+                        value={newUser.email}
                         onChange={handleInputChange}
                       />
                     </FormControl>
@@ -361,8 +402,8 @@ export default function UserPage() {
                       <TextField
                         required
                         label="Phone"
-                        name="phone"
-                        value={newUser.phone}
+                        name="phoneNo"
+                        value={newUser.phoneNo}
                         onChange={handleInputChange}
                       />
                     </FormControl>

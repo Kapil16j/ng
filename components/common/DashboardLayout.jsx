@@ -21,13 +21,13 @@ const DashboardLayout = ({ children }) => {
       case "AISearch":
         return <Aisearch />;
       case "Proposals":
-        return null;
+        return <Proposal setSelectedComponent={setSelectedComponent}/>;;
       case "Plans":
         return <Plans/>;
         case "Profile":
         return <ProfilePage/>;
       case "Help":
-        return <Proposal setSelectedComponent={setSelectedComponent}/>;
+        return null;
       default:
         return <DiscoverNGO />;
     }

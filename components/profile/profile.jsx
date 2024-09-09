@@ -1,4 +1,4 @@
-import { getUser } from "@/app/store/actions/dataActions";
+import { getUser, updateUser } from "@/app/store/actions/dataActions";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -6,13 +6,11 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [userData,setUserData] = useState(null)
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        name: "",
         email: "",
-        address: "",
-        contactNumber: "",
-        city: "",
-        state: "",
+        phoneNo: "",
+        country: "",
+        
     });
 
 const dispatch = useDispatch()
@@ -27,13 +25,11 @@ const getUserData = async () => {
         if (response?.status === 200) {
             const data = response.data;
             setFormData({
-                firstName: data.name || "",
-                lastName: data.lastName || "",
+                name: data.name || "",
                 email: data.email || "",
-                address: data.address || "",
-                contactNumber: data.phoneNo || "",
-                city: data.city || "",
-                state: data.state || "",
+                phoneNo: data.phoneNo || "",
+                country: data.country || "",
+               
             });
             setUserData(data);
         } else {
@@ -60,13 +56,40 @@ const getUserData = async () => {
         setIsEditing(true);
     };
 
+    // const handleSaveClick = () => {
+    //     setIsEditing(false);
+    //     // You can add your save logic here
+    // };
+
     const handleSaveClick = () => {
         setIsEditing(false);
+        
+        // Compare formData with userData and log the changed fields
+        const changedFields = {};
+        for (let key in formData) {
+            if (formData[key] !== userData[key]) {
+                changedFields[key] = formData[key];
+            }
+        }
+    
+        if (Object.keys(changedFields).length > 0) {
+            console.log("Changed fields:", changedFields);
+
+            dispatch(updateUser(changedFields,userData.id))
+
+        } else {
+            console.log("No changes made.");
+        }
+        
         // You can add your save logic here
     };
+    
+    
+    
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100">
+        <div className="flex justify-center items-center mt-4 ">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[85%]">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold">{isEditing ? "Edit profile" : "My Profile"}</h2>
@@ -82,14 +105,14 @@ const getUserData = async () => {
                             <label className="block text-gray-700">First Name</label>
                             <input
                                 type="text"
-                                name="firstName"
-                                value={formData.firstName}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleInputChange}
                                 disabled={!isEditing}
                                 className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
                             />
                         </div>
-                        <div>
+                        {/* <div>
                             <label className="block text-gray-700">Last Name</label>
                             <input
                                 type="text"
@@ -99,9 +122,8 @@ const getUserData = async () => {
                                 disabled={!isEditing}
                                 className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
                             />
-                        </div>
-                    </div>
-                    <div>
+                        </div> */}
+                         <div>
                         <label className="block text-gray-700">Email</label>
                         <input
                             type="email"
@@ -112,13 +134,15 @@ const getUserData = async () => {
                             className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
                         />
                     </div>
+                    </div>
+                   
                     <div>
                         <label className="block text-gray-700">Address</label>
                         <input
                             type="text"
                             name="address"
-                            value={formData.address}
-                            onChange={handleInputChange}
+                            // value={formData.address}
+                            // onChange={handleInputChange}
                             disabled={!isEditing}
                             className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
                         />
@@ -127,8 +151,8 @@ const getUserData = async () => {
                         <label className="block text-gray-700">Contact Number</label>
                         <input
                             type="text"
-                            name="contactNumber"
-                            value={formData.contactNumber}
+                            name="phoneNo"
+                            value={formData.phoneNo}
                             onChange={handleInputChange}
                             disabled={!isEditing}
                             className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
@@ -136,11 +160,11 @@ const getUserData = async () => {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-gray-700">City</label>
+                            <label className="block text-gray-700">Country</label>
                             <input
                                 type="text"
-                                name="city"
-                                value={formData.city}
+                                name="country"
+                                value={formData.country}
                                 onChange={handleInputChange}
                                 disabled={!isEditing}
                                 className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
@@ -151,8 +175,8 @@ const getUserData = async () => {
                             <input
                                 type="text"
                                 name="state"
-                                value={formData.state}
-                                onChange={handleInputChange}
+                                // value={formData.state}
+                                // onChange={handleInputChange}
                                 disabled={!isEditing}
                                 className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
                             />
@@ -189,6 +213,7 @@ const getUserData = async () => {
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

@@ -87,6 +87,26 @@ export const getAllUser = () => {
 
 
 
+export const updateUser = (data,id) => {
+  try {
+      const authToken = Cookies.get('accesstoken')
+
+      const response = axios.put(`${API_BASE_URL}/admin/users/${id}/`, data,
+          {
+              headers: {
+                  authorization: `Bearer ${authToken}`,
+              },
+          }
+      );
+
+      return response;
+
+  } catch (error) {
+      return error;
+  }
+};
+
+
 export const getAllSupportForms = () => {
     try {
         const authToken = Cookies.get('accesstoken')
@@ -210,11 +230,12 @@ export const updateSubscription = (data) => {
 };
 
 
-export const updateUser = (data) => {
+
+export const activateDeactivateUser = (data) => {
     try {
         const authToken = Cookies.get('accesstoken')
 
-        const response = axios.put(`${API_BASE_URL}/users`, data,
+        const response = axios.put(`${API_BASE_URL}/admin/users/${data.id}/${data.value}`, {},
             {
                 headers: {
                     authorization: `Bearer ${authToken}`,
@@ -230,11 +251,11 @@ export const updateUser = (data) => {
 };
 
 
-export const activateDeactivateUser = (data) => {
+export const updateTier = (data,id) => {
     try {
         const authToken = Cookies.get('accesstoken')
 
-        const response = axios.put(`${API_BASE_URL}/admin/users/${data.id}/${data.value}`, {},
+        const response = axios.put(`${API_BASE_URL}/admin/users/${id}/tier`, data,
             {
                 headers: {
                     authorization: `Bearer ${authToken}`,

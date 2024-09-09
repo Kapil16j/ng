@@ -6,10 +6,10 @@ import { CardElement, PaymentElement, useElements, useStripe, ElementsConsumer }
 
 
 
-const StripeComponent = ({ clientSecret }) => {
+const StripeComponent = ({ clientSecret ,subScriptionId}) => {
     const [plansData, setPlansData] = useState([])
     const [showStripe, setShowStripe] = useState(false)
-    const [subScriptionId, setSubsciptionID] = useState('')
+    // const [subScriptionId, setSubsciptionID] = useState('')
     const [amount, setAmount] = useState('')
     const [error, setError] = useState(null);
 
@@ -70,25 +70,24 @@ const StripeComponent = ({ clientSecret }) => {
             return;
         }
         if (clientSecret) {
-
-
-
-            // const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-            //     payment_method: {
-            //         card: elements.getElement(CardElement),
-            //     },
-            // });
-
-            const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
-                elements,
-                confirmParams: {
-                    return_url: 'https://your-website.com/order/complete',
+            const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: elements.getElement(CardElement),
                 },
             });
+
+            // const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
+            //     elements,
+            //     confirmParams: {
+            //         return_url: 'https://your-website.com/order/complete',
+            //     },
+            // });
 
             console.log("paymentIntent:", paymentIntent);
 
             if (stripeError) {
+
+                console.log("stripeError??",stripeError)
                 setError(stripeError.message);
                 return;
             }
@@ -105,7 +104,7 @@ const StripeComponent = ({ clientSecret }) => {
     return (
         <>
 
-            <div className="flex justify-center items-center">
+            {/* <div className="flex justify-center items-center">
                 <p className="font-bold text-[20px] mt-7">Payment</p>
             </div>
             <form onSubmit={handleSubmit} className="flex flex-col items-center p-4 max-w-md mx-auto bg-white shadow-lg rounded-lg">
@@ -118,9 +117,9 @@ const StripeComponent = ({ clientSecret }) => {
                     Pay (${amount})
                 </button>
                 {error && <div className="mt-2 text-red-500">{error}</div>}
-            </form>
+            </form> */}
 
-            {/* <div className='m-14'>
+            <div className='m-14'>
 
                 <form onSubmit={handleSubmit}>
                     <CardElement options={CARD_OPTIONS} />
@@ -133,7 +132,7 @@ const StripeComponent = ({ clientSecret }) => {
                     </button>
                     {error && <div>{error}</div>}
                 </form>
-            </div> */}
+            </div>
 
 
         </>

@@ -16,9 +16,9 @@ const AllPlans = ({subScriptionId, clientSecret}) => {
     return (
         <>
 
-{/* <Elements stripe={stripeTestPromise} > */}
-             <Elements stripe={stripeTestPromise} options={{ clientSecret }}>
-                <StripeComponent clientSecret={clientSecret}/>
+<Elements stripe={stripeTestPromise} >
+             {/* <Elements stripe={stripeTestPromise} options={{ clientSecret }}> */}
+                <StripeComponent clientSecret={clientSecret} subScriptionId={subScriptionId}/>
 
             </Elements>
         </>
