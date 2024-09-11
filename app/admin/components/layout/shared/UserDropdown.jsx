@@ -100,10 +100,10 @@ const UserDropdown = ({user}) => {
               transformOrigin: placement === 'bottom-end' ? 'right top' : 'left top'
             }}
           >
-            <Paper className='shadow-lg'>
+            <Paper className='shadow-lg p-4'>
               <ClickAwayListener onClickAway={e => handleDropdownClose(e)}>
                 <MenuList>
-                  <div className='flex items-center plb-2 pli-4 gap-2' tabIndex={-1}>
+                  <div className='flex  px-2 py-4 gap-2' tabIndex={-1}>
                     <Avatar alt='John Doe' src='/images/avatars/1.png' />
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
@@ -121,10 +121,7 @@ const UserDropdown = ({user}) => {
                     <i className='ri-settings-4-line' />
                     <Typography color='text.primary'>Settings</Typography>
                   </MenuItem>
-                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='ri-money-dollar-circle-line' />
-                    <Typography color='text.primary'>Pricing</Typography>
-                  </MenuItem>
+                 
                   <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
                     <i className='ri-question-line' />
                     <Typography color='text.primary'>FAQ</Typography>

@@ -86,7 +86,7 @@ export default function UserTableRow({
         <TableCell>{role}</TableCell>
         <TableCell>{accountLocked == true ? 'Yes' : 'No'}</TableCell>
         <TableCell>{isEmailVerified == true ? 'Yes' : 'No'}</TableCell>
-        <TableCell>{subscription ? subscription : "No"}</TableCell>
+        {/* <TableCell>{subscription ? subscription : "No"}</TableCell> */}
         <TableCell>
 
           <FormControl fullWidth>
