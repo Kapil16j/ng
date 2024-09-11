@@ -68,9 +68,9 @@ const Plans = ({setSelectedComponent}) => {
                     <p className="text-2xl font-bold mb-4"> {price} /-</p>
                 </div>
                 <div>
-                    {description?.split(',').map((item) => {
+                    {description?.split(',').map((item,index) => {
                         return (
-                            <div className='flex flex-col'>
+                            <div className='flex flex-col' key={index}>
                                 <div className='flex flex-row gap-2'>
                                     <img src="/assets/img/checkMark.png" className='w-4 h-4 mt-1'></img>
                                     <p className="text-gray-600">{item}</p>
