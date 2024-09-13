@@ -109,7 +109,7 @@ const StripeComponent = ({ clientSecret, subScriptionId, setShowStripe }) => {
     return (
         <>
             {!success ?
-                <div className="min-h-screen bg-gray-100">
+                <div className="bg-[rgb(0,43,66)] h-screen  p-6">
                     <div className='p-4 ' >
                         <img src="/assets/img/backarrow.png" className='w-4 h-4 mt-1 cursor-pointer' onClick={() => setShowStripe(false)}></img>
                     </div>
@@ -123,7 +123,7 @@ const StripeComponent = ({ clientSecret, subScriptionId, setShowStripe }) => {
                         <button
                             type="submit"
                             disabled={!stripe}
-                            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="bg-[rgb(0,43,66)] text-white font-bold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             Pay (${amount})
                         </button>
