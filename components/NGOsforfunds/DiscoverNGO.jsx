@@ -47,12 +47,12 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
 
   console.log("proposalData?.result", proposalData?.result)
   return (
-    <div className="bg-[#FAFAFA] h-screen">
+    <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
       {loading && <Loader />}
       <div className=" max-w-[1180px] w-full px-4 xl:px-8">
         <div className=" flex max-sm:flex-col gap-[10px] justify-between mt-[32px] items-center ">
           <div>
-            <p className=" text-[#333] max-sm:text-center font-interTight mb-[4px] lg:text-[28px] text-[23px] font-medium ">
+            <p className=" text-white max-sm:text-center font-interTight mb-[4px] lg:text-[28px] text-[23px] font-medium ">
               Discover NGO’sforfunds
             </p>
             <p className=" text-[#828282] max-sm:text-center font-interTight lg:text-[18px] text-[15px] max-sm:w-full white leading-[140%] ">

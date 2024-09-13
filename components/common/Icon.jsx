@@ -2178,7 +2178,7 @@ export const NewProposalIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="group-hover:fill-white group fill-retroBlue group-hover:cursor-pointer group-hover:scale-105 duration-300  "
+      className="group-hover:fill-white group fill-[rgb(0,43,66)] group-hover:cursor-pointer group-hover:scale-105 duration-300  "
       width="32"
       height="32"
       viewBox="0 0 32 32"
@@ -2192,7 +2192,7 @@ export const NewProposalIcon = () => {
       <path
         d="M16 10.1235V21.8467"
         stroke="white"
-        className="group-hover:stroke-retroBlue"
+        className="group-hover:stroke-[rgb(0,43,66)]"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -2218,7 +2218,7 @@ export const AiChatAiIcon = () => {
       viewBox="0 0 44 44"
       fill="none"
     >
-      <rect width="43.1739" height="43.1739" rx="4" fill="#316FF4" />
+      <rect width="43.1739" height="43.1739" rx="4" fill="rgb(0,43,66)" />
       <path
         d="M35.2601 20.8633H33.8139V19.7198C33.8139 16.9956 31.5942 14.8095 28.9036 14.8095H23.0516V13.4979C23.0516 12.9261 22.5807 12.4216 21.9753 12.4216C21.4036 12.4216 20.8991 12.8925 20.8991 13.4979V14.8095H15.0471C12.3229 14.8095 10.1368 17.0293 10.1368 19.7198V20.8633H8.69058C7.21076 20.8633 6 22.0741 6 23.5539V27.3207C6 28.8006 7.21076 30.0113 8.69058 30.0113H10.1368V31.1548C10.1368 33.879 12.3565 36.0651 15.0471 36.0651H28.9036C31.6278 36.0651 33.8139 33.8454 33.8139 31.1548V30.0113H35.2601C36.7399 30.0113 37.9507 28.8006 37.9507 27.3207V23.5539C37.9507 22.0741 36.7399 20.8633 35.2601 20.8633ZM8.69058 27.8589C8.38789 27.8589 8.11883 27.6234 8.11883 27.2871V23.5539C8.11883 23.2512 8.35426 22.9822 8.69058 22.9822H10.1368V27.8589H8.69058ZM31.6951 31.1212C31.6951 32.6683 30.4507 33.9127 28.9036 33.9127H15.0471C13.5 33.9127 12.2556 32.6683 12.2556 31.1212V19.7198C12.2556 18.1728 13.5 16.9284 15.0471 16.9284H28.9036C30.4507 16.9284 31.6951 18.1728 31.6951 19.7198V31.1212ZM35.8318 27.3207C35.8318 27.6234 35.5964 27.8925 35.2601 27.8925H33.8139V22.9822H35.2601C35.5628 22.9822 35.8318 23.2176 35.8318 23.5539V27.3207Z"
         fill="white"

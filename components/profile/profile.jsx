@@ -1,6 +1,8 @@
 import { getUser, updateUser } from "@/app/store/actions/dataActions";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -62,7 +64,7 @@ const getUserData = async () => {
     // };
 
     const handleSaveClick = () => {
-        setIsEditing(false);
+        
         
         // Compare formData with userData and log the changed fields
         const changedFields = {};
@@ -75,7 +77,11 @@ const getUserData = async () => {
         if (Object.keys(changedFields).length > 0) {
             console.log("Changed fields:", changedFields);
 
-            dispatch(updateUser(changedFields,userData.id))
+            dispatch(updateUser(changedFields,userData.id)).then((item)=>{
+                console.log("item????",item)
+                toast.success("Profile Updated Successfully")
+                setIsEditing(false);
+            })
 
         } else {
             console.log("No changes made.");
@@ -88,7 +94,8 @@ const getUserData = async () => {
     
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <>
+        <div className="bg-[rgb(0,43,66)] h-screen flex flex-col p-6">
         <div className="flex justify-center items-center mt-4 ">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-[85%]">
                 <div className="flex justify-between items-center mb-6">
@@ -205,7 +212,7 @@ const getUserData = async () => {
                             <button
                                 type="button"
                                 onClick={handleEditClick}
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                className="bg-[rgb(0,43,66)]  text-white px-4 py-2 rounded hover:bg-[rgb(0,43,66)] "
                             >
                                 Edit
                             </button>
@@ -215,6 +222,8 @@ const getUserData = async () => {
             </div>
         </div>
         </div>
+        <ToastContainer/>
+        </>
     );
 };
 

@@ -8,6 +8,7 @@ import { genreatePorposalMessage, getAllMessagesForChat } from "@/app/store/acti
 import moment from 'moment';
 import ChatMessage from "../common/ChatMessage";
 import Typewriter from 'typewriter-effect';
+import Iconify from "@/app/admin/components/iconify";
 
 const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, selectedChatId, loading, setLoading }) => {
   const [answer, setAnswer] = useState('');
@@ -104,6 +105,7 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
                       {item.sentBy === "SYSTEM" && (
                         <div className="absolute z-50 top-0 left-0">
                           <AiChatAiIcon />
+                      
                         </div>
                       )}
                       <div className={`flex gap-3 ${item.sentBy === "USER" ? "justify-end" : ""} pl-[25px] md:pl-10 items-center`}>

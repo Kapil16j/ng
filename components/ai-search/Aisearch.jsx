@@ -39,7 +39,7 @@ const Aisearch = () => {
 
   console.log("query??", query);
   return (
-    <div className="bg-[#FAFAFA] h-screen">
+    <div className="bg-[rgb(0,43,66)]  min-h-screen p-6">
       {loading && <Loader />}
       <div className="max-w-[1180px] w-full px-4 xl:px-8">
 
@@ -51,7 +51,7 @@ const Aisearch = () => {
           <>
             <div className="max-sm:flex-col flex justify-between sm:mt-[34px] items-center gap-[10px]">
               <div>
-                <p className="text-[#333333] font-interTight font-medium md:text-[24px] sm:text-[20px] text-[15px]">
+                <p className="text-white font-interTight font-medium md:text-[24px] sm:text-[20px] text-[15px]">
                   Results for Africa opportunities
                 </p>
               </div>
@@ -119,7 +119,7 @@ const Aisearch = () => {
         }
 
         {/* Existing "Browse the grants" Section */}
-        <div className="max-w-[1100px] bg-white rounded-[16px] w-full pt-[32px] sm:mt-[34px] px-3 lg:pl-[32px] lg:pr-[36px] pb-6 md:pb-10 lg:pb-[50px]">
+        {/* <div className="max-w-[1100px] bg-white rounded-[16px] w-full pt-[32px] sm:mt-[34px] px-3 lg:pl-[32px] lg:pr-[36px] pb-6 md:pb-10 lg:pb-[50px]">
           <div className="max-sm:flex-col flex justify-between items-center gap-[10px]">
             <div>
               <p className="text-[#333333] font-interTight font-medium md:text-[24px] sm:text-[20px] text-[15px]">
@@ -175,7 +175,7 @@ const Aisearch = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Recommended Proposals Section */}
         <div className="max-w-[1100px] bg-white rounded-[16px] w-full pt-[32px] sm:mt-[34px] px-3 lg:pl-[32px] lg:pr-[36px] pb-6 md:pb-10 lg:pb-[50px]">

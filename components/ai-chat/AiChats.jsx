@@ -1,5 +1,6 @@
 import React from "react";
 import { FaceIcon, SaveIcon } from "../common/Icon";
+import Iconify from "@/app/admin/components/iconify";
 
 const AiChats = ({ chatsData, handleFav, selectedChatId, setSelectedChatId }) => {
   const handleSelectedChat = (id) => {
@@ -12,13 +13,14 @@ const AiChats = ({ chatsData, handleFav, selectedChatId, setSelectedChatId }) =>
         ?.sort((a, b) => b.id - a.id)
         ?.map((item, index) => (
           <div
-            className={`w-full flex gap-1 p-[11px_8px_16px] justify-center items-start cursor-pointer ${item.id === selectedChatId ? "bg-blue-500 rounded-lg" : ""
+            className={`w-full flex gap-1 p-[11px_8px_16px] justify-center items-start cursor-pointer ${item.id === selectedChatId ? "bg-[rgb(0,43,66)] rounded-lg" : ""
               }`}
             key={index}
             onClick={() => handleSelectedChat(item.id)}
           >
             <div className="mt-1">
-              <FaceIcon />
+              
+              <Iconify icon="ic:outline-smart-toy" color={`${item.id === selectedChatId ?"white":"black"}`}/>
             </div>
             <div className="w-full flex flex-col gap-1">
               <div className="flex justify-between items-center gap-3">

@@ -39,7 +39,7 @@ const DashboardHeader = ({ sidebar, setSidebar }) => {
   };
 
   return (
-    <div className="bg-whiteSmoke w-full h-[90px] flex items-center justify-end py-2 md:py-[19px] pr-4 lg:pr-10 xl:pr-12 sticky top-0 z-10">
+    <div className="bg-[#e5e6e9] w-full h-[90px] flex items-center justify-end py-2 md:py-[19px] pr-4 lg:pr-10 xl:pr-12 sticky top-0 z-10">
       <div className="flex gap-4 md:gap-6 lg:gap-8 items-center">
         <div className="relative cursor-pointer">
           <NotificationBellIcon />
