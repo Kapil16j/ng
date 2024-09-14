@@ -56,9 +56,9 @@ const Proposal = ({ setSelectedComponent }) => {
 
   return (
     <>
-      <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
-        <div className=" flex flex-row  p-6 w-fit">
-          <div className="flex flex-col p-6">
+      <div className="bg-[rgb(0,43,66)] h-screen flex flex-col border items-center p-6">
+        <div className=" flex flex-row   p-6 w-full">
+          <div className="flex flex-col p-6 ">
             <div >
               <h2 className="text-3xl font-bold mb-2  text-white">
                 Let’s talk on something
@@ -81,7 +81,7 @@ const Proposal = ({ setSelectedComponent }) => {
             </div>
 
           </div>
-          <div className="p-6 bg-white rounded-lg shadow-md">
+          <div className="p-6 bg-white rounded-lg shadow-md w-full">
             <h2 className="text-3xl font-bold mb-6 text-center text-[#002b42]">
               Raise a tikcet
             </h2>

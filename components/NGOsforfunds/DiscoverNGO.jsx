@@ -7,6 +7,7 @@ import { getAllGrants, getAllSampleProposals, getProposalQuestions, resetStore }
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
+import { Box, CircularProgress } from "@mui/material";
 
 const DiscoverNGO = ({ setSelectedComponent }) => {
   const [loading, setLoading] = useState(false);
@@ -19,36 +20,52 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
   console.log("userData?", userData)
 
   useEffect(() => {
+    getProposals()
 
-    dispatch(getAllSampleProposals())
     dispatch(getAllGrants())
     // dispatch(resetStore())
 
   }, [])
 
-  const handleClick = (id) => {
-
-    if(userData?.tier == "free"){
-      alert("Upgrade the Plan to access this feature!")
-    }else{
-
-    const data = {
-      "sample_proposal_id": id
-    }
-
-    setLoading(true);
-    dispatch(getProposalQuestions(data)).then(() => {
-      setLoading(false);
-      router.push('/ai-chat')
+  const getProposals = () => {
+    setLoading(true)
+    dispatch(getAllSampleProposals()).then(() => {
+      setLoading(false)
     })
   }
+
+  const handleClick = (id) => {
+
+    if (userData?.tier == "free") {
+      alert("Upgrade the Plan to access this feature!")
+    } else {
+
+      const data = {
+        "sample_proposal_id": id
+      }
+
+      setLoading(true);
+      dispatch(getProposalQuestions(data)).then(() => {
+        setLoading(false);
+        router.push('/ai-chat')
+      })
+    }
 
   }
 
   console.log("proposalData?.result", proposalData?.result)
   return (
-    <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
-      {loading && <Loader />}
+    <>
+
+    {loading ? 
+      <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <CircularProgress sx={{ color:'white' }}/>
+      </Box>
+    </div>
+      :
+      <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
+     
       <div className=" max-w-[1180px] w-full px-4 xl:px-8">
         <div className=" flex max-sm:flex-col gap-[10px] justify-between mt-[32px] items-center ">
           <div>
@@ -96,18 +113,18 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
                 className=" max-w-[240px] w-full mx-auto border-[1px] border-[#E0E0E0] bg-white rounded-[4px] "
               >
                 <div className=" group relative ">
-               <div 
+                  <div
                     className="max-w-[324px] w-full max-h-[240px] h-full"
-                    >
-               <Image
-                    src={item.image}
-                    width={324}
-                    height={240}
-                    alt="CraftYour-img4.png"
-                    className="w-[324px] h-[172px]"
+                  >
+                    <Image
+                      src={item.image}
+                      width={324}
+                      height={240}
+                      alt="CraftYour-img4.png"
+                      className="w-[324px] h-[172px]"
 
-                  />
-               </div>
+                    />
+                  </div>
                   <div className=" flex-col flex gap-[10px] custom-bg group-hover:duration-300 absolute w-full top-0 h-full justify-center ">
                     {/* {userData?.tier != "free" && */}
                     <button
@@ -210,6 +227,9 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
 
 
     </div>
+  }
+   
+    </>
   );
 };
 

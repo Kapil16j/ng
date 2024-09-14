@@ -113,7 +113,7 @@ const Plans = ({ setSelectedComponent }) => {
             {loading ?
                  <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
                     <Box sx={{ display: 'flex',justifyContent:'center',alignItems:'center', }}>
-                        <CircularProgress />
+                    <CircularProgress sx={{ color:'white' }}/>
                     </Box>
                 </div>
 

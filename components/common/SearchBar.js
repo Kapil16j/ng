@@ -57,7 +57,7 @@ const SearchBar = ({query,setQuery}) => {
           placeholder="AI Search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full outline-none sm:text-sm"
+          className="w-full outline-none sm:text-sm bg-transparent text-white"
         />
         <span>
           <CrossIcon />
