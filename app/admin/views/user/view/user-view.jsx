@@ -15,7 +15,8 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import { Box, Modal, TextField, FormControl, CardHeader, CardContent, Grid } from '@mui/material';
+import { Box, Modal, TextField, FormControl, CardHeader, CardContent, Grid, Select, MenuItem, InputLabel, InputAdornment, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import Iconify from '@/app/admin/components/iconify';
 import Scrollbar from '@/app/admin/components/scrollbar';
@@ -26,14 +27,14 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-import { activateDeactivateUser, getAllUser, updateTier, updateUser } from '@/app/admin/utils/api';
+import { activateDeactivateUser, BulkUsersCreate, getAllSubscription, getAllUser, updateSubscriptionId, updateTier, updateUser } from '@/app/admin/utils/api';
 import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
   const [users, setUsers] = useState([]);
-
+  const [subscriptions, setSubscriptions] = useState([])
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -44,6 +45,7 @@ export default function UserPage() {
   const [error, setError] = useState(null);
   const [checked, setChecked] = useState(true);
   const [open, setOpen] = useState(false)
+  const [bulkopen, setBulkOpen] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false);
   const [isEditId, setIsEditId] = useState('');
   const [tierValue, setTierValue] = useState('');
@@ -55,22 +57,75 @@ export default function UserPage() {
 
   });
 
+  const [bulkUsers, setBulkUsers] = useState({
+    subscriptionId: -1,
+    duration : 1,
+    users : [{
+      name: '',
+      email:'',
+      phoneNo: '',
+      country: '',
+    }]
+  })
+
 
   const getUsers = () => {
     getAllUser().then((item) => {
-
       setUsers(item?.data)
     })
   }
+  const getSubscritpion = () => {
+    getAllSubscription().then((item) => {
+      console.log("subscriptionitem???", item);
+      setSubscriptions(item?.data);
+    });
+  };
 
   useEffect(() => {
-
-    getUsers()
-
+    getUsers();
+    getSubscritpion();
   }, [])
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleOpenBulk = () => setBulkOpen(true);
+  const handleCloseBulk = () => setBulkOpen(false);
+
+  const handleBulkInputChange = (e, index) =>{
+    const { name, value } = e.target;
+    const updatedUsers = [...bulkUsers.users];
+    updatedUsers[index][name] = value;
+    setBulkUsers((prev) => ({ ...prev, users: updatedUsers }));
+  }
+  const addNewUserToBulk = () => {
+    setBulkUsers((prev) => ({
+      ...prev,
+      users: [...prev.users, { name: '', email: '', phoneNo: '', country: '' }],
+    }));
+  };
+  const removeUserFromBulk = (index) => {
+    const updatedUsers = [...bulkUsers.users];
+    updatedUsers.splice(index, 1);
+    setBulkUsers((prev) => ({ ...prev, users: updatedUsers }));
+  };
+
+  const handleBulkSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await BulkUsersCreate(bulkUsers);
+      console.log('Bulk create successful:', response.data);
+      toast.success("Bulk create successfully!");
+      handleCloseBulk();
+      getUsers();
+      setLoading(false);
+    } catch (error) {
+      console.error('Error during bulk create:', error);
+      toast.error("Error during bulk create!");
+      setLoading(false);
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -78,11 +133,12 @@ export default function UserPage() {
     setNewUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newUserId = Date.now().toString(); // Generate a unique ID for the new user
-
-    setUsers((prevUsers) => [...prevUsers, { ...newUser, _id: newUserId }]);
+    setLoading(true);
+    const res = await userCreate(data);
+    getUsers();
+    setLoading(false);
     handleClose();
     toast.success("User created successfully!");
   };
@@ -90,7 +146,7 @@ export default function UserPage() {
   // Other handlers like handleSort, handleSelectAllClick, etc.
 
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -102,7 +158,7 @@ export default function UserPage() {
       phoneNo: newUser.phoneNo,
       country: newUser.country,
     }
-    updateUser(data,isEditId).then((item) => {
+    await updateUser(data,isEditId).then((item) => {
      
       toast.success("User updated successfully!");
       handleClose();
@@ -203,6 +259,19 @@ export default function UserPage() {
     }
   };
 
+  const handleSubscriptionChange = async (id, newStatus) => {
+    try {
+      const data = {
+        subscriptionId: newStatus==-1?null:newStatus
+      };
+      await updateUser(data, id).then((item) => {
+        getUsers();
+      })
+    } catch (error) {
+      console.error("Error updating user status:", error);
+    }
+  };
+
 
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -274,9 +343,14 @@ export default function UserPage() {
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Users</Typography>
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpen}>
-          New User
-        </Button>
+        <div className='flex gap-2'>
+          <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpen}>
+            New User
+          </Button>
+          <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenBulk}>
+            Bulk Add Users
+          </Button>
+        </div>
       </Stack>
 
       <Card>
@@ -302,12 +376,11 @@ export default function UserPage() {
                   { id: 'role', label: 'Role' },
                   { id: 'isAccountLocked', label: 'Account Locked' },
                   { id: 'isEmailVerified', label: 'Email Verified' },
+                  { id: 'subscription', label: 'Subscription' },
                   { id: 'tier', label: 'Tier' },
                   { id: 'createdAt', label: 'created Date' },
                   { id: 'status', label: 'A/D User' },
                   { id: 'setting', label: 'Setting' },
-
-
                 ]}
               />
               <TableBody>
@@ -321,6 +394,7 @@ export default function UserPage() {
                       accountLocked={row?.isAccountLocked}
                       isEmailVerified={row?.isEmailVerified}
                       subscription={row?.subscription}
+                      allsubscriptions={subscriptions}
                       tier={row?.tier}
                       status={row?.status}
                       createdAt={row?.createdAt}
@@ -333,6 +407,7 @@ export default function UserPage() {
                       id={row.id}
                       checked={checked}
                       handleTierChange={(event) => handleTierChange(row.id, event.target.value)}
+                      handleSubscriptionChange={(event) => handleSubscriptionChange(row.id, parseInt(event.target.value))}
                     />
                   ))}
 
@@ -379,7 +454,7 @@ export default function UserPage() {
                     <FormControl fullWidth>
                       <TextField
                         required
-                        label="First Name"
+                        label="Name"
                         name="name"
                         value={newUser.name}
                         onChange={handleInputChange}
@@ -390,7 +465,7 @@ export default function UserPage() {
                     <FormControl fullWidth>
                       <TextField
                         required
-                        label="Last Name"
+                        label="Email"
                         name="email"
                         value={newUser.email}
                         onChange={handleInputChange}
@@ -417,10 +492,135 @@ export default function UserPage() {
                        
                         value={newUser.country}
                         onChange={handleInputChange}
-                       
                       />
                     </FormControl>
                   </Grid>
+                  <Grid item xs={12}>
+                    <LoadingButton
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                      loading={loading}
+                    >
+                      {isEditMode ? "Update" : "Submit"}
+                    </LoadingButton>
+                  </Grid>
+                </Grid>
+              </form>
+            </CardContent>
+          </Card>
+        </Box>
+      </Modal>
+
+      <Modal open={bulkopen} onClose={handleCloseBulk}>
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '80%',
+          maxHeight: '90vh',
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          borderRadius: "15px",
+          overflowY: scroll,
+        }}>
+          <Card>
+            <CardHeader title={"Add users in bulk."} />
+            <CardContent>
+              <form onSubmit={handleBulkSubmit}>
+                <div className='flex gap-4 mb-4'>
+                  <Grid item >
+                    <FormControl >
+                    <InputLabel id="subscription-select-label">Subscription</InputLabel>
+                      <Select
+                        value={bulkUsers.subscriptionId}
+                        labelId='subscription-select-label'
+                        label='subscription'
+                        className=' min-w-[150px]'
+                        onChange={(event) => setBulkUsers({ ...bulkUsers, subscriptionId: event.target.value })}
+                      >
+                        <MenuItem value={-1}>None</MenuItem>
+                        {subscriptions?.map((subscription) => (
+                          <MenuItem value={subscription?.id}>{subscription?.name}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <FormControl fullWidth>
+                      <TextField
+                        required
+                        label="Duration"
+                        name="duration"
+                        type="number"
+                        value={bulkUsers.duration}
+                        onChange={e=>setBulkUsers({...bulkUsers, duration: e.target.value})}
+                        InputProps={{
+                          endAdornment: <InputAdornment position="end">Month</InputAdornment>,
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Button variant="contained" color="primary" onClick={addNewUserToBulk}>+ Add User</Button>
+                  </Grid>
+                </div>
+                {bulkUsers.users.map((user, index) => (
+                  <div key={index} className='flex  gap-4 mb-4'>
+                    <Grid item xs={5}>
+                      <FormControl fullWidth>
+                        <TextField
+                          required
+                          label="Name"
+                          name="name"
+                          value={user.name}
+                          onChange={e => handleBulkInputChange(e, index)}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={7}>
+                      <FormControl fullWidth>
+                        <TextField
+                          required
+                          label="Email"
+                          name="email"
+                          value={user.email}
+                          onChange={e => handleBulkInputChange(e, index)}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <FormControl fullWidth>
+                        <TextField
+                          required
+                          label="Phone"
+                          name="phoneNo"
+                          value={user.phoneNo}
+                          onChange={e => handleBulkInputChange(e, index)}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <FormControl fullWidth>
+                        <TextField
+                          required
+                          label="Country"
+                          name="country"
+                          value={user.country}
+                          onChange={e => handleBulkInputChange(e, index)}
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <IconButton onClick={() => removeUserFromBulk(index)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Grid>
+                  </div>
+                ))}
+                <Grid container spacing={3}>
                   <Grid item xs={12}>
                     <LoadingButton
                       fullWidth

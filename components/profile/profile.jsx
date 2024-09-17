@@ -1,6 +1,7 @@
 import { getUser, updateUser } from "@/app/store/actions/dataActions";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
@@ -34,10 +35,12 @@ const getUserData = async () => {
             setUserData(data);
         } else {
             setError("Failed to fetch user data.");
+            toast.error("Couldn't fetch user! Try Loging in again!")
         }
     } catch (err) {
         console.error("Error fetching user data:", err);
         setError("An error occurred while fetching user data.");
+        toast.error("An error occurred while fetching user data.");
     } finally {
         // setLoading(false);
     }

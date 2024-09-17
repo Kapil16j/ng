@@ -31,6 +31,7 @@ export default function UserTableRow({
   details,
   duration,
   cost,
+  ispublic,
   getSubscritpion,
   handleDelete,
   openConfirm,
@@ -78,6 +79,7 @@ export default function UserTableRow({
         <TableCell>{details}</TableCell>
         <TableCell>{duration}</TableCell>
         <TableCell>{cost}</TableCell>
+        <TableCell>{ispublic?"True":"False"}</TableCell>
        
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>

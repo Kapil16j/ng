@@ -15,6 +15,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@headlessui/react": "^2.0.4",
     "@iconify/react": "^5.0.2",
+    "@mui/icons-material": "^5.16.7",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.16.6",

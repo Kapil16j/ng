@@ -2,6 +2,7 @@ import { premiumSupport } from "@/app/store/actions/dataActions";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const Proposal = ({setSelectedComponent}) => {
   const [formData, setFormData] = useState({
@@ -42,7 +43,7 @@ const Proposal = ({setSelectedComponent}) => {
       dispatch(premiumSupport(formData)).then((data)=>{
 
         if(data?.data?.status == 201){
-          alert(data?.data?.message)
+          toast(data?.data?.message)
           setSelectedComponent("Home")
         }
         

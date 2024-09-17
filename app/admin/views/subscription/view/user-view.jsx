@@ -15,7 +15,7 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import { Box, Modal, TextField, FormControl } from '@mui/material';
+import { Box, Modal, TextField, FormControl, Switch } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
 import CardHeader from '@mui/material/CardHeader';
@@ -61,6 +61,7 @@ export default function UserPage() {
     details: '',
     duration: '',
     cost: '',
+    public : true,
   });
 
   const getSubscritpion = () => {
@@ -76,7 +77,7 @@ export default function UserPage() {
 
   const handleOpen = () => {
     setIsEditMode(false); // Reset edit mode
-    setNewUser({ name: '', details: '', duration: '', cost: '' }); // Reset form fields
+    setNewUser({ name: '', details: '', duration: '', cost: '', public: true }); // Reset form fields
     setOpen(true);
   };
   
@@ -87,13 +88,18 @@ export default function UserPage() {
 
     setNewUser((prev) => ({ ...prev, [name]: value }));
   };
+  const handleInputChangePublic = (e) => {
+    const ischecked = e.target.checked;
+    console.log("ischecked", ischecked);
+    setNewUser((prev) => ({ ...prev, public: ischecked }));
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     createSubscription(newUser).then((item) => {
       handleClose();
-      toast.success("User created successfully!");
+      toast.success("Subscription created successfully!");
       getSubscritpion();
       setLoading(false);
     });
@@ -104,7 +110,7 @@ export default function UserPage() {
     setLoading(true);
     updateSubscription(newUser).then((item) => {
       handleClose();
-      toast.success("User updated successfully!");
+      toast.success("Subscription updated successfully!");
       getSubscritpion();
       setLoading(false);
     });
@@ -224,6 +230,7 @@ export default function UserPage() {
                   { id: 'details', label: 'Detail' },
                   { id: 'duration', label: 'Duration' },
                   { id: 'cost', label: 'Cost' },
+                  { id: 'public', label: 'Public' },
                   { id: 'setting', label: 'Setting' },
                 ]}
               />
@@ -236,6 +243,7 @@ export default function UserPage() {
                       details={row?.details}
                       duration={row?.duration}
                       cost={row?.cost}
+                      ispublic={row?.public}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                       id={row.id}
@@ -331,6 +339,18 @@ export default function UserPage() {
                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
                         }}
                       />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <div className='flex items-center justify-between'>
+                        <label>Is it Public ? </label>
+                        <Switch
+                          checked={newUser.public}
+                          onChange={handleInputChangePublic}
+                          inputProps={{ 'aria-label': 'controlled' }}
+                        />
+                      </div>
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>

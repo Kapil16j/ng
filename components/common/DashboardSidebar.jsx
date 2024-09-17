@@ -19,6 +19,7 @@ import { Templates, writingBeta } from "./Helper";
 import NaimurDropDown from "./NaimurDropDown";
 import WritingBeteDropDown from "./WritingBeteDropDown";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const DashboardSidebar = ({ sidebar, setSidebar, setSelectedComponent, selectedComponent }) => {
 
@@ -45,7 +46,7 @@ const DashboardSidebar = ({ sidebar, setSidebar, setSelectedComponent, selectedC
   const handleSelectionData = (component) => {
 
     if (userData?.tier == "free") {
-      alert("Upgrade the Plan to access this feature!")
+      toast.warn("Upgrade the Plan to access this feature!", {position:"top-center"})
     } else {
 
 
