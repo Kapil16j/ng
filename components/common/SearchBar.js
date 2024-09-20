@@ -48,7 +48,7 @@ const SearchBar = ({query,setQuery}) => {
 
   return (
     <div className="flex flex-col items-center p-4">
-      <div className="w-full flex items-center justify-between gap-2 max-w-[991px] mx-auto border border-gray-300 rounded-md shadow-sm p-2">
+      <div className="w-full flex items-center justify-between gap-2 max-w-[991px] mx-auto border border-white rounded-md shadow-sm p-2">
         <span>
           <SearchIcon />
         </span>
@@ -57,7 +57,7 @@ const SearchBar = ({query,setQuery}) => {
           placeholder="AI Search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full outline-none sm:text-sm"
+          className="w-full outline-none sm:text-sm bg-transparent text-white"
         />
         <span>
           <CrossIcon />

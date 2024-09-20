@@ -23,7 +23,7 @@ const DashboardLayout = ({ children }) => {
       case "Proposals":
         return <Proposal setSelectedComponent={setSelectedComponent}/>;;
       case "Plans":
-        return <Plans/>;
+        return <Plans setSelectedComponent={setSelectedComponent}/>;
         case "Profile":
         return <ProfilePage/>;
       case "Help":

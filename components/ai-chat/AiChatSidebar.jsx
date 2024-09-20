@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import AiChats from "./AiChats";
 import {
+  CrossIcon,
   FilterIcon,
   KebabmenuIcon,
+  LogoIcon,
   MessagesIcon,
   NewProposalIcon,
   SaveIcon3,
@@ -10,31 +12,33 @@ import {
 } from "../common/Icon";
 import { getAllChats } from "@/app/store/actions/dataActions";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
-const AiChatSidebar = ({active, setActive, setCreateProposal,  setSelectedChatId, selectedChatId }) => {
+const AiChatSidebar = ({ active, setActive, setCreateProposal, setSelectedChatId, selectedChatId }) => {
   // const [allChats, setAllChats] = useState(allChatData);
   const [favChats, setFavChats] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading,setLoading] = useState()
+  const [loading, setLoading] = useState()
 
   const dispatch = useDispatch()
+  const router = useRouter()
 
   const allChatData = useSelector((state) => state.data.allChatsData)
   let allChats = allChatData?.result
   const fetchAllChats = async () => {
     setLoading(true);
-    await dispatch(getAllChats()).then(()=>{
+    await dispatch(getAllChats()).then(() => {
       setLoading(false);
     });
-    
+
   };
 
-  
 
-  useEffect(()=>{
+
+  useEffect(() => {
 
     fetchAllChats()
-  },[])
+  }, [])
 
   useEffect(() => {
     const favs = allChats?.filter((chat) => chat.isFav);
@@ -63,91 +67,102 @@ const AiChatSidebar = ({active, setActive, setCreateProposal,  setSelectedChatId
     : favChats?.filter(chat => chat.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <div className="max-lg:hidden w-[366px] h-full px-4 flex gap-4 flex-col bg-whiteSmoke">
-      {/* My proposal and new proposal creator btn */}
-      <div className="mt-[59px] w-full mx-auto flex justify-between">
-        <p className="text-zinc-800 text-2xl font-medium">My Proposals</p>
-        <div className="flex gap-2.5">
+    <>
+
+      <div className="max-lg:hidden w-[366px] h-full px-4 flex gap-4 flex-col bg-whiteSmoke ">
+        {/* My proposal and new proposal creator btn */}
+        {/* <p className="text-zinc-800 text-2xl font-medium">NGO</p> */}
+
+
+        <div className=" mt-[59px]w-full flex items-center justify-between p-4 cursor-pointer" onClick={()=>router.push("/dashboard/home")}>
+            <div className="flex items-center gap-2">
+              <LogoIcon />
+              <h2 className="text-black font-Inter text-[25px] font-bold">NGO</h2>
+            </div>
+
+          </div>
+
+        <div className=" w-full mx-auto flex justify-between">
+          
+          <p className="text-zinc-800 text-2xl font-medium">My Proposals</p>
+          <div className="flex gap-2.5">
+            <button
+              onClick={() => setCreateProposal((prev) => !prev)}
+              className="group"
+            >
+              <NewProposalIcon />
+            </button>
+            <button>
+              <KebabmenuIcon />
+            </button>
+          </div>
+        </div>
+
+        {/* Nav tabs */}
+        <div className="flex w-full bg-superSilver border-[#E2E2E2] border-[0.6px] rounded mx-auto justify-center gap-1 p-1">
           <button
-            onClick={() => setCreateProposal((prev) => !prev)}
-            className="group"
+            onClick={() => setActive("chats")}
+            className={`${active === "chats"
+                ? "bg-white text-[rgb(0,43,66)]"
+                : "bg-superSilver text-carbonColor"
+              } rounded w-full h-[40px] flex items-center justify-center gap-[6px] text-[14px] font-normal text-carbonColor`}
           >
-            <NewProposalIcon />
+            <span className="flex-shrink-0">
+              <MessagesIcon icon={active} />
+            </span>
+            CHATS
+            <span
+              className={`${active === "chats" ? "bg-[#E3E8F2]" : "bg-kinglyCloud"
+                } text-[14px] font-normal flex items-center justify-center p-[1px_4px] rounded`}
+            >
+              {allChats?.length}
+            </span>
           </button>
-          <button>
-            <KebabmenuIcon />
+          <button
+            onClick={() => setActive("saved")}
+            className={`${active === "saved" ? "bg-white text-[rgb(0,43,66)]" : "text-carbonColor"
+              } rounded w-full h-[40px] flex items-center justify-center gap-[6px] text-[14px] font-normal text-carbonColor`}
+          >
+            <span className="flex-shrink-0">
+              <SaveIcon3 icon={active} />
+            </span>
+            SAVED
+            <span
+              className={`${active === "saved" ? "bg-kinglyCloud" : "bg-[#E3E8F2]"
+                } text-sm font-normal flex items-center justify-center p-[1px_4px] rounded`}
+            >
+              {favChats?.length}
+            </span>
           </button>
         </div>
-      </div>
 
-      {/* Nav tabs */}
-      <div className="flex w-full bg-superSilver border-[#E2E2E2] border-[0.6px] rounded mx-auto justify-center gap-1 p-1">
-        <button
-          onClick={() => setActive("chats")}
-          className={`${
-            active === "chats"
-              ? "bg-white text-retroBlue"
-              : "bg-superSilver text-carbonColor"
-          } rounded w-full h-[40px] flex items-center justify-center gap-[6px] text-[14px] font-normal text-carbonColor`}
-        >
-          <span className="flex-shrink-0">
-            <MessagesIcon icon={active} />
-          </span>
-          CHATS
-          <span
-            className={`${
-              active === "chats" ? "bg-[#E3E8F2]" : "bg-kinglyCloud"
-            } text-[14px] font-normal flex items-center justify-center p-[1px_4px] rounded`}
-          >
-            {allChats?.length}
-          </span>
-        </button>
-        <button
-          onClick={() => setActive("saved")}
-          className={`${
-            active === "saved" ? "bg-white text-retroBlue" : "text-carbonColor"
-          } rounded w-full h-[40px] flex items-center justify-center gap-[6px] text-[14px] font-normal text-carbonColor`}
-        >
-          <span className="flex-shrink-0">
-            <SaveIcon3 icon={active} />
-          </span>
-          SAVED
-          <span
-            className={`${
-              active === "saved" ? "bg-kinglyCloud" : "bg-[#E3E8F2]"
-            } text-sm font-normal flex items-center justify-center p-[1px_4px] rounded`}
-          >
-            {favChats?.length}
-          </span>
-        </button>
-      </div>
+        {/* Search bar */}
+        <div className="flex items-center gap-2 w-full">
+          <div className="px-2 h-8 gap-2 w-full rounded bg-titaniumWhite items-center flex">
+            <SearchIcon />
+            <input
+              type="search"
+              className="font-interTight w-full bg-transparent text-[#575B65] outline-none font-normal text-[14px]"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
 
-      {/* Search bar */}
-      <div className="flex items-center gap-2 w-full">
-        <div className="px-2 h-8 gap-2 w-full rounded bg-titaniumWhite items-center flex">
-          <SearchIcon />
-          <input
-            type="search"
-            className="font-interTight w-full bg-transparent text-[#575B65] outline-none font-normal text-[14px]"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-
-          />
+            />
+          </div>
+          <div className="hover:cursor-pointer">
+            <FilterIcon />
+          </div>
         </div>
-        <div className="hover:cursor-pointer">
-          <FilterIcon />
-        </div>
-      </div>
 
-      {/* Ai chats */}
-      <AiChats
-        chatsData={filteredChats}
-        handleFav={handleFav}
-        setSelectedChatId={setSelectedChatId}
-        selectedChatId={selectedChatId}
-      />
-    </div>
+        {/* Ai chats */}
+        <AiChats
+          chatsData={filteredChats}
+          handleFav={handleFav}
+          setSelectedChatId={setSelectedChatId}
+          selectedChatId={selectedChatId}
+        />
+      </div>
+    </>
   );
 };
 

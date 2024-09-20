@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react'
 
 import LayoutNavbar from '../../../@layouts/components/vertical/Navbar'
 import NavbarContent from './NavbarContent'
-import { getUser } from '@/app/store/actions/dataActions'
+import { getUser } from '@/app/admin/utils/api'
+
 
 const Navbar = () => {
   const [user,setUser] = useState(null)

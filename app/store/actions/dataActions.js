@@ -427,6 +427,50 @@ export const createPaymentIntent =
 
 
 
+    export const getAllNotification =
+  () =>
+    async (dispatch, getState) => {
+      try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.get(`${API_BASE_URL}/users/notifications`,
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        return response;
+
+      } catch (error) {
+        return error;
+      }
+    };
+
+
+    export const markAllNotiRead =
+  () =>
+    async (dispatch, getState) => {
+      try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.put(`${API_BASE_URL}/users/mark-all-notifications-as-read`,{},
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        return response;
+
+      } catch (error) {
+        return error;
+      }
+    };
+
+
 
 
 
