@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
 import Cookies from 'js-cookie'
 import OTPInput, { ResendOTP } from "otp-input-react";
+import { toast } from "react-toastify";
 
 const Signin = () => {
   const [passwordeye, setPasswordeye] = useState(true);
@@ -74,7 +75,7 @@ const Signin = () => {
       if (response?.status === 201 || response?.status === 200) {
         setOtpVisible(true); // Show OTP screen on successful login
       } else if (response?.response?.status) {
-        alert(response?.response?.data?.detail);
+        toast.error(response?.response?.data?.detail);
       }
     });
   };
@@ -111,7 +112,7 @@ const Signin = () => {
       // "  /dashobard/home"
 
       } else {
-        alert(response?.response?.data?.detail)
+        toast.error(response?.response?.data?.detail)
       }
     });
   };

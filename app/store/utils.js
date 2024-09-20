@@ -4,4 +4,6 @@ export const API_BASE_URL = 'http://3.111.147.36:8000'
 
 // export const API_BASE_URL = 'http://127.0.0.1:8000'
 
+//  export const API_BASE_URL = 'http://localhost:8000'
+
 export const AUTH_TOKEN = ''

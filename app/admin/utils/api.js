@@ -85,7 +85,43 @@ export const getAllUser = () => {
     }
 };
 
+export const BulkUsersCreate = (data) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+  
+        const response = axios.post(`${API_BASE_URL}/admin/users/bulkcreate`, data,
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+  
+        return response;
+  
+    } catch (error) {
+        return error;
+    }
+};
 
+export const userCreate = (data) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+  
+        const response = axios.post(`${API_BASE_URL}/admin/users/`, data,
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+  
+        return response;
+  
+    } catch (error) {
+        return error;
+    }
+};
 
 export const updateUser = (data,id) => {
   try {
@@ -155,7 +191,7 @@ export const getAllSubscription = () => {
     try {
         const authToken = Cookies.get('accesstoken')
 
-        const response = axios.get(`${API_BASE_URL}/users/subscriptions`,
+        const response = axios.get(`${API_BASE_URL}/admin/subscriptions`,
             {
                 headers: {
                     authorization: `Bearer ${authToken}`,
@@ -270,6 +306,24 @@ export const updateTier = (data,id) => {
     }
 };
 
+export const updateSubscriptionId = (sub_id,id) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.put(`${API_BASE_URL}/admin/users/${id}/${sub_id}`, {},
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        return response;
+
+    } catch (error) {
+        return error;
+    }
+};
 
 
 

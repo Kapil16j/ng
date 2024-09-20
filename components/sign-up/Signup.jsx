@@ -93,11 +93,11 @@ const Signup = () => {
     dispatch(register({ data })).then((data) => {
       setLoading(false)
       if (data?.status == 201) {
-        // alert("Registered Successfully");
+        // toast.success("Registered Successfully");
       
         router.push('/signin')
       } else if (data?.response?.status == 400) {
-        alert(data?.response?.data?.detail);
+        toast.error(data?.response?.data?.detail);
       }
     });
   };

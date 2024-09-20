@@ -41,7 +41,9 @@ export default function UserTableRow({
   checked,
   createdAt,
   updatedAt,
-  handleTierChange
+  handleTierChange,
+  handleSubscriptionChange,
+  allsubscriptions
 }) {
   const [openMenu, setOpenMenu] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -86,9 +88,21 @@ export default function UserTableRow({
         <TableCell>{role}</TableCell>
         <TableCell>{accountLocked == true ? 'Yes' : 'No'}</TableCell>
         <TableCell>{isEmailVerified == true ? 'Yes' : 'No'}</TableCell>
-        {/* <TableCell>{subscription ? subscription : "No"}</TableCell> */}
-        <TableCell>
 
+        <TableCell>
+            <FormControl fullWidth>
+              <Select
+                value={subscription? subscription.id: -1}
+                onChange={handleSubscriptionChange}
+              >
+                <MenuItem value={-1}>None</MenuItem>
+                {allsubscriptions?.map((subscription) => (
+                  <MenuItem value={subscription?.id}>{subscription?.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+        </TableCell>
+        <TableCell>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">--</InputLabel>
             <Select

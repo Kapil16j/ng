@@ -32,6 +32,7 @@ import themeConfig from '../configs/themeConfig'
 import { useImageVariant } from '../@core/hooks/useImageVariant'
 
 import {login, verifyOtp } from '../utils/api'
+import { toast } from 'react-toastify'
 
 const Login = ({ mode }) => {
   // States
@@ -82,7 +83,7 @@ return regex.test(email)
           setStep(2)
          
         } else {
-          alert(item?.response?.data?.detail)
+          toast.error(item?.response?.data?.detail)
         }
 
         setLoading(false)
@@ -115,7 +116,7 @@ return regex.test(email)
         router.push('/admin/app')
 
       } else {
-        alert(item?.response?.data?.detail)
+        toast.error(item?.response?.data?.detail)
       }
 
       setLoading(false)

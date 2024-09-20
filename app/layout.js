@@ -25,6 +25,7 @@ import "./globals.css";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store/store";
+import ToastProvider from "@/components/common/ToastProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +35,9 @@ export default function RootLayout({ children, params }) {
       <body className={inter.className}>
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              {children}
+              <ToastProvider>
+                {children}
+              </ToastProvider>
             </PersistGate>
         </Provider>
       </body>

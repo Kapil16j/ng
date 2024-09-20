@@ -7,6 +7,7 @@ import { getAllGrants, getAllSampleProposals, getProposalQuestions, resetStore }
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
+import { toast } from "react-toastify";
 import { Box, CircularProgress } from "@mui/material";
 
 const DiscoverNGO = ({ setSelectedComponent }) => {
@@ -36,9 +37,9 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
 
   const handleClick = (id) => {
 
-    if (userData?.tier == "free") {
-      alert("Upgrade the Plan to access this feature!")
-    } else {
+    if(userData?.tier == "free"){
+      toast.warn('Upgrade the Plan to access this feature!');
+    }else{
 
       const data = {
         "sample_proposal_id": id
@@ -100,7 +101,7 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
             <div>
               <Link
                 className=" text-[#316FF4] text-[18px] font-interTight "
-                href="/"
+                href="#"
               >
                 Explore all templates
               </Link>

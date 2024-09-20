@@ -2,8 +2,7 @@ import { premiumSupport } from "@/app/store/actions/dataActions";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
 
 const Proposal = ({ setSelectedComponent }) => {
   const [formData, setFormData] = useState({
@@ -43,8 +42,7 @@ const Proposal = ({ setSelectedComponent }) => {
       setLoading(true);
       dispatch(premiumSupport(formData)).then((data) => {
         if (data?.data?.status == 201) {
-          // alert(data?.data?.message);
-          // setSelectedComponent("Home");
+          setSelectedComponent("Home");
           toast.success("Ticket Raised Succesfully")
         }
         setLoading(false);
