@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   EyeoffIcon,
   EyeonIcon,
@@ -8,11 +8,13 @@ import {
 } from "../common/Icon";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { register } from "@/app/store/actions/dataActions";
+import { getSubscriptionById, register, registerWithSubscription } from "@/app/store/actions/dataActions";
 import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
+import Cookies from "js-cookie";
+import { Button } from "@mui/material";
 
-const Signup = () => {
+const Signup = ({sub_id}) => {
   const [passwordeye, setPasswordeye] = useState(true);
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -26,6 +28,8 @@ const Signup = () => {
   const [termsChecked, setTermsChecked] = useState(false);
   const [termsError, setTermsError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [subscriptinoInfo , setSubscriptionInfo] = useState(null);
+
 
   const dispatch = useDispatch();
   const router = useRouter()
@@ -35,6 +39,8 @@ const Signup = () => {
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   };
+
+  console.log("SUB_ID", sub_id)
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -102,6 +108,65 @@ const Signup = () => {
     });
   };
 
+  const handleSubmitwithSubscription = (e) => {
+    e.preventDefault();
+
+    // Validate fields
+    const isValidEmail = validateEmail(email);
+    const isValidPassword = password.length >= 8;
+    const isValidName = name.trim() !== "";
+    const isValidTerms = termsChecked;
+
+    // Set errors
+    setEmailError(!isValidEmail);
+    setPasswordError(!isValidPassword);
+    setTermsError(!isValidTerms);
+
+    if (!isValidEmail || !isValidName || !isValidTerms) {
+      return;
+    }
+
+    // Dispatch registration action
+    setLoading(true)
+    const data = {
+      name: name,
+      email: email,
+      country: country,
+      phone:phone
+    };
+
+    dispatch(registerWithSubscription({ data, sub_id })).then((data) => {
+      console.log("DATA : ", data)
+      setLoading(false)
+      if (data.user) {
+        // toast.success("Registered Successfully");
+
+        const accesstoken = data?.user?.access_token
+        const secret = data?.secret
+        Cookies.set('accesstoken', accesstoken, { expires: 10 })
+        if(secret)
+          router.push(`/signup/pay/${sub_id}?secret=${secret}`)
+        else 
+          toast.error("Couldn't create Payment Intent. Please try Again later!")
+        
+      } else if (data?.response?.status == 400) {
+        toast.error(data?.response?.data?.detail);
+      }
+    });
+  }
+
+  async function getSubscriptionInfo(id){
+    const response = await dispatch(getSubscriptionById(id))
+    console.log("Plan Info : ", response.data)
+    setSubscriptionInfo(response.data)
+  }
+
+  useEffect(() =>{
+    if(sub_id){
+      getSubscriptionInfo(sub_id)
+    }
+  }, [])
+
   return (
     <div className="w-full flex sm:h-screen">
       {loading && (
@@ -115,7 +180,7 @@ const Signup = () => {
           <p className="text-[#828282]  font-interTight text-[16px] sm:text-[22px] font-light">
             Kindly fill in your details to create an account
           </p>
-          <form className="w-full flex gap-5 flex-col mt-2 xl:mt-[49px]" onSubmit={handleSubmit}>
+          <form className="w-full flex gap-5 flex-col mt-2 xl:mt-[49px]" onSubmit={sub_id? handleSubmitwithSubscription :handleSubmit}>
             <div className="flex flex-col gap-1 sm:gap-[10px] ">
               <label
                 htmlFor="text"
@@ -285,7 +350,34 @@ const Signup = () => {
           </Link>
         </div>
       </div>
-      <div className="w-[48.5%] max-lg:hidden bg-[url(/assets/img/login-bg.png)] bg-cover bg-no-repeat bg-center  flex items-center justify-center p-4"></div>
+      <div className="w-[48.5%] max-lg:hidden bg-[url(/assets/img/login-bg.png)] bg-cover bg-no-repeat bg-center  flex items-center justify-center p-4">
+        {subscriptinoInfo && <>
+            <div>
+              <div className="bg-white shadow-md rounded-lg p-6 ">
+                  <div className="text-center text-2xl mb-3">Your Order Summary</div>
+                  <div className=" text-center">
+                      <p className="text-3xl font-extrabold mb-4 text-green-600"> $ {subscriptinoInfo.cost} <span className="text-sm font-light text-gray-500">/ month</span></p>
+                      <span className="bg-blue-100 text-blue-700  text-white font-bold py-2 px-4 rounded border mb-4">Billed Monthly</span>
+                  </div>
+                  <div className="py-4">
+                      {subscriptinoInfo.details?.split(',').map((item, index) => {
+                          return (
+                              <div className='flex flex-col' key={index}>
+                                  <div className='flex flex-row gap-2'>
+                                      <img src="/assets/img/checkMark.png" className='w-4 h-4 mt-1'></img>
+                                      <p className="text-gray-600">{item}</p>
+                                  </div>
+                              </div>
+                          )
+                      })}
+                  </div>
+                  <div className="text-xs text-opacity-50 text-gray-700 flex justify-center">
+                    <div>* Payments are processed using secure, <br /> PCI- compliant payment processors. <br />We do not store your complete card details.</div>
+                  </div>
+              </div>
+            </div>
+        </>}
+      </div>
     </div>
   );
 };

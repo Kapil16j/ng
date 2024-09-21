@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   EyeoffIcon,
   EyeonIcon,
@@ -8,7 +8,7 @@ import {
 } from "../common/Icon";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { createPaymentIntent, register } from "@/app/store/actions/dataActions";
+import { register } from "@/app/store/actions/dataActions";
 import { useRouter } from "next/navigation";
 import Loader from "../common/Loader";
 import Cookies from "js-cookie";
@@ -80,6 +80,10 @@ const Signup = ({id}) => {
     }
     return null
   };
+
+  useEffect(()=>{
+    
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -310,6 +314,11 @@ const Signup = ({id}) => {
               <GoogleIcon /> Register with Google
             </button>
           </Link> */}
+        </div>
+      </div>
+      <div className="w-[48.5%] max-lg:hidden bg-[url(/assets/img/login-bg.png)] bg-cover bg-no-repeat bg-center  flex items-center justify-center p-0 ">
+        <div>
+          hello
         </div>
       </div>
     </div>

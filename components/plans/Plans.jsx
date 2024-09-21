@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import AllPlans from './AllPlans';
 
 
-export const PlanCard = ({ name, price, description, subId }) => (
+export const PlanCard = ({ name, price, description, subId , handleSubmit}) => (
     <>
         <div className="bg-white shadow-md rounded-lg p-6 ">
             <div className=" text-center">
@@ -50,6 +50,7 @@ export const PlanCard = ({ name, price, description, subId }) => (
         </div>
     </>
 );
+
 
 const Plans = ({ setSelectedComponent }) => {
     const [plansData, setPlansData] = useState([])
@@ -128,7 +129,7 @@ const Plans = ({ setSelectedComponent }) => {
                                 <div className="flex flex-col md:flex-row justify-center gap-8">
                                     {plansData?.map((plan, index) => (
                                         <div key={index} className="w-full max-w-xs">
-                                            <PlanCard name={plan.name} price={plan.cost} description={plan.details} subId={plan.id} />
+                                            <PlanCard name={plan.name} price={plan.cost} description={plan.details} subId={plan.id} handleSubmit={handleSubmit} />
                                         </div>
                                     ))}
                                 </div>

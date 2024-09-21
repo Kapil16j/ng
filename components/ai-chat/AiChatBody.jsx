@@ -142,6 +142,7 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
         toast.error("There were no proposals generated for this chat.")
         return ;
       }
+      setNewProposal(proposals.data)
       const doc = await processor.process(proposals.data);
       const blob = await doc.result;
       saveAs(blob, "proposal.docx");
@@ -276,7 +277,7 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
             <div className="flex items-center">
               <Button onClick={()=>generateProposal()} disabled={inputLoading}>Generate Proposal</Button>
               <div>
-                 <button  onClick={()=>DownloadProposal()} disabled={inputLoading}><Download /></button>
+                 <button className="border px-1" onClick={()=>DownloadProposal()} disabled={inputLoading}><Download /></button>
               </div>
             </div>
           </div>
