@@ -83,7 +83,7 @@ const StripeComponent = ({ clientSecret, subScriptionId, setShowStripe }) => {
             const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
                 elements,
                 confirmParams: {
-                    return_url: window.location.href,
+                    return_url:  window.location.origin+ "/dashboard/home",
                 },
             });
 

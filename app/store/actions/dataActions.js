@@ -63,6 +63,33 @@ export const register =
       }
     };
 
+export const registerWithSubscription =
+({ data, sub_id }) =>
+  async (dispatch) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/register`, data);
+      dispatch({ type: REGISTER_SUCCESS, payload: response.data });
+
+      const subdata = {
+        "subscription_id" : sub_id
+      }
+
+      const res = await axios.post(`${API_BASE_URL}/stripe/create-payment-intent`, subdata,
+        {
+          headers: {
+            authorization: `Bearer ${response.data.access_token}`,
+          },
+        }
+      );
+
+      return {user: response.data, secret: res.data};
+
+    } catch (error) {
+      dispatch({ type: REGISTER_FAILURE, payload: error.response });
+      return error;
+    }
+  };
+
 export const logIn =
   ({ data }) =>
     async (dispatch) => {
@@ -440,6 +467,27 @@ export const getAllSubscription =
         return error;
       }
     };
+
+    export const getSubscriptionById =
+    (id) =>
+      async (dispatch, getState) => {
+        try {
+          const authToken = Cookies.get('accesstoken')
+  
+          const response = axios.get(`${API_BASE_URL}/users/subscriptions/${id}`,
+            {
+              headers: {
+                authorization: `Bearer ${authToken}`,
+              },
+            }
+          );
+  
+          return response;
+  
+        } catch (error) {
+          return error;
+        }
+      };
 
 
 export const createPaymentIntent =
