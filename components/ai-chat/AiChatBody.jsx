@@ -1,20 +1,30 @@
+"use client"
 import { useEffect, useState, useRef } from "react";
 import { AiChatAiIcon, AiChatExpandIcon, AiChatShrinkIcon, AiChatSparkleIcon, AiChatTranslateIcon, EnterIcons, PauseIcon, PlusIcons } from "../common/Icon";
 import AiChatGenerateProposal from "./AiChatGenerateProposal";
 import AiChatGrayBtnWithIconLabel from "./AiChatGrayBtnWithIconLabel";
 import ProposalCreatorComponent from "./ProposalCreatorComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { genreatePorposalMessage, getAllMessagesForChat } from "@/app/store/actions/dataActions";
+import { marked } from "marked";  // Parses Markdown to HTML
+import { genreatePorposalMessage, getAllMessagesForChat, getProposalText, sendChatMessage } from "@/app/store/actions/dataActions";
 import moment from 'moment';
 import ChatMessage from "../common/ChatMessage";
 import Typewriter from 'typewriter-effect';
 import Iconify from "@/app/admin/components/iconify";
+import { Button } from "@mui/material";
+import { Download } from "@mui/icons-material";
+import { unified } from "unified";
+import markdown from "remark-parse";
+import docx from "remark-docx";
+import { saveAs } from "file-saver";
+
 
 const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, selectedChatId, loading, setLoading }) => {
   const [answer, setAnswer] = useState('');
   const [inputLoading, setInputLoading] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   const [typoWriteText, setTypeWriterText] = useState(false);
+  const [newProposal, setNewProposal] = useState(null)
 
   const dispatch = useDispatch();
   const chatContainerRef = useRef(null);
@@ -26,27 +36,50 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
   const userMessages = allMessages?.filter(msg => msg.sentBy === 'USER');
   const systemMessages = allMessages?.filter(msg => msg.sentBy === 'SYSTEM');
 
+  const processor = unified().use(markdown).use(docx, { output: "blob" });
+
   const sendAnswer = async () => {
     if (answer === "") return null;
 
     setInputLoading(true);
     const data = {
-      "chat_id": selectedChatId,
-      "fine_tuned_answers": answer
+      "chat_id": parseInt(selectedChatId),
+      "message": answer
     };
+    console.log("message: ", data);
 
     try {
-      await dispatch(genreatePorposalMessage(data));
+      await dispatch(sendChatMessage(data));
       await fetchAllMessagesChat();
       setInputLoading(false);
       // setTypeWriterText(true)
-      setAnswer(''); 
+      setAnswer('');
  
     } catch (error) {
       console.error('Error sending answer:', error);
       setInputLoading(false);
     }
   };
+
+  const generateProposal = async () =>{
+    setInputLoading(true);
+
+    const data = {
+      "chat_id": selectedChatId,
+    };
+    console.log("generating proposal: ", data)
+    try {
+      const proposals = await dispatch(genreatePorposalMessage(data));
+      console.log(proposals)
+      //setNewProposal(JSON.stringify(proposals))
+      
+      await fetchAllMessagesChat();
+      setInputLoading(false);
+    } catch (error) {
+      console.error('Error sending answer:', error);
+      setInputLoading(false);
+    }
+  }
 
 
 
@@ -78,6 +111,49 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
     }
   }, [allMessages, inputLoading]);
 
+  // Function to convert Markdown to DOC
+  async function markdownTohtml(markdownText) {
+    const htmlContent = await marked(markdownText);
+
+    const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+        </head>
+        <body>
+            ${htmlContent}
+        </body>
+        </html>
+    `;
+    return html;
+  }
+
+  const DownloadProposal = async () => {
+    setInputLoading(true);
+    const data = {
+      "chat_id": selectedChatId,
+    };
+    console.log("generating proposal: ", data)
+    try {
+      const proposals = await dispatch(getProposalText(data));
+      console.log("proposal text is : ",proposals)
+      if(!proposals){
+        toast.error("There were no proposals generated for this chat.")
+        return ;
+      }
+      const doc = await processor.process(proposals.data);
+      const blob = await doc.result;
+      saveAs(blob, "proposal.docx");
+
+      setInputLoading(false);
+    } catch (error) {
+      console.error('Error sending answer:', error);
+      setInputLoading(false);
+    }
+  }
+
+
   return (
     <div className="w-full h-full overflow-auto bg-[#FAFAFA] pt-8 px-4 md:pl-8 md:pr-5 scroll-ml-2">
       <div className={`w-full ${createProposal ? "h-[calc(100%-74px)]" : "h-[calc(100%-74px)] sm:h-[calc(100%-120px)]"} flex-grow overflow-auto`} ref={chatContainerRef}>
@@ -100,12 +176,12 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
             ) : (
               <div className="max-w-[992px] w-full">
                 <div className="flex flex-col gap-[34px]">
+                  <div className="font-bold text-xl text-gray-500">Let AI help you create your proposal.</div>
                   {allMessages?.map((item, i) => (
                     <div key={i} className={`pl-3 sm:pl-[15px] md:pl-[22px] relative ${item.sentBy === "USER" ? "text-right" : ""}`}>
                       {item.sentBy === "SYSTEM" && (
                         <div className="absolute z-50 top-0 left-0">
                           <AiChatAiIcon />
-                      
                         </div>
                       )}
                       <div className={`flex gap-3 ${item.sentBy === "USER" ? "justify-end" : ""} pl-[25px] md:pl-10 items-center`}>
@@ -190,11 +266,19 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
       {/* Chat input and buttons */}
       <div className="py-2 max-w-[992px] w-full flex flex-col gap-[13px]">
         {!createProposal && (
-          <div className="max-sm:hidden flex items-center justify-start gap-3">
-            <AiChatGrayBtnWithIconLabel icon={<AiChatTranslateIcon />} label="Translate" />
-            <AiChatGrayBtnWithIconLabel icon={<AiChatSparkleIcon />} label="Improve" />
-            <AiChatGrayBtnWithIconLabel icon={<AiChatExpandIcon />} label="Make longer" />
-            <AiChatGrayBtnWithIconLabel icon={<AiChatShrinkIcon />} label="Make shorter" />
+          <div className="max-sm:hidden flex items-center justify-between">
+            <div className="max-sm:hidden flex items-center justify-start gap-3">
+              <AiChatGrayBtnWithIconLabel icon={<AiChatTranslateIcon />} label="Translate" />
+              <AiChatGrayBtnWithIconLabel icon={<AiChatSparkleIcon />} label="Improve" />
+              <AiChatGrayBtnWithIconLabel icon={<AiChatExpandIcon />} label="Make longer" />
+              <AiChatGrayBtnWithIconLabel icon={<AiChatShrinkIcon />} label="Make shorter" />
+            </div>
+            <div className="flex items-center">
+              <Button onClick={()=>generateProposal()} disabled={inputLoading}>Generate Proposal</Button>
+              <div>
+                 <button  onClick={()=>DownloadProposal()} disabled={inputLoading}><Download /></button>
+              </div>
+            </div>
           </div>
         )}
 
@@ -215,15 +299,11 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
             {!inputLoading ?
               <div className="cursor-pointer" onClick={() => sendAnswer()}>
                 <EnterIcons />
-
               </div>
               :
-
               <>
 
               </>
-
-
             }
           </div>
         </div>

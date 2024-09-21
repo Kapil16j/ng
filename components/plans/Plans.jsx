@@ -8,6 +8,49 @@ import Box from '@mui/material/Box';
 
 import AllPlans from './AllPlans';
 
+
+export const PlanCard = ({ name, price, description, subId }) => (
+    <>
+        <div className="bg-white shadow-md rounded-lg p-6 ">
+            <div className=" text-center">
+                <h3 className="text-xl font-semibold mb-2">{name}</h3>
+                <p className="text-2xl font-bold mb-4"> {price} /-</p>
+            </div>
+            <div>
+                {description?.split(',').map((item, index) => {
+                    return (
+                        <div className='flex flex-col' key={index}>
+                            <div className='flex flex-row gap-2'>
+                                <img src="/assets/img/checkMark.png" className='w-4 h-4 mt-1'></img>
+                                <p className="text-gray-600">{item}</p>
+                            </div>
+                        </div>
+                    )
+                })}
+
+                <div className=" text-center">
+                    {price > 0 ?
+                        <button className="bg-[#002b42] text-white py-2 px-4 rounded-lg hover:bg-blue-600 mt-4"
+                            onClick={() => handleSubmit(subId)}
+                        >
+                            Upgrade Plus
+                        </button>
+
+                        :
+                        <>
+                            {/* <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+                               
+                            >
+                                Your Current Plan
+                            </button> */}
+                        </>
+                    }
+                </div>
+            </div>
+        </div>
+    </>
+);
+
 const Plans = ({ setSelectedComponent }) => {
     const [plansData, setPlansData] = useState([])
     const [showStripe, setShowStripe] = useState(false)
@@ -52,60 +95,13 @@ const Plans = ({ setSelectedComponent }) => {
         console.log("response??", response)
 
         if (response?.status == 200) {
-
-
             const clientSecret = response?.data
             setClientSecret(clientSecret)
             setSubsciptionID(subId)
             setShowStripe(true)
-
         }
-
-
     };
 
-
-    const PlanCard = ({ name, price, description, subId }) => (
-        <>
-            <div className="bg-white shadow-md rounded-lg p-6 ">
-                <div className=" text-center">
-                    <h3 className="text-xl font-semibold mb-2">{name}</h3>
-                    <p className="text-2xl font-bold mb-4"> {price} /-</p>
-                </div>
-                <div>
-                    {description?.split(',').map((item, index) => {
-                        return (
-                            <div className='flex flex-col' key={index}>
-                                <div className='flex flex-row gap-2'>
-                                    <img src="/assets/img/checkMark.png" className='w-4 h-4 mt-1'></img>
-                                    <p className="text-gray-600">{item}</p>
-                                </div>
-                            </div>
-                        )
-                    })}
-
-                    <div className=" text-center">
-                        {price > 0 ?
-                            <button className="bg-[#002b42] text-white py-2 px-4 rounded-lg hover:bg-blue-600 mt-4"
-                                onClick={() => handleSubmit(subId)}
-                            >
-                                Upgrade Plus
-                            </button>
-
-                            :
-                            <>
-                                {/* <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
-                                   
-                                >
-                                    Your Current Plan
-                                </button> */}
-                            </>
-                        }
-                    </div>
-                </div>
-            </div>
-        </>
-    );
 
     return (
 
