@@ -135,7 +135,6 @@ const Proposal = ({ setSelectedComponent }) => {
         </div>
 
       </div>
-      <ToastContainer />
     </>
   );
 };

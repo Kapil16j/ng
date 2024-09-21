@@ -223,7 +223,7 @@ export const getAllMessagesForChat =
   (chatId) =>
     async (dispatch, getState) => {
       try {
-
+        if (!chatId) return;
         const authToken = Cookies.get('accesstoken')
         const response = await axios.get(`${API_BASE_URL}/users/all_messages_for_chat/${chatId}`,
           {
@@ -233,8 +233,9 @@ export const getAllMessagesForChat =
             },
           }
         );
-
-        dispatch({ type: ALL_MESSAGE_FOR_CHAT, payload: response.data });
+        console.log("all_messages_for_chat", response)
+        const sortedMessages = response.data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+        dispatch({ type: ALL_MESSAGE_FOR_CHAT, payload: sortedMessages });
         return response;
 
       } catch (error) {
@@ -272,12 +273,30 @@ export const refershTokenValue =
       }
     };
 
+export const sendChatMessage = (data) => async (dispatch, getState) => {
+  try {
+    const authToken = Cookies.get('accesstoken')
+
+    const response = await axios.post(`${API_BASE_URL}/users/handle_user_answer` , data,
+      {
+        headers: {
+          authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    console.log("send_chat_message_response", response)
+    return response;
+
+  } catch (error) {
+    return error;
+  }
+};
+
 
 export const genreatePorposalMessage =
   (data) =>
     async (dispatch, getState) => {
       try {
-
         const authToken = Cookies.get('accesstoken')
 
         const response = await axios.post(`${API_BASE_URL}/users/generate_proposal`, data,
@@ -297,6 +316,26 @@ export const genreatePorposalMessage =
         return error;
       }
     };
+
+export const getProposalText =  (data) => async (dispatch, getState) => {
+      try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = await axios.post(`${API_BASE_URL}/users/getproposaltext`, data,
+          {
+            headers: {
+              authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        console.log("generate_proposal_response", response)
+        return response;
+      } catch (error) {
+        console.log("error??", error);
+        return null;
+      }
+};
 
 export const getAllGrants =
   () =>
