@@ -41,7 +41,7 @@ const DashboardLayout = ({ children }) => {
         setSelectedComponent={setSelectedComponent}
         selectedComponent={selectedComponent}
       />
-      <div className="flex w-full flex-col h-full overflow-auto">
+      <div className="bg-[rgb(0,43,66)] flex w-full flex-col h-full overflow-auto">
         <DashboardHeader sidebar={sidebar} setSidebar={setSidebar} />
         {renderComponent()}
       </div>

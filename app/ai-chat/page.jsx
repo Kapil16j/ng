@@ -4,7 +4,8 @@ import AiChatHeader from "@/components/ai-chat/AiChatHeader";
 import AiChatSidebar from "@/components/ai-chat/AiChatSidebar";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllChats, getAllMessagesForChat } from "../store/actions/dataActions";
+import { getAllChats, getAllMessagesForChat, getUser } from "../store/actions/dataActions";
+import { toast } from "react-toastify";
 
 const AiChat = () => {
   const [active, setActive] = useState("chats");
@@ -14,6 +15,23 @@ const AiChat = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch()
+
+  async function validateUser() {
+    try{
+      const response = await dispatch(getUser())
+      const user = response.data
+      console.log("response", response)
+      if(user.role != 'admin' || user.tier?.toLowerCase() != "platinum"){
+        window.location.href = window.location.origin + user.role == 'admin' ? '/admin/app' : '/dashboard/home'
+      } 
+    } catch (error) {
+      console.log("error", error)
+      toast.user("Couldn't load ai-chat , something went wrong!")
+      window.location.href = window.location.origin + user.role == 'admin' ? '/admin/app' : '/dashboard/home'
+    }
+  }
+  validateUser()
+  
 
   const proposalQuestions = useSelector((state) => state.data.proposalQuestions)
 

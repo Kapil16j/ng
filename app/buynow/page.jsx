@@ -35,7 +35,7 @@ const BuyNowPage = () => {
 
 
     const handleSubmit = async (subId) => {
-        await router.push(`/buynow/${subId}`)
+        await router.push(`/signup?sub_id=${subId}`)
     };
 
     return (
