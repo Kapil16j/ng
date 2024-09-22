@@ -120,9 +120,26 @@ export const verifyOtp =
     };
 
 
+    export const getSubscriptionData = () => async (dispatch, getState) => {
+      try {
+        const authToken = Cookies.get('accesstoken');
+    
+        const response = await axios.get(`${API_BASE_URL}/users/getsubscription-info`, {
+          headers: {
+            authorization: `Bearer ${authToken}`,
+          },
+        });
 
+        return response;
+    
+      } catch (error) {
+        const errorResponse = error.response ? error.response : { message: 'An error occurred' };
+        return errorResponse;
+      }
+    };
+    
 
-export const getUser =
+  export const getUser =
   () =>
     async (dispatch, getState) => {
       try {
@@ -163,6 +180,27 @@ export const getUser =
           );
   
           return response;
+  
+      } catch (error) {
+          return error;
+      }
+  };
+
+  export const cancelTheSubscription =
+    () =>
+      async (dispatch, getState) => {
+      try {
+          const authToken = Cookies.get('accesstoken')
+  
+          const response = axios.put(`${API_BASE_URL}/users/cancelsubscription`, {},
+              {
+                  headers: {
+                      authorization: `Bearer ${authToken}`,
+                  },
+              }
+          );
+  
+          return response.data;
   
       } catch (error) {
           return error;
@@ -412,13 +450,13 @@ export const searchAllGrants =
 
         console.log("response??", response)
         dispatch({ type: SEARCH_GRANTS, payload: response.data });
-        return response;
+        return response.data;
 
       } catch (error) {
         console.log("error??", error)
         dispatch({ type: SEARCH_GRANTS_ERROR, payload: error.response });
         dispatch({ type: SEARCH_GRANTS, payload: [] });
-        return error;
+        return [];
       }
     };
 

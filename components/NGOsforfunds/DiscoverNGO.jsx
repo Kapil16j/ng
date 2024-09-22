@@ -37,7 +37,7 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
 
   const handleClick = (id) => {
 
-    if(userData?.tier == "free"){
+    if(userData?.tier?.toLowerCase() !== "platinum"){
       toast.warn('Upgrade the Plan to access this feature!');
     }else{
 
@@ -131,13 +131,11 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
                     <button
                       onClick={() => handleClick(item.id)}
                       className=" bg-[#F2F2F2] rounded-[4px] py-1 px-4 max-w-[100px]
-                     w-full border-[1px] border-white hover:bg-transparent duration-300 text-[#333] font-interTight text-[14px] font-semibold hover:text-white mx-auto hidden group-hover:block"
+                      w-full border-[1px] border-white hover:bg-transparent duration-300 text-[#333] font-interTight text-[14px] font-semibold hover:text-white mx-auto hidden group-hover:block"
                     >
                       <div className="flex gap-2 justify-center items-center">
-
-
                         Use
-                        {userData?.tier == "free" &&
+                        {userData?.tier?.toLowerCase() !== "platinum" &&
                           <Image src="/assets/img/star.png" width={20} height={20}></Image>
                         }
                       </div>
