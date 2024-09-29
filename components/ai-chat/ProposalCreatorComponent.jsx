@@ -26,11 +26,9 @@ const ProposalCreatorComponent = ({ setActive, setCreateProposal }) => {
   }, [])
 
   const handleClick = (id) => {
-
     const data = {
       "sample_proposal_id": id
     }
-
     setLoading(true);
     dispatch(getProposalQuestions(data)).then(() => {
       // setActive("chats"

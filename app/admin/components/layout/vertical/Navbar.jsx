@@ -15,15 +15,12 @@ const Navbar = () => {
 
   const getUserData = async() =>{
     try {
-      
       await getUser().then((data)=>{
-
-
         console.log("userdata???",data)
         setUser(data?.data)
       })
     } catch (error) {
-      
+      console.log("Error while getting user.",error)
     }
   }
 

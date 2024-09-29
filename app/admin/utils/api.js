@@ -306,6 +306,25 @@ export const updateTier = (data,id) => {
     }
 };
 
+export const changeUserRole = (data,id) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.put(`${API_BASE_URL}/superadmin/change-role/${id}`, data,
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        return response;
+
+    } catch (error) {
+        return error;
+    }
+};
+
 export const updateSubscriptionId = (sub_id,id) => {
     try {
         const authToken = Cookies.get('accesstoken')

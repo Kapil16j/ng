@@ -32,6 +32,9 @@ export default function UserTableRow({
   name,
   email,
   role,
+  allroles,
+  handleRoleChange,
+  currentUser,
   accountLocked,
   isEmailVerified,
   subscription,
@@ -68,6 +71,7 @@ export default function UserTableRow({
   const handleInvoice = () => {
 
   }
+
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
@@ -85,7 +89,22 @@ export default function UserTableRow({
         </TableCell>
 
         <TableCell>{email}</TableCell>
-        <TableCell>{role}</TableCell>
+        {currentUser?.role == 'SUPERADMIN' ? 
+          <TableCell>
+            <FormControl fullWidth>
+              <Select
+                value={role}
+                onChange={handleRoleChange}
+              >
+                {allroles?.map((role) => (
+                  <MenuItem value={role}>{role}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </TableCell>
+          : 
+          <TableCell>{role}</TableCell>
+        }
         <TableCell>{accountLocked == true ? 'Yes' : 'No'}</TableCell>
         <TableCell>{isEmailVerified == true ? 'Yes' : 'No'}</TableCell>
 
@@ -113,7 +132,6 @@ export default function UserTableRow({
               onChange={handleTierChange}
             >
               <MenuItem value='free'>Free</MenuItem>
-              <MenuItem value='premium'>Premium</MenuItem>
               <MenuItem value='vip'>VIP</MenuItem>
               <MenuItem value='platinum'>Platinum</MenuItem>
             </Select>

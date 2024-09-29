@@ -27,7 +27,7 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-import { activateDeactivateUser, BulkUsersCreate, getAllSubscription, getAllUser, updateSubscriptionId, updateTier, updateUser } from '@/app/admin/utils/api';
+import { activateDeactivateUser, BulkUsersCreate, getAllSubscription, getAllUser, getUser, updateSubscriptionId, updateTier, updateUser } from '@/app/admin/utils/api';
 import { LoadingButton } from '@mui/lab';
 
 // ----------------------------------------------------------------------
@@ -49,6 +49,8 @@ export default function UserPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isEditId, setIsEditId] = useState('');
   const [tierValue, setTierValue] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+  const allroles = ["ADMIN", "USER", "SUPERADMIN", "EDITOR"];
   const [newUser, setNewUser] = useState({
     name: '',
     email:"",
@@ -68,6 +70,19 @@ export default function UserPage() {
     }]
   })
 
+  const getCurrentUser = async() =>{
+    try {
+      await getUser().then((data)=>{
+        console.log("userdata???",data)
+        setCurrentUser(data?.data)
+      })
+    } catch (error) {
+      console.log("Error while getting user.",error)
+    }
+  }
+  useEffect(() => {
+    getCurrentUser();
+  }, [])
 
   const getUsers = () => {
     getAllUser().then((item) => {
@@ -80,11 +95,13 @@ export default function UserPage() {
       setSubscriptions(item?.data);
     });
   };
-
+  
   useEffect(() => {
-    getUsers();
-    getSubscritpion();
-  }, [])
+    if (currentUser && currentUser.role !== "EDITOR") {
+      getUsers();
+      getSubscritpion();
+    }
+  }, [currentUser]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -167,7 +184,18 @@ export default function UserPage() {
     });
   };
 
-
+  const handleRoleChange = async (id, newRole) => {
+    try {
+      const data = {
+        role: newRole
+      };
+      await changeUserRole(data, id).then((item) => {
+        getUsers();
+      })
+    } catch (error) {
+      console.error("Error updating user status:", error);
+    }
+  }
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -337,8 +365,13 @@ export default function UserPage() {
     return <div>Error: {error.message}</div>;
   }
 
-
-
+  if(currentUser?.role=="EDITOR"){
+    return (
+      <Container className='flex items-center justify-center'>
+        <div className='text-3xl font-bold text-orange-600'>Adimin Access is Required !</div>
+      </Container>
+    )
+  } else {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -391,6 +424,8 @@ export default function UserPage() {
                       name={row?.name}
                       email={row?.email}
                       role={row?.role}
+                      allroles={allroles}
+                      currentUser={currentUser}
                       accountLocked={row?.isAccountLocked}
                       isEmailVerified={row?.isEmailVerified}
                       subscription={row?.subscription}
@@ -408,6 +443,7 @@ export default function UserPage() {
                       checked={checked}
                       handleTierChange={(event) => handleTierChange(row.id, event.target.value)}
                       handleSubscriptionChange={(event) => handleSubscriptionChange(row.id, parseInt(event.target.value))}
+                      handleRoleChange={(event) => handleRoleChange(row.id, event.target.value)}
                     />
                   ))}
 
@@ -641,4 +677,5 @@ export default function UserPage() {
       <ToastContainer />
     </Container>
   );
+  }
 }

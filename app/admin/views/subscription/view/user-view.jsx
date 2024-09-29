@@ -15,7 +15,7 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-import { Box, Modal, TextField, FormControl, Switch } from '@mui/material';
+import { Box, Modal, TextField, FormControl, Switch, Select, MenuItem, InputLabel } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
 import CardHeader from '@mui/material/CardHeader';
@@ -61,12 +61,13 @@ export default function UserPage() {
     details: '',
     duration: '',
     cost: '',
-    public : true,
+    tier: '',
+    public : false,
   });
 
-  const getSubscritpion = () => {
-    getAllSubscription().then((item) => {
-      console.log("subscriptionitem???", item);
+  const getSubscritpion = async () => {
+    await getAllSubscription().then((item) => {
+      console.log("subscriptionitems???", item);
       setUsers(item?.data);
     });
   };
@@ -77,7 +78,7 @@ export default function UserPage() {
 
   const handleOpen = () => {
     setIsEditMode(false); // Reset edit mode
-    setNewUser({ name: '', details: '', duration: '', cost: '', public: true }); // Reset form fields
+    setNewUser({ name: '', details: '', duration: '', cost: '', tier:'', public: false }); // Reset form fields
     setOpen(true);
   };
   
@@ -94,15 +95,18 @@ export default function UserPage() {
     setNewUser((prev) => ({ ...prev, public: ischecked }));
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    createSubscription(newUser).then((item) => {
+    console.log("new Subscription ::::", newUser);
+    await createSubscription(newUser).then((item) => {
+      setLoading(false);
       handleClose();
+      console.log("CreateSubsription Response : : :", item)
       toast.success("Subscription created successfully!");
       getSubscritpion();
-      setLoading(false);
     });
+    setLoading(false);
   };
 
   const handleUpdate = (e) => {
@@ -126,7 +130,7 @@ export default function UserPage() {
   };
 
   const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
+    if (event.target?.checked) {
       const newSelecteds = users.map((n) => n.name);
 
       setSelected(newSelecteds);
@@ -230,6 +234,7 @@ export default function UserPage() {
                   { id: 'details', label: 'Detail' },
                   { id: 'duration', label: 'Duration' },
                   { id: 'cost', label: 'Cost' },
+                  { id: 'tier', label: 'Tier' },
                   { id: 'public', label: 'Public' },
                   { id: 'setting', label: 'Setting' },
                 ]}
@@ -243,6 +248,7 @@ export default function UserPage() {
                       details={row?.details}
                       duration={row?.duration}
                       cost={row?.cost}
+                      tier={row?.tier}
                       ispublic={row?.public}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
@@ -339,6 +345,22 @@ export default function UserPage() {
                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
                         }}
                       />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Select Tier</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        name='tier'
+                        value={newUser.tier}
+                        label="Select Tier"
+                        onChange={handleInputChange}
+                      >
+                        <MenuItem value='free'>Free</MenuItem>
+                        <MenuItem value='vip'>VIP</MenuItem>
+                        <MenuItem value='platinum'>Platinum</MenuItem>
+                      </Select>
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>

@@ -16,21 +16,21 @@ const AiChat = () => {
 
   const dispatch = useDispatch()
 
-  async function validateUser() {
-    try{
-      const response = await dispatch(getUser())
-      const user = response.data
-      console.log("response", response)
-      if(user.role != 'admin' || user.tier?.toLowerCase() != "platinum"){
-        window.location.href = window.location.origin + user.role == 'admin' ? '/admin/app' : '/dashboard/home'
-      } 
-    } catch (error) {
-      console.log("error", error)
-      toast.user("Couldn't load ai-chat , something went wrong!")
-      window.location.href = window.location.origin + user.role == 'admin' ? '/admin/app' : '/dashboard/home'
-    }
-  }
-  validateUser()
+  // async function validateUser() {
+  //   try{
+  //     const response = await dispatch(getUser())
+  //     const user = response.data
+  //     console.log("response", response)
+  //     if( user.tier?.toLowerCase() != "platinum"){
+  //       window.location.href = window.location.origin + user.role == 'admin' ? '/admin/app' : '/dashboard/home'
+  //     } 
+  //   } catch (error) {
+  //     console.log("error", error)
+  //     toast.user("Couldn't load ai-chat , something went wrong!")
+  //     window.location.href = window.location.origin + user.role == 'admin' ? '/admin/app' : '/dashboard/home'
+  //   }
+  // }
+  // validateUser()
   
 
   const proposalQuestions = useSelector((state) => state.data.proposalQuestions)

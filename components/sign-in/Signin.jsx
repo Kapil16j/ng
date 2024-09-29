@@ -100,7 +100,7 @@ const Signin = () => {
 
         Cookies.set('accesstoken', accesstoken, { expires: 7 })
 
-        if(response?.data?.user_type == "ADMIN"){
+        if(["ADMIN", "SUPERADMIN", "EDITOR"].includes(response?.data?.user_type)){
           router.push('/admin/app')
         }
 

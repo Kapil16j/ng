@@ -38,13 +38,13 @@ const Navbar = () => {
 
   const handleDashboard = () =>{
 
-   
-
     if(loginData?.user_type == "USER"){
       router.push("/dashboard/home")
     }
-    if(loginData?.user_type == "ADMIN"){
+    else if(["ADMIN", "SUPERADMIN", "EDITOR"].includes(loginData?.user_type)){
       router.push("/admin/app")
+    }else{
+      router.push("/signin")
     }
   }
 
@@ -86,16 +86,16 @@ const Navbar = () => {
             </div>
 
             <div className="max-w-[406px] w-full flex justify-between items-center max-sm:hidden">
-              <Link href="#" className="navtabs-text">
+              <Link href="/" className="navtabs-text">
                 Home
               </Link>
-              <Link href="#" className="navtabs-text">
+              <Link href="/about" className="navtabs-text">
                 About
               </Link>
-              <Link href="#" className="navtabs-text">
+              <Link href="/premium" className="navtabs-text">
                 Premium
               </Link>
-              <Link href="#" className="navtabs-text">
+              <Link href="/contact" className="navtabs-text">
                 Contact
               </Link>
               {
@@ -111,7 +111,6 @@ const Navbar = () => {
                   >
                     Login
                   </button>
-
               }
             </div>
           </div>
