@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import AllPlans from '@/components/plans/AllPlans';
 import { PlanCard } from '@/components/plans/Plans';
+import Navbar from '@/components/common/Navbar';
 
 const BuyNowPage = () => {
     const [plansData, setPlansData] = useState([])
@@ -40,7 +41,8 @@ const BuyNowPage = () => {
 
     return (
         <>
-            <div className="min-h-screen bg-gray-100">
+            <div className="min-h-screen bg-gray-100 bg-gradient-to-br from-sky-100 to-blue-300">
+                <Navbar />
                 <div className=" flex flex-col items-center justify-center py-4 px-4">
                     <h2 className="text-3xl font-bold mb-4 mt-5">Join Premium Membership</h2>
                     <p className="text-lg text-gray-700 mb-8">Select a plan that fits your needs.</p>

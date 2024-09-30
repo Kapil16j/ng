@@ -26,16 +26,16 @@ const SideBar = ({ sidebar, setSidebar }) => {
           </button>
         </div>
         <div className="flex flex-col items-start gap-4 pt-8 px-6">
-          <Link href="#" className="navtabs-text">
+          <Link href="/" className="navtabs-text">
             Home
           </Link>
-          <Link href="#" className="navtabs-text">
+          <Link href="/about" className="navtabs-text">
             About
           </Link>
-          <Link href="#" className="navtabs-text">
+          <Link href="/premium" className="navtabs-text">
             Premium
           </Link>
-          <Link href="#" className="navtabs-text">
+          <Link href="/contact" className="navtabs-text">
             Contact
           </Link>
           <button className="w-full bg-coarseWool text-white font-interTight rounded-[4px] text-base font-normal leading-[150%] h-[40px] border-[1px] border-black hover:bg-transparent hover:text-black transition duration-300 ease-in-out">

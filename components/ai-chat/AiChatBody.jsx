@@ -17,6 +17,8 @@ import { unified } from "unified";
 import markdown from "remark-parse";
 import docx from "remark-docx";
 import { saveAs } from "file-saver";
+import { toast } from "react-toastify";
+import { Loader2 } from "../common/Loader";
 
 
 const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, selectedChatId, loading, setLoading }) => {
@@ -49,14 +51,20 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
     console.log("message: ", data);
 
     try {
-      await dispatch(sendChatMessage(data));
-      await fetchAllMessagesChat();
+      const res = await dispatch(sendChatMessage(data));
+      console.log("message send response: ", res);
+      if(res.status==200){
+        await fetchAllMessagesChat();
+      }else{
+        toast.warn("Couldn't send Message. "+res?.response?.data?.detail, {position:"top-center"})
+      }
       setInputLoading(false);
       // setTypeWriterText(true)
       setAnswer('');
  
     } catch (error) {
-      console.error('Error sending answer:', error);
+      console.error('Error sending answer', error);
+      toast.error('Error sending answer', error.message);
       setInputLoading(false);
     }
   };
@@ -72,16 +80,18 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
       const proposals = await dispatch(genreatePorposalMessage(data));
       console.log(proposals)
       //setNewProposal(JSON.stringify(proposals))
-      
-      await fetchAllMessagesChat();
+      if(proposals.status==200){
+        await fetchAllMessagesChat();
+      }else{
+        toast.warn("Couldn't Generating Proposal. "+proposals?.response?.data?.detail, {position:"top-center"})
+      }
       setInputLoading(false);
     } catch (error) {
-      console.error('Error sending answer:', error);
+      console.error('Error Generating proposals:', error);
+      console.error('Error Generating proposals:', error.message);
       setInputLoading(false);
     }
   }
-
-
 
   const fetchAllMessagesChat = async () => {
     if (!selectedChatId) return; 
@@ -94,6 +104,7 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
   useEffect(() => {
     if (selectedChatId) {
       fetchAllMessagesChat().then(() => setDataFetched(true));
+      setInputLoading(false)
     }
   }, [selectedChatId]);
 
@@ -111,24 +122,7 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
     }
   }, [allMessages, inputLoading]);
 
-  // Function to convert Markdown to DOC
-  async function markdownTohtml(markdownText) {
-    const htmlContent = await marked(markdownText);
-
-    const html = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-        </head>
-        <body>
-            ${htmlContent}
-        </body>
-        </html>
-    `;
-    return html;
-  }
-
+  
   const DownloadProposal = async () => {
     setInputLoading(true);
     const data = {
@@ -138,8 +132,9 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
     try {
       const proposals = await dispatch(getProposalText(data));
       console.log("proposal text is : ",proposals)
-      if(!proposals){
+      if(!proposals.data){
         toast.error("There were no proposals generated for this chat.")
+        setInputLoading(false);
         return ;
       }
       setNewProposal(proposals.data)
@@ -154,9 +149,16 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
     }
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      sendAnswer();
+    }
+  };
+
 
   return (
-    <div className="w-full h-full overflow-auto bg-[#FAFAFA] pt-8 px-4 md:pl-8 md:pr-5 scroll-ml-2">
+    <div className="w-full h-full overflow-auto bg-[#FAFAFA] pt-8 px-4 md:pl-8 md:pr-5 scroll-ml-2 ">
+      {inputLoading && <div><Loader2/></div>}
       <div className={`w-full ${createProposal ? "h-[calc(100%-74px)]" : "h-[calc(100%-74px)] sm:h-[calc(100%-120px)]"} flex-grow overflow-auto`} ref={chatContainerRef}>
         {loading ? (
           <div className="flex items-center justify-center h-full">
@@ -172,7 +174,7 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
           <>
             {dataFetched && allMessages?.length === 0 ? (
               <div className="flex items-center justify-center h-full">
-                <p></p>
+                <p>No Messages Yet!</p>
               </div>
             ) : (
               <div className="max-w-[992px] w-full">
@@ -252,17 +254,7 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
       </div>
 
       {/* Input loader */}
-      {inputLoading && (
-        <div className="flex items-center justify-center mt-2">
-          <div role="status">
-            <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
-              <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" />
-            </svg>
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      )}
+      
 
       {/* Chat input and buttons */}
       <div className="py-2 max-w-[992px] w-full flex flex-col gap-[13px]">
@@ -294,17 +286,13 @@ const AiChatBody = ({ active,setActive, createProposal,setCreateProposal, select
               className="text-black pl-1 text-[18px] w-full outline-none leading-[140%] font-interTight"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-
+              onKeyUp={handleKeyPress}
             />
 
-            {!inputLoading ?
+            {!inputLoading &&
               <div className="cursor-pointer" onClick={() => sendAnswer()}>
                 <EnterIcons />
               </div>
-              :
-              <>
-
-              </>
             }
           </div>
         </div>

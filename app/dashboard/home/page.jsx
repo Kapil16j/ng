@@ -5,10 +5,13 @@ import DashboardLayout from "@/components/common/DashboardLayout";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { useSearchParams } from "next/navigation";
+import SuccessPage from "@/components/plans/SuccessPage";
 
 const DashboardHome = () => {
 
-
+  const searchParams = useSearchParams();
+  const paymentStatus = searchParams.get("redirect_status");
   const dispatch = useDispatch()
 
   // useEffect(() => {
@@ -29,9 +32,10 @@ const DashboardHome = () => {
   // }, []);
   return (
     <div>
+      {paymentStatus==="succeeded" ? <SuccessPage />:
       <DashboardLayout >
         <DiscoverNGO />
-      </DashboardLayout>
+      </DashboardLayout>}
     </div>
   );
 };

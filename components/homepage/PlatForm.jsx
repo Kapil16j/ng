@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import ViewBtnModel from "../model/ViewBtnModel";
+import Link from "next/link";
 const PlatForm = () => {
   return (
     <div className="bg-[url(/assets/img/platform-hero-bg.png)] bg-no-repeat sm:h-[58vw] flex items-center bg-center bg-cover relative overflow-hidden ">
@@ -30,12 +31,12 @@ const PlatForm = () => {
           Tools
         </p>
         <div className="flex gap-2 md:gap-4 mt-[23px] md:mt-8 justify-center">
-     <button
+          <Link href={"/premium"}
             type="submit"
-            className="w-[83px] md:w-[160px] h-[26px] md:h-[56px] rounded-[4px] bg-retroBlue border border-retroBlue  text-white text-center font-interTight font-medium text-[10px] md:text-[16px] leading-[150%] capitalize hover:bg-transparent hover:border-white transition duration-300 ease-in-out"
+            className="w-[83px] md:w-[160px] h-[26px] md:h-[56px] rounded-[4px] bg-retroBlue border border-retroBlue  text-white flex items-center justify-center  font-interTight font-medium text-[10px] md:text-[16px] leading-[150%] capitalize hover:bg-transparent hover:border-white transition duration-300 ease-in-out"
           >
-            Join Premium
-          </button>
+            <div>Join Premium</div>
+          </Link>
           <button
             type="submit"
             className="w-[94px] md:w-[177px] h-[26px] md:h-[56px] rounded-[4px] bg-transparent border border-white  text-white text-center font-interTight font-medium text-[10px] md:text-[16px] leading-[150%] capitalize hover:bg-retroBlue hover:border-retroBlue transition duration-300 ease-in-out z-20"

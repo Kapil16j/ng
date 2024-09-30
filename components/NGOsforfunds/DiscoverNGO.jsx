@@ -6,7 +6,7 @@ import { RightarrowIcons } from "../common/Icon";
 import { getAllGrants, getAllSampleProposals, getProposalQuestions, resetStore } from "@/app/store/actions/dataActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import Loader from "../common/Loader";
+import Loader, { Loader2 } from "../common/Loader";
 import { toast } from "react-toastify";
 import { Box, CircularProgress } from "@mui/material";
 
@@ -44,11 +44,10 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
       const data = {
         "sample_proposal_id": id
       }
-
       setLoading(true);
       dispatch(getProposalQuestions(data)).then(() => {
-        setLoading(false);
         router.push('/ai-chat')
+        setLoading(false);
       })
     }
 
@@ -59,11 +58,13 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
     <>
 
     {loading ? 
-      <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <CircularProgress sx={{ color:'white' }}/>
-      </Box>
-    </div>
+      <div className="h-full w-full flex justify-center items-center">
+        <div className="bg-white p-5 rounded-lg shadow-lg">
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900"></div>
+          </div>
+        </div>
+      </div>
       :
       <div className="bg-[rgb(0,43,66)] h-screen flex flex-col justify-center items-center p-6">
      

@@ -31,6 +31,7 @@ export default function UserTableRow({
   details,
   duration,
   cost,
+  tier,
   ispublic,
   getSubscritpion,
   handleDelete,
@@ -79,6 +80,7 @@ export default function UserTableRow({
         <TableCell>{details}</TableCell>
         <TableCell>{duration}</TableCell>
         <TableCell>{cost}</TableCell>
+        <TableCell>{tier}</TableCell>
         <TableCell>{ispublic?"True":"False"}</TableCell>
        
         <TableCell align="right">
