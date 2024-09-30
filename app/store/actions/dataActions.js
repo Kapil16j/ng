@@ -32,6 +32,8 @@ import {
 import { AUTH_TOKEN } from "../utils";
 import Cookies from 'js-cookie'
 
+
+
 export const fetchData = () => async (dispatch) => {
   dispatch({ type: "FETCH_DATA_REQUEST" });
 
@@ -311,32 +313,39 @@ export const getAllMessagesForChat =
     };
 
 
-export const refershTokenValue =
-  () =>
-    async (dispatch, getState) => {
+    export const refershTokenValue = () => async (dispatch) => {
       try {
+        const refreshToken = Cookies.get('refreshtoken'); // Get the refresh token from cookies
 
-        const authToken = Cookies.get('accesstoken')
-        const data = {
-          "refresh_token": authToken
+        if (!refreshToken) {
+          window.location.href = '/login'; 
+          throw new Error('No refresh token available'); // Handle case where no refresh token exists
         }
-        const response = await axios.post(`${API_BASE_URL}/auth/token/refresh`, data,
+    
+        const response = await axios.post(`${API_BASE_URL}/auth/token/refresh`, 
+          {refresh_token: refreshToken},
           {
             headers: {
-              authorization: `Bearer ${authToken}`,
+              authorization: `Bearer ${refreshToken}`,
+              'content-type': 'multipart/form-data'
             },
           }
         );
-
-        console.log("sample_proposal_response", response)
+    
+        console.log("Refresh token response:", response);
+    
         dispatch({ type: REFERSH_TOKEN, payload: response.data });
+        
+        // Set new access token in cookies
+        Cookies.set('accesstoken', response.data.access_token, { expires: 1 });
+    
         return response;
-
       } catch (error) {
         dispatch({ type: REFERSH_TOKEN_FAILURE, payload: error.response });
-        return error;
+        throw error; // Re-throw the error for handling in the interceptor
       }
     };
+    
 
 export const sendChatMessage = (data) => async (dispatch, getState) => {
   try {
@@ -605,6 +614,7 @@ export const logout =
   () =>
     async (dispatch) => {
       try {
+        Cookies.remove('accesstoken')
         dispatch({ type: LOGOUT_SUCCESS });
         window.location.href = "/";
       } catch (error) {

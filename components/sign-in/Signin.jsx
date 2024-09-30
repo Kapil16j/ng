@@ -98,7 +98,8 @@ const Signin = () => {
         const accesstoken = response?.data?.access_token
         const refreshToken = response?.data?.refresh_token
 
-        Cookies.set('accesstoken', accesstoken, { expires: 7 })
+        Cookies.set('accesstoken', accesstoken, { expires: 5/1440 });
+        Cookies.set('refreshtoken', refreshToken, { expires: 7 });
 
         if(["ADMIN", "SUPERADMIN", "EDITOR"].includes(response?.data?.user_type)){
           router.push('/admin/app')

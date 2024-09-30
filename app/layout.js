@@ -26,10 +26,12 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store/store";
 import ToastProvider from "@/components/common/ToastProvider";
+import { setupAxiosInterceptors } from "./store/axiosInterceptor";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children, params }) {
+  setupAxiosInterceptors();
   return (
     <html lang={params.locale}>
       <body className={inter.className}>
