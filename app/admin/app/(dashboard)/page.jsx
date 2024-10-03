@@ -76,9 +76,9 @@ const DashboardAnalytics = () => {
       <Grid item xs={12} md={6} lg={4}>
         <TotalEarning stats={stats} />
       </Grid>
-      <Grid item xs={12} md={6} lg={4}>
+      {/* <Grid item xs={12} md={6} lg={4}>
         <SalesByCountries />
-      </Grid>
+      </Grid> */}
       {/* <Grid item xs={12} lg={8}>
         <DepositWithdraw />
       </Grid> */}

@@ -29,6 +29,7 @@ export default function UserTableRow({
   handleEdit,
   handleDelete,
   id,
+  user,
   userId,
   amount,
   stripeEventId,
@@ -63,9 +64,10 @@ export default function UserTableRow({
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar className='size-5' alt={userId} src={avatarUrl} />
-            <Typography variant="subtitle2" noWrap>
-              {userId}
-            </Typography>
+            <div>
+              <Typography>{user?.name}</Typography>
+              <Typography>{user?.email}</Typography>
+            </div>
           </Stack>
         </TableCell>
         

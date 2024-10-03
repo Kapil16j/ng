@@ -182,11 +182,12 @@ return;
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'userId', label: 'User ID' },
+                  { id: 'User', label: 'User' },
                   { id: 'amount', label: 'Amount' },
                   { id: 'stripeEventId', label: 'Stripe Event ID' },
                   { id: 'stripeWebhookEventId', label: 'Webhook ID' },
                   { id: 'subscriptionId', label: 'Subscription ID' },
+                  { id: 'showUsers', label: 'See Details' },
                   // { id: 'users', label: 'User' },
                 ]}
               />
@@ -197,6 +198,7 @@ return;
                       key={row?.id}
                       userId={row?.userId}
                       amount={row?.amount}
+                      user={row?.user}
                       stripeEventId={row?.stripeEventId}
                       stripeWebhookEventId={row?.stripeWebhookEventId}
                       subscriptionId={row?.subscriptionId}
