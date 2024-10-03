@@ -15,6 +15,7 @@ import CardStatVertical from '../../components/card-statistics/Vertical'
 import Table from '../../views/dashboard/Table'
 import { useEffect, useState } from 'react'
 import { getAdminStats } from '../../utils/api'
+import SubscriptionWiseRevenue from '../../views/dashboard/SubscriptionWiseRevenue'
 
 const DashboardAnalytics = () => {
   const [stats, setStats] = useState(null)
@@ -37,11 +38,12 @@ const DashboardAnalytics = () => {
         <WeeklyOverview stats={stats} />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
-        <TotalEarning stats={stats} />
+        <SubscriptionWiseRevenue stats={stats} />
       </Grid>
+      
       <Grid item xs={12} md={6} lg={4}>
-        <Grid container spacing={6}>
-          <Grid item xs={12} sm={6}>
+        <Grid item spacing={2}>
+          <Grid item marginY={2}>
             <CardStatVertical
               title='Weekly Revenue'
               stats={"$"+stats?.prev_week_revenue}
@@ -52,7 +54,7 @@ const DashboardAnalytics = () => {
               trend={stats?.prev_week_revenue - stats?.prev_prev_week_revenue > 0 ?'positive':'negative'}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item marginY={2}>
             <CardStatVertical
               stats={ stats?.support_forms - stats?.resolved_support_forms + "/" +stats?.support_forms}
               trend='negative'
@@ -63,20 +65,23 @@ const DashboardAnalytics = () => {
               avatarIcon='ri-file-word-2-line'
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <DistributedColumnChart stats={stats} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <LineChart />
-          </Grid>
+          </Grid> */}
         </Grid>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <TotalEarning stats={stats} />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <SalesByCountries />
       </Grid>
-      <Grid item xs={12} lg={8}>
+      {/* <Grid item xs={12} lg={8}>
         <DepositWithdraw />
-      </Grid>
+      </Grid> */}
 
     </Grid>
   )

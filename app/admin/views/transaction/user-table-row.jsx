@@ -69,7 +69,7 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
         
-        <TableCell>{amount}</TableCell>
+        <TableCell>${amount}</TableCell>
         <TableCell>{stripeEventId}</TableCell>
         <TableCell>{stripeWebhookEventId}</TableCell>
         <TableCell>{ subscriptionId}</TableCell>

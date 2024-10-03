@@ -53,7 +53,7 @@ const Transactions = ({stats}) => {
       />
       <CardContent className='!pbs-5'>
         <Grid container spacing={2}>
-            <Grid item xs={6} md={3} >
+            <Grid item sm xs={6} md={3} >
               <div className='flex items-center gap-3'>
                 <CustomAvatar variant='rounded' color="primary" className='shadow-xs'>
                   <i className="ri-pie-chart-2-line"></i>
