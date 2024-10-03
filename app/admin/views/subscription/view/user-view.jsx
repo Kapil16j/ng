@@ -219,7 +219,7 @@ export default function UserPage() {
           onFilterName={handleFilterByName}
         />
 
-        <Scrollbar>
+        <Box>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
               <UserTableHead
@@ -270,7 +270,7 @@ export default function UserPage() {
               </TableBody>
             </Table>
           </TableContainer>
-        </Scrollbar>
+        </Box>
 
         <TablePagination
           page={page}

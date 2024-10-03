@@ -1,12 +1,10 @@
 'use client'
 
-// Next Imports
 import dynamic from 'next/dynamic'
-
-// MUI Imports
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import { useTheme } from '@mui/material/styles'
+import { useState } from 'react'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
@@ -19,14 +17,14 @@ import CardContent from '@mui/material/CardContent'
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('../../libs/styles/AppReactApexCharts'))
 
-const WeeklyOverview = ({stats}) => {
-  
-  const userTiers = stats?.user_tiers
+const SubscriptionWiseRevenue = ({stats}) => {
+  const userTiers = stats?.subscriptions_distribution
   let maxIndex = undefined
 
   // Prepare data for the chart
   const series = userTiers?.map(tier => tier.count)
-  const labels = userTiers?.map(tier => tier.tier)
+  const labels = userTiers?.map(tier => tier.subscription_name)
+  const amount = userTiers?.map(tier => tier.total_amount)
 
   function findMaxIndex(arr) {
     let maxIndex = 0
@@ -109,8 +107,9 @@ const WeeklyOverview = ({stats}) => {
     tooltip: {
       enabled: true,
       y: {
-        formatter: function (val) {
-          return `${val} users`
+        formatter: function (val, { seriesIndex }) {
+          const tierAmount = amount ? amount[seriesIndex] : 0
+          return `${val} Subscriptions <br/>Total $${tierAmount.toFixed(2)} `
         }
       }
     }
@@ -127,24 +126,19 @@ const WeeklyOverview = ({stats}) => {
         <AppReactApexCharts
           boxProps={{ width: '100%', minHeight: '100px'}}
           options={options2}
-          series={series? series: []}
+          series={series? amount: []}
           type='pie'
         />
-        {stats && 
-          <div className='flex items-center mbe-4 gap-4'>
-            {/* <Typography >{stats.users} Users</Typography> */}
+        <div className='flex items-center mbe-4 gap-4'>
+          {stats &&
             <div>
-            {series.map((item, index) => (
-              <span key={index}><b>{item}/{stats.users}</b> users are in {labels[index]} tier. </span>
-            ))}
+              <Typography><b>{labels[maxIndex]} </b> transactions contributed most, with total amount of ${amount[maxIndex].toFixed(2)}.</Typography>
             </div>
-            
-          </div>
-        }
-        
+          }
+        </div>
       </CardContent>
     </Card>
   )
 }
 
-export default WeeklyOverview
+export default SubscriptionWiseRevenue

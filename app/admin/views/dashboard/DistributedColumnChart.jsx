@@ -20,7 +20,7 @@ const series = [
   }
 ]
 
-const DistributedColumnChart = () => {
+const DistributedColumnChart = ({stats}) => {
   // Hooks
   const theme = useTheme()
 

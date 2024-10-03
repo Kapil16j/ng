@@ -27,7 +27,7 @@ import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
-import { getAllUser } from '@/app/admin/utils/api';
+import { getAllTransactions, getAllUser } from '@/app/admin/utils/api';
 
 // ----------------------------------------------------------------------
 export default function UserPage() {
@@ -54,7 +54,7 @@ export default function UserPage() {
 
   useEffect(()=>{
 
-    getAllUser().then((item)=>{
+    getAllTransactions().then((item)=>{
       console.log("useritem???",item)
       setUsers(item?.data)
     })
@@ -171,7 +171,7 @@ return;
           onFilterName={handleFilterByName}
         />
 
-        <Scrollbar>
+        <Box>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
               <UserTableHead
@@ -182,16 +182,13 @@ return;
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'email', label: 'Email' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isAccountLocked', label: 'Account Locked' },
-                  { id: 'isEmailVerified', label: 'Email Verified' },
-                  
-                  { id: 'subscription', label: 'Subscription' },
-                  { id: 'status', label: 'Status' },
-                  
-
+                  { id: 'User', label: 'User' },
+                  { id: 'amount', label: 'Amount' },
+                  { id: 'stripeEventId', label: 'Stripe Event ID' },
+                  { id: 'stripeWebhookEventId', label: 'Webhook ID' },
+                  { id: 'subscriptionId', label: 'Subscription ID' },
+                  { id: 'showUsers', label: 'See Details' },
+                  // { id: 'users', label: 'User' },
                 ]}
               />
               <TableBody>
@@ -199,13 +196,12 @@ return;
                   .map((row, index) => (
                     <UserTableRow
                       key={row?.id}
-                      name={row?.name}
-                      email={row?.email}
-                      role={row?.role}
-                     accountLocked={row?.isAccountLocked}
-                     isEmailVerified={row?.isEmailVerified}
-                     subscription={row?.subscription}
-                     status={row?.status}
+                      userId={row?.userId}
+                      amount={row?.amount}
+                      user={row?.user}
+                      stripeEventId={row?.stripeEventId}
+                      stripeWebhookEventId={row?.stripeWebhookEventId}
+                      subscriptionId={row?.subscriptionId}
                       
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
@@ -222,7 +218,7 @@ return;
               </TableBody>
             </Table>
           </TableContainer>
-        </Scrollbar>
+        </Box>
 
         <TablePagination
           page={page}
