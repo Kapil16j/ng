@@ -76,10 +76,7 @@ export const getAllUser = () => {
                 },
             }
         );
-
-
         return response;
-
     } catch (error) {
         return error;
     }
@@ -142,6 +139,24 @@ export const updateUser = (data,id) => {
   }
 };
 
+export const getUserById = (id) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+  
+        const response = axios.get(`${API_BASE_URL}/admin/users/${id}/`,
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+  
+        return response;
+  
+    } catch (error) {
+        return error;
+    }
+  };
 
 export const getAllSupportForms = () => {
     try {
@@ -577,6 +592,45 @@ export const deletePromoCode = (id) => {
         const authToken = Cookies.get('accesstoken')
 
         const response = axios.delete(`${API_BASE_URL}/admin/promo-codes/${id}`,
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        return response;
+
+    } catch (error) {
+        return error;
+    }
+};
+
+
+export const getAllTransactions = () => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.get(`${API_BASE_URL}/admin/transactions`,
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        return response;
+
+    } catch (error) {
+        return error;
+    }
+};
+
+export const getAdminStats = () => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.get(`${API_BASE_URL}/admin/stats`,
             {
                 headers: {
                     authorization: `Bearer ${authToken}`,

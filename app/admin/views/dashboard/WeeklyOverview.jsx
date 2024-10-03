@@ -19,69 +19,55 @@ import CardContent from '@mui/material/CardContent'
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('../../libs/styles/AppReactApexCharts'))
 
-const WeeklyOverview = () => {
-  // Hooks
-  const theme = useTheme()
+const WeeklyOverview = ({stats}) => {
+  
+  const userTiers = stats?.user_tiers
 
-  // Vars
-  const divider = 'var(--mui-palette-divider)'
-  const disabled = 'var(--mui-palette-text-disabled)'
 
-  const options = {
+  // Prepare data for the chart
+  const series = userTiers?.map(tier => tier.count)
+  const labels = userTiers?.map(tier => tier.tier)
+
+  // Chart options
+  
+  const options2 = {
     chart: {
-      parentHeightOffset: 0,
-      toolbar: { show: false }
+      type: 'pie'
     },
-    plotOptions: {
-      bar: {
-        borderRadius: 7,
-        distributed: true,
-        columnWidth: '40%'
+    labels: labels? labels : [],
+    colors: ['#FF4560', '#008FFB', '#00E396'], // Array of colors for each tier
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 300
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
       }
+    ],
+    fill: {
+      opacity: 1 // Ensure the pie slices are fully opaque
     },
     stroke: {
-      width: 2,
-      colors: ['var(--mui-palette-background-paper)']
-    },
-    legend: { show: false },
-    grid: {
-      xaxis: { lines: { show: false } },
-      strokeDashArray: 7,
-      padding: { left: -9, top: -20, bottom: 13 },
-      borderColor: divider
-    },
-    dataLabels: { enabled: false },
-    colors: [
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-primary-main)',
-      'var(--mui-palette-customColors-trackBg)',
-      'var(--mui-palette-customColors-trackBg)'
-    ],
-    states: {
-      hover: {
-        filter: { type: 'none' }
-      },
-      active: {
-        filter: { type: 'none' }
-      }
-    },
-    xaxis: {
-      categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      tickPlacement: 'on',
-      labels: { show: false },
-      axisTicks: { show: false },
-      axisBorder: { show: false }
-    },
-    yaxis: {
       show: true,
-      tickAmount: 4,
-      labels: {
-        offsetY: 2,
-        offsetX: -17,
-        style: { colors: disabled, fontSize: theme.typography.body2.fontSize },
-        formatter: value => `${value > 999 ? `${(value / 1000).toFixed(0)}` : value}k`
+      width: 2, // Border width between slices
+      colors: ['#fff'] // Border color between slices
+    },
+    legend: {
+      position: 'right',
+      offsetY: 0,
+      height: 230,
+    },
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter: function (val) {
+          return `${val} users`
+        }
       }
     }
   }
@@ -89,25 +75,21 @@ const WeeklyOverview = () => {
   return (
     <Card>
       <CardHeader
-        title='Weekly Overview'
+        title='User Tier Distribution'
         // action={<OptionsMenu iconClassName='text-textPrimary' options={['Refresh', 'Update', 'Delete']} />}
         
       />
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
         <AppReactApexCharts
-          type='bar'
-          height={206}
-          width='100%'
-          series={[{ name: 'Sales', data: [37, 57, 45, 75, 57, 40, 65] }]}
-          options={options}
+          boxProps={{ width: '100%'}}
+          options={options2}
+          series={series? series: []}
+          type='pie'
         />
         <div className='flex items-center mbe-4 gap-4'>
           <Typography variant='h4'>45%</Typography>
           <Typography>Your sales performance is 45% 😎 better compared to last month</Typography>
         </div>
-        <Button fullWidth variant='contained'>
-          Details
-        </Button>
       </CardContent>
     </Card>
   )

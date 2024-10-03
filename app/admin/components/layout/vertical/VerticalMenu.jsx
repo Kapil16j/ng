@@ -188,6 +188,9 @@ const VerticalMenu = ({ scrollMenu }) => {
           <MenuItem href='/admin/app/subscription' icon={<i className='ri-vip-crown-line' />}>
             Subscriptions
           </MenuItem>
+          <MenuItem href='/admin/app/transaction' icon={<i class="ri-money-dollar-box-line" />}>
+            Transactions
+          </MenuItem>
           <MenuItem href='/admin/app/supportForms' icon={<i className='ri-customer-service-2-line' />}>
             Support Forms
           </MenuItem>

@@ -18,6 +18,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import Iconify from '../../components/iconify';
+import { getUserById } from '../../utils/api';
+import { ContentCopy } from '@mui/icons-material';
 
 export default function UserTableRow({
   selected,
@@ -27,33 +29,29 @@ export default function UserTableRow({
   handleEdit,
   handleDelete,
   id,
-  name,
-  email,
-  role,
- accountLocked,
- isEmailVerified,
- subscription,
- status,
+  userId,
+  amount,
+  stripeEventId,
+  stripeWebhookEventId,
+  subscriptionId,
 }) {
-  const [openMenu, setOpenMenu] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [newUser, setNewUser] = useState(null);
 
-  const handleOpenMenu = (event) => {
-    setOpenMenu(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpenMenu(null);
-  };
-
-  const handleOpenConfirm = () => {
+  const handleOpenConfirm = async () => {
+    const user = await getUserById(userId)
+    console.log("user is : : : ",user);
+    setNewUser(user?.data);
     setOpenConfirm(true);
-    handleCloseMenu();
   };
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+  }
 
   return (
     <>
@@ -64,59 +62,50 @@ export default function UserTableRow({
 
         <TableCell component="th" scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+            <Avatar className='size-5' alt={userId} src={avatarUrl} />
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {userId}
             </Typography>
           </Stack>
         </TableCell>
         
-        <TableCell>{email}</TableCell>
-        <TableCell>{role}</TableCell>
-        <TableCell>{accountLocked == true ?'Yes' :'No'}</TableCell>
-        <TableCell>{ isEmailVerified == true ?'Yes' :'No'}</TableCell>
-
-        <TableCell>{ subscription}</TableCell>
-        <TableCell>{ status}</TableCell>
+        <TableCell>{amount}</TableCell>
+        <TableCell>{stripeEventId}</TableCell>
+        <TableCell>{stripeWebhookEventId}</TableCell>
+        <TableCell>{ subscriptionId}</TableCell>
 
         <TableCell align="right">
-          <IconButton onClick={handleOpenMenu}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          <button className='bg-slate-500 text-white py-1 px-2 rounded-lg' onClick={handleOpenConfirm}>
+            {/* <Iconify icon="eva:more-vertical-fill" /> */}
+            <div>Show User</div>
+          </button>
         </TableCell>
       </TableRow>
 
-      <Popover
-        open={!!openMenu}
-        anchorEl={openMenu}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: { width: 140 },
-        }}
-      >
-        <MenuItem onClick={handleEdit}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
-
-        <MenuItem onClick={handleOpenConfirm} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover>
-
       <Dialog open={openConfirm} onClose={handleCloseConfirm}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <Typography>Are you sure you want to delete this item?</Typography>
+        <DialogTitle>User Details </DialogTitle>
+        <DialogContent className='min-w-[350px]'>
+          <Typography className='flex justify-between'><span className='font-bold text-black'>Name : </span> <div><span>{newUser?.name}</span> <button onClick={()=>navigator.clipboard.writeText(newUser?.name)}><ContentCopy /></button></div></Typography>
+          <Typography className='flex justify-between'><span className='font-bold text-black'>Email : </span> <div><span>{newUser?.email}</span> <button onClick={()=>navigator.clipboard.writeText(newUser?.email)}><ContentCopy /></button></div></Typography>
+          <Typography className='flex justify-between'><span className='font-bold text-black'>Phone : </span> <div><span>{newUser?.phoneNo}</span> <button onClick={()=>navigator.clipboard.writeText(newUser?.phoneNo)}><ContentCopy /></button></div></Typography>
+          <Typography className='flex justify-between'><span className='font-bold text-black'>Country : </span> <span>{newUser?.country}</span></Typography>
+          <Typography className='flex justify-between'><span className='font-bold text-black'>Tier : </span> <span>{newUser?.tier}</span></Typography>
+          <Typography className='flex justify-between'><span className='font-bold text-black'>Role : </span> <span>{newUser?.role}</span></Typography>
+          <Typography ><span className='font-bold text-black'>Subscription : </span> 
+            <div className='pl-3 flex flex-col items-end'>
+              <div><span>name : </span> <span>{newUser?.subscription.name}</span></div>
+              <div><span>cost : </span> <span>$ {newUser?.subscription.cost}</span></div>
+              <div><span>duration : </span> <span>{newUser?.subscription.duration} Month</span></div>
+            </div>
+          </Typography>
+          <Typography><span className='font-bold text-black'>IsAccountLocked : </span> <span>{newUser?.isAccountLocked ?"True":"False"}</span></Typography>
+          <Typography><span className='font-bold text-black'>isEmailVerified : </span> <span>{newUser?.isEmailVerified ?"True":"False"}</span></Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseConfirm}>Cancel</Button>
-          <Button onClick={handleDelete} color="error">
+          <Button onClick={handleCloseConfirm}>OK</Button>
+          {/* <Button onClick={handleDelete} color="error">
             Delete
-          </Button>
+          </Button> */}
         </DialogActions>
       </Dialog>
     </>

@@ -208,7 +208,7 @@ return;
           onFilterName={handleFilterByName}
         />
 
-        <Scrollbar>
+        <Box>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
               <UserTableHead
@@ -258,7 +258,7 @@ return;
               </TableBody>
             </Table>
           </TableContainer>
-        </Scrollbar>
+        </Box>
 
         <TablePagination
           page={page}

@@ -112,7 +112,8 @@ return regex.test(email)
         const accesstoken = item?.data?.access_token
         const refreshToken = item?.data?.refresh_token
 
-        Cookies.set('accesstoken', accesstoken, { expires: 7 })
+        Cookies.set('accesstoken', accesstoken, { expires: 1 })
+        Cookies.set('refreshtoken', refreshToken, { expires: 7 });
         router.push('/admin/app')
 
       } else {
