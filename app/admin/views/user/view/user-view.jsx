@@ -229,7 +229,7 @@ export default function UserPage() {
 
 
       // Toggle the boolean status
-      const newStatus = !currentStatus;
+      const newStatus = currentStatus;
 
       // Update the status locally
       setUsers((prevUsers) =>

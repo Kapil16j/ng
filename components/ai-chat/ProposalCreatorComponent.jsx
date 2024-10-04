@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllChats, getAllSampleProposals, getProposalQuestions } from "@/app/store/actions/dataActions";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { downloadDocument } from "@/app/store/utils";
+import Iconify from "@/app/admin/components/iconify";
 
 const ProposalCreatorComponent = ({ setActive, setCreateProposal }) => {
 
@@ -76,8 +78,11 @@ const ProposalCreatorComponent = ({ setActive, setCreateProposal }) => {
                       >
                         Use
                       </button>
-                      <button className=" hover:bg-[#F2F2F2] rounded py-[8px] px-[35px] max-w-[100px] w-full border-[1px] border-white bg-transparent hover:duration-300 hover:text-[#333] font-interTight text-[14px] font-semibold text-white">
-                        View
+                      <button onClick={async()=>{setLoading(true);await downloadDocument(item.pdf);setLoading(false)}} className=" hover:bg-[#F2F2F2] rounded py-[8px] px-[35px] max-w-[100px] w-full border-[1px] border-white bg-transparent hover:duration-300 hover:text-[#333] font-interTight text-[14px] font-semibold text-white">
+                        <div className="flex items-center">
+                          <Iconify icon="mdi:file-download-outline" />
+                          <div>View</div>
+                        </div>
                       </button>
                     </div>
                   </div>

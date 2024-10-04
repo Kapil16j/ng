@@ -36,8 +36,10 @@ export default function UserTableRow({
   getSubscritpion,
   handleDelete,
   openConfirm,
-  setOpenConfirm
-
+  setOpenConfirm,
+  active,
+  ActivateSubsctiption,
+  DeactivateSubscription,
 }) {
   const [openMenu, setOpenMenu] = useState(null);
  
@@ -82,6 +84,7 @@ export default function UserTableRow({
         <TableCell>{cost}</TableCell>
         <TableCell>{tier}</TableCell>
         <TableCell>{ispublic?"True":"False"}</TableCell>
+        <TableCell>{active?"Yes":"No"}</TableCell>
        
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -105,13 +108,20 @@ export default function UserTableRow({
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleOpenConfirm} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
+        {active ? 
+          <MenuItem onClick={DeactivateSubscription} sx={{ color: 'error.main' }}>
+            <Iconify icon="fluent-mdl2:deactivate-orders" sx={{ mr: 2 }} />
+            Deactivate
+          </MenuItem>
+          :
+          <MenuItem onClick={ActivateSubsctiption} sx={{ color: 'success.main' }}>
+            <Iconify icon="fluent-mdl2:activate-orders" sx={{ mr: 2 }} />
+            Activate
+          </MenuItem>
+        }
       </Popover>
 
-      <Dialog open={openConfirm} onClose={handleCloseConfirm}>
+      {/* <Dialog open={openConfirm} onClose={handleCloseConfirm}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography>Are you sure you want to delete this item?</Typography>
@@ -122,7 +132,7 @@ export default function UserTableRow({
             Delete
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }

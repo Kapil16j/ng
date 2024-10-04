@@ -137,7 +137,6 @@ const Signup = ({sub_id}) => {
 
     dispatch(registerWithSubscription({ data, sub_id })).then((data) => {
       console.log("DATA : ", data)
-      setLoading(false)
       if (data.user) {
         // toast.success("Registered Successfully");
 
@@ -148,6 +147,8 @@ const Signup = ({sub_id}) => {
           router.push(`/signup/pay/${sub_id}?secret=${secret}`)
         else 
           toast.error("Couldn't create Payment Intent. Please try Again later!")
+
+        setLoading(false)
         
       } else if (data?.response?.status == 400) {
         toast.error(data?.response?.data?.detail);

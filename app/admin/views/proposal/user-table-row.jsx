@@ -63,8 +63,7 @@ export default function UserTableRow({
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
   };
-
-
+  
 
   return (
     <>
@@ -84,11 +83,16 @@ export default function UserTableRow({
         
         <TableCell>{details ? details :'N/A'}</TableCell>
         <TableCell><img src={image} className='h-14 w-14'></img></TableCell>
-        <TableCell><Link
-                        href={pdf}
-                      >
-                       <Iconify icon="mdi:file-pdf-outline" />
-                      </Link></TableCell>
+        {/* <TableCell>
+          <a href={pdf} download target="_blank" rel="noopener noreferrer">
+            <Iconify icon="mdi:file-pdf-outline" />
+          </a>
+        </TableCell> */}
+        <TableCell>
+          <IconButton onClick={() => downloadDocument(pdf)} className='p-2'>
+            <Iconify icon="mdi:file-download-outline" />
+          </IconButton>
+        </TableCell>
        
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>

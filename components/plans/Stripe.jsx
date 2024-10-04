@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { CardElement, PaymentElement, useElements, useStripe, ElementsConsumer } from "@stripe/react-stripe-js"
 import SuccessPage from './SuccessPage';
+import Loader from '../common/Loader';
 
 
 
@@ -20,6 +21,7 @@ const StripeComponent = ({ clientSecret, subScriptionId, setShowStripe }) => {
     const dispatch = useDispatch()
     const stripe = useStripe()
     const elements = useElements()
+    const [loading, setLoading] = useState(false)
 
 
     const CARD_OPTIONS = {
@@ -73,6 +75,7 @@ const StripeComponent = ({ clientSecret, subScriptionId, setShowStripe }) => {
         if (!stripe || !elements) {
             return;
         }
+        setLoading(true)
         if (clientSecret) {
             // const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
             //     payment_method: {
@@ -86,7 +89,7 @@ const StripeComponent = ({ clientSecret, subScriptionId, setShowStripe }) => {
                     return_url:  window.location.origin+ "/dashboard/home",
                 },
             });
-
+            setLoading(false)
             console.log("paymentIntent:", paymentIntent);
 
             if (stripeError) {
@@ -108,6 +111,7 @@ const StripeComponent = ({ clientSecret, subScriptionId, setShowStripe }) => {
 
     return (
         <>
+            {loading && <Loader />}
             {!success ?
                 <div className="bg-[rgb(0,43,66)] h-screen  p-6">
                     <div className='p-4 ' >

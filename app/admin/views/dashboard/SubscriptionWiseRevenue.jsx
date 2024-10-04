@@ -109,7 +109,7 @@ const SubscriptionWiseRevenue = ({stats}) => {
       y: {
         formatter: function (val, { seriesIndex }) {
           const tierAmount = amount ? amount[seriesIndex] : 0
-          return `${val} Subscriptions <br/>Total $${tierAmount.toFixed(2)} `
+          return `${series[seriesIndex]} Subscriptions <br/>Total $${tierAmount.toFixed(2)} `
         }
       }
     }
@@ -118,7 +118,7 @@ const SubscriptionWiseRevenue = ({stats}) => {
   return (
     <Card>
       <CardHeader
-        title='User Tier Distribution'
+        title='Transactions Distribution'
         // action={<OptionsMenu iconClassName='text-textPrimary' options={['Refresh', 'Update', 'Delete']} />}
         
       />

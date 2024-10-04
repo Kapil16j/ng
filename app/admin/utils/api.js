@@ -260,6 +260,44 @@ export const deleteSubscription = (id) => {
     }
 };
 
+export const Activate_Subscription = (id) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.put(`${API_BASE_URL}/admin/subscriptions/${id}/activate`,{},
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        return response;
+
+    } catch (error) {
+        return error;
+    }
+};
+
+export const Deactivate_Subscription = (id) => {
+    try {
+        const authToken = Cookies.get('accesstoken')
+
+        const response = axios.put(`${API_BASE_URL}/admin/subscriptions/${id}/deactivate`,{},
+            {
+                headers: {
+                    authorization: `Bearer ${authToken}`,
+                },
+            }
+        );
+
+        return response;
+
+    } catch (error) {
+        return error;
+    }
+};
+
 
 export const updateSubscription = (data) => {
     try {
