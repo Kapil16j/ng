@@ -150,7 +150,7 @@ export default function UserTableRow({
 
       <TableCell>
         <Switch
-          checked={accountLocked == true}  // Check if the status is 'ACTIVE'
+          checked={accountLocked }  // Check if the status is 'ACTIVE'
           onChange={onStatusChange}
           inputProps={{ 'aria-label': 'controlled' }}
         />
@@ -184,13 +184,13 @@ export default function UserTableRow({
           Invoice
         </MenuItem>
 
-        <MenuItem onClick={handleOpenConfirm} sx={{ color: 'error.main' }}>
+        {/* <MenuItem onClick={handleOpenConfirm} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
-        </MenuItem>
+        </MenuItem> */}
       </Popover>
 
-      <Dialog open={openConfirm} onClose={handleCloseConfirm}>
+      {/* <Dialog open={openConfirm} onClose={handleCloseConfirm}>
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>
           <Typography>Are you sure you want to delete this item?</Typography>
@@ -201,7 +201,7 @@ export default function UserTableRow({
             Delete
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }

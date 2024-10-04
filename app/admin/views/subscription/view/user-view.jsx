@@ -37,7 +37,7 @@ import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
  // Import updateSubscription
   
-import {  createSubscription, deleteSubscription, getAllSubscription, updateSubscription } from '@/app/admin/utils/api';
+import {  Activate_Subscription, createSubscription, Deactivate_Subscription, deleteSubscription, getAllSubscription, updateSubscription } from '@/app/admin/utils/api';
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
@@ -62,6 +62,7 @@ export default function UserPage() {
     duration: '',
     cost: '',
     tier: '',
+    active: true,
     public : false,
   });
 
@@ -78,7 +79,7 @@ export default function UserPage() {
 
   const handleOpen = () => {
     setIsEditMode(false); // Reset edit mode
-    setNewUser({ name: '', details: '', duration: '', cost: '', tier:'', public: false }); // Reset form fields
+    setNewUser({ name: '', details: '', duration: '', cost: '', tier:'', public: false, active: true }); // Reset form fields
     setOpen(true);
   };
   
@@ -153,8 +154,28 @@ export default function UserPage() {
       getSubscritpion()
       setOpenConfirm(false);
     })
- 
-   
+  }
+
+  const ActivateSubscription = (id) => {
+    Activate_Subscription(id).then((item) => {
+      if(item)
+      toast.success("Subscription activated!");
+      else(
+        toast.error("Something went wrong!")
+      )
+      getSubscritpion();
+    });
+  }
+
+  const DeactivateSubscription = (id) => {
+    Deactivate_Subscription(id).then((item) => {
+      if(item)
+        toast.success("Subscription deactivate!");
+        else(
+          toast.error("Something went wrong!")
+        )
+      getSubscritpion();
+    });
   }
 
   const handleClick = (event, name) => {
@@ -236,6 +257,7 @@ export default function UserPage() {
                   { id: 'cost', label: 'Cost' },
                   { id: 'tier', label: 'Tier' },
                   { id: 'public', label: 'Public' },
+                  { id: 'active', label: 'Active' },
                   { id: 'setting', label: 'Setting' },
                 ]}
               />
@@ -250,12 +272,15 @@ export default function UserPage() {
                       cost={row?.cost}
                       tier={row?.tier}
                       ispublic={row?.public}
+                      active = {row?.active}
                       selected={selected.indexOf(row.name) !== -1}
                       handleClick={(event) => handleClick(event, row.name)}
                       id={row.id}
                       getSubscritpion={getSubscritpion}
                       handleEdit={() => handleEdit(row)}
                       handleDelete={()=>handleDelete(row.id)}
+                      ActivateSubsctiption={()=>ActivateSubscription(row.id)}
+                      DeactivateSubscription={()=>DeactivateSubscription(row.id)}
                       openConfirm={openConfirm}
                       setOpenConfirm={setOpenConfirm}
                     />

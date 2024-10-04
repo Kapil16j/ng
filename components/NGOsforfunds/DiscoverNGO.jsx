@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import Loader, { Loader2 } from "../common/Loader";
 import { toast } from "react-toastify";
 import { Box, CircularProgress } from "@mui/material";
+import { downloadDocument } from "@/app/store/utils";
+import Iconify from "@/app/admin/components/iconify";
 
 const DiscoverNGO = ({ setSelectedComponent }) => {
   const [loading, setLoading] = useState(false);
@@ -143,11 +145,13 @@ const DiscoverNGO = ({ setSelectedComponent }) => {
                     </button>
                     {/* } */}
                     <button
-                      onClick={() => window.open(item?.pdf, '_blank')}
-                      className=" bg-[#F2F2F2] rounded-[4px] py-1 px-4 max-w-[100px]
-                     w-full border-[1px] border-white hover:bg-transparent duration-300 text-[#333] font-interTight text-[14px] font-semibold hover:text-white mx-auto hidden group-hover:block"
+                      onClick={async() =>{setLoading(true); await downloadDocument(item?.pdf); setLoading(false) }}
+                      className=" bg-[#F2F2F2] rounded-[4px] py-1 px-4 max-w-[100px] w-full border-[1px] border-white hover:bg-transparent duration-300 text-[#333] font-interTight text-[14px] font-semibold hover:text-white mx-auto hidden group-hover:block"
                     >
-                      View
+                      <div className="flex items-center">
+                        <Iconify icon="mdi:file-download-outline" />
+                        <div>View</div>
+                      </div>
                     </button>
                   </div>
 

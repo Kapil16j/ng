@@ -84,7 +84,7 @@ export const setupAxiosInterceptors = () => {
         } catch (refreshError) {
           console.error('Failed to refresh token:', refreshError);
           // Handle refresh error, possibly redirect to login
-          window.location.href = '/signin'; 
+          // window.location.href = '/signin'; 
         } finally {
           isRefreshing = false; // Reset the refreshing flag
         }
